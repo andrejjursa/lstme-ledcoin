@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database', 'datamapper', 'session', 'parser');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'auth');
+$autoload['helper'] = array('url', 'auth', 'flashmessage');
 
 
 /*

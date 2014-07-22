@@ -7,7 +7,7 @@
         <li><a href="{'/'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Účastníci</a></li>
         <li><a href="{'strojak/bufet'|site_url}" class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Bufet</a></li>
         {if auth_is_authentificated()}
-            <li><a href="{'user/logout'|site_url}" class="ui-btn ui-btn-b ui-shadow" data-ajax="false">Odhlásiť sa</a></li>
+            <li><a href="#logoutDialog" class="ui-btn ui-btn-b ui-shadow" data-rel="popup" data-position-to="window" data-transition="flip">Odhlásiť sa</a></li>
         {/if}
     </ul>
         

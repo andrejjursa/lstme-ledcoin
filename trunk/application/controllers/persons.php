@@ -20,7 +20,12 @@ class Persons extends CI_Controller {
 
     public function index() {
         $this->inject_persons();
-        $this->parser->parse('web/controllers/persons/index.tpl', array('title' => 'Administrácia / Ľudia'));
+        
+        $persons = new Person();
+        $persons->order_by('admin', 'asc')->order_by('name', 'asc');
+        $persons->get_iterated();
+        
+        $this->parser->parse('web/controllers/persons/index.tpl', array('title' => 'Administrácia / Ľudia', 'persons' => $persons, 'new_item_url' => site_url('persons/new')));
     }
     
     protected function inject_persons() {
