@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="{"assets/themes/lstme.min.css?strojak_version={$app_version}"|base_url}" />
         <link rel="stylesheet" type="text/css" href="{"assets/themes/jquery.mobile.icons.min.css?strojak_version={$app_version}"|base_url}" />
         <link rel="stylesheet" type="text/css" href="{"assets/jquery.mobile.structure-1.4.3.min.css?strojak_version={$app_version}"|base_url}}" />
+        <link rel="stylesheet" type="text/css" href="{"assets/strojak_standard.css?strojak_version={$app_version}"|base_url}}" />
         <script type="text/javascript" src="{"assets/jquery-1.11.1.min.js?strojak_version={$app_version}"|base_url}"></script>
         <script type="text/javascript" src="{"assets/jquery.mobile-1.4.3.min.js?strojak_version={$app_version}"|base_url}"></script>
     </head>
@@ -22,12 +23,15 @@
             </div>
             
             <div data-role="content">
+                {include file='web/partials/flashmessages.tpl' inline}
                 {block content_block}{/block}
             </div>
             
             <div data-role="footer" data-position="fixed">
                 <p style="text-align: center;">&copy; LSTME 2014</p>
             </div>
+            
+            {include file='web/partials/logoutDialog.tpl' inline}
         </div>
     </body>
 </html>
