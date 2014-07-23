@@ -90,6 +90,15 @@ function auth_get_name() {
 }
 
 /**
+ * Returns current user id.
+ * @return int user id.
+ */
+function auth_get_id() {
+    if (!auth_is_authentificated()) { return 0; }
+    return (int)$GLOBALS['strojak-user-data']['id'];
+}
+
+/**
  * Redirect browser request to specified URL when no authentification is found.
  * @param string $url relative URL to redirect to.
  */

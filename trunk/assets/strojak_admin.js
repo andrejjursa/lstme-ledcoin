@@ -117,7 +117,7 @@ var make_gridtable_active = function(gridtable_selector) {
                     $('#strojak-main-page').append( popup_element ).trigger( "create" );
                     $tr.click(function(e) {
                         popup_element.popup('open', {
-                            positionTo: 'origin',
+                            positionTo: $tr,
                             transition: 'pop',
                             x: e.pageX,
                             y: e.pageY

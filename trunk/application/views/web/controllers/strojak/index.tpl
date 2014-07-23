@@ -19,9 +19,9 @@
                     <td>{$person->name}</td>
                     <td>{$person->group_title}</td>
                     <td>{$person->organisation}</td>
-                    <td>{$person->plus_time - $person->minus_time_1 - $person->minus_time_2}</td>
-                    <td>{$person->plus_time}</td>
-                    <td>{$person->minus_time_1 + $person->minus_time_2}</td>
+                    <td>{{$person->plus_time - $person->minus_time_1 - $person->minus_time_2}|floatval}</td>
+                    <td>{$person->plus_time|floatval}</td>
+                    <td>{{$person->minus_time_1 + $person->minus_time_2}|floatval}</td>
                 </tr>
                 {/foreach}
             </tbody>

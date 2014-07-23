@@ -13,7 +13,7 @@
     </head>
     <body>
         <div data-role="page" id="strojak-main-page" data-theme="b">
-            <div data-role="header" data-position="fixed">
+            <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>Strojový čas{if $title} / {$title}{/if}</h1>
             </div>
             
@@ -22,7 +22,7 @@
                 {block content_block}{/block}
             </div>
             
-            <div data-role="footer" data-position="fixed">
+            <div data-role="footer" data-position="fixed" data-tap-toggle="false">
                 <p style="text-align: center;">&copy; LSTME 2014</p>
             </div>
         </div>
