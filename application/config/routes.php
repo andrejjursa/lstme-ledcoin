@@ -39,7 +39,7 @@
 */
 
 $route['default_controller'] = "strojak";
-$route['404_override'] = '';
+$route['404_override'] = 'error/page_not_found';
 
 
 /* End of file routes.php */

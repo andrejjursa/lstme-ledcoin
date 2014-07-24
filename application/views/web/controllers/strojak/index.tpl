@@ -16,7 +16,7 @@
             <tbody>
                 {foreach $persons as $person}
                 <tr>
-                    <td>{$person->name}</td>
+                    <td>{$person->name} {$person->surname}</td>
                     <td>{$person->group_title}</td>
                     <td>{$person->organisation}</td>
                     <td>{{$person->plus_time - $person->minus_time_1 - $person->minus_time_2}|floatval}</td>

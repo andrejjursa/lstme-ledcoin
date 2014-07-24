@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-23 16:23:46
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:13:55
          compiled from "application\views\web\controllers\error\no_admin.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2710653cd63c4839b65-71088544%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -13,13 +13,25 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '0ad190e36aa4e5dc00b4cf4229eafa3f3f82edea' => 
     array (
       0 => 'application\\views\\web\\layouts\\error.tpl',
-      1 => 1406047911,
+      1 => 1406221596,
+      2 => 'file',
+    ),
+    '3fbf8869f9133a2dcb36200bfd275fde4aa88b2a' => 
+    array (
+      0 => 'application\\views\\web\\partials\\navpanel.tpl',
+      1 => 1406222033,
       2 => 'file',
     ),
     'f55371eff71ae32ec6531cdb4f5413d25646fdda' => 
     array (
       0 => 'application\\views\\web\\partials\\flashmessages.tpl',
       1 => 1406046995,
+      2 => 'file',
+    ),
+    'd6e2cedd3cb1b56eb26745753243a1acf2548024' => 
+    array (
+      0 => 'application\\views\\web\\partials\\logoutDialog.tpl',
+      1 => 1406045507,
       2 => 'file',
     ),
   ),
@@ -59,16 +71,26 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     </head>
     <body>
         <div data-role="page" id="strojak-main-page" data-theme="b">
-            <div data-role="header" data-position="fixed">
+            <div data-role="panel" id="navpanel" data-position="right" data-position-fixed="true" data-display="push" data-swipe-close="false">
+                <?php /*  Call merged included template "web/partials/navpanel.tpl" */
+$_tpl_stack[] = $_smarty_tpl;
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/navpanel.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '2710653cd63c4839b65-71088544');
+content_53d13ed3a5f075_29375995($_smarty_tpl);
+$_smarty_tpl = array_pop($_tpl_stack); 
+/*  End of included template "web/partials/navpanel.tpl" */?>
+            </div>
+            
+            <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>Strojový čas<?php if ($_smarty_tpl->tpl_vars['title']->value) {?> / <?php echo $_smarty_tpl->tpl_vars['title']->value;?>
 <?php }?></h1>
+                <a href="#navpanel" class="strojak-navigation-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-right">Navigácia</a>
             </div>
             
             <div data-role="content">
                 <?php /*  Call merged included template "web/partials/flashmessages.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/flashmessages.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '2710653cd63c4839b65-71088544');
-content_53cfc572ee2e14_79026493($_smarty_tpl);
+content_53d13ed3a9c108_59597703($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/flashmessages.tpl" */?>
                 
@@ -86,15 +108,68 @@ $_smarty_tpl = array_pop($_tpl_stack);
 
             </div>
             
-            <div data-role="footer" data-position="fixed">
+            <div data-role="footer" data-position="fixed" data-tap-toggle="false">
                 <p style="text-align: center;">&copy; LSTME 2014</p>
             </div>
+            
+            <?php /*  Call merged included template "web/partials/logoutDialog.tpl" */
+$_tpl_stack[] = $_smarty_tpl;
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/logoutDialog.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '2710653cd63c4839b65-71088544');
+content_53d13ed3af3cd5_31192228($_smarty_tpl);
+$_smarty_tpl = array_pop($_tpl_stack); 
+/*  End of included template "web/partials/logoutDialog.tpl" */?>
         </div>
     </body>
 </html><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-23 16:23:46
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:13:55
+         compiled from "application\views\web\partials\navpanel.tpl" */ ?>
+<?php if ($_valid && !is_callable('content_53d13ed3a5f075_29375995')) {function content_53d13ed3a5f075_29375995($_smarty_tpl) {?><div class="ui-panel-inner">
+<?php if (auth_is_authentificated()) {?>
+    <p><strong>Používateľ:</strong> <?php echo auth_get_name();?>
+</p>
+<?php }?>
+    <h3>Navigácia</h3>
+    <ul data-role="listview" data-inset="true">
+        <li><a href="<?php echo site_url('/');?>
+" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Účastníci</a></li>
+        <li><a href="<?php echo site_url('strojak/bufet');?>
+" class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Bufet</a></li>
+        <?php if (auth_is_authentificated()) {?>
+            <li><a href="#logoutDialog" class="ui-btn ui-btn-b ui-shadow" data-rel="popup" data-position-to="window" data-transition="pop">Odhlásiť sa</a></li>
+        <?php }?>
+    </ul>
+        
+<?php if (!auth_is_authentificated()) {?>
+    <form action="<?php echo site_url('user/login');?>
+" method="post" id="login-form" data-ajax="false">
+        <h3>Prihlásenie</h3>
+        <label for="login-login">Prihlasovacie meno:</label>
+        <input type="text" name="login[login]" id="login-login" value="" data-clear-btn="true" data-mini="true" data-theme="a" />
+        <label for="login-password">Heslo:</label>
+        <input type="password" name="login[password]" id="login-password" value="" data-clear-btn="true" data-mini="true" data-theme="a" />
+        <input type="submit" value="Prihlásiť sa" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini" data-theme="a" />
+        <input type="hidden" name="return_url" value="<?php if ($_smarty_tpl->tpl_vars['this']->value->router->class!='error') {?><?php echo current_url();?>
+<?php } else { ?><?php echo site_url('/');?>
+<?php }?>" />
+    </form>
+<?php }?>    
+        
+<?php if (auth_is_admin()) {?>
+    <h3>Administrácia</h3>
+    <ul data-role="listview" data-inset="true">
+        <li><a href="<?php echo site_url('persons');?>
+" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Ľudia</a></li>
+        <li><a href="<?php echo site_url('groups');?>
+" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Skupiny</a></li>
+        <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Zamestnania</a></li>
+        <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bufet</a></li>
+        <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Strojový čas</a></li>
+    </ul>
+<?php }?>
+</div><?php }} ?>
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:13:55
          compiled from "application\views\web\partials\flashmessages.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53cfc572ee2e14_79026493')) {function content_53cfc572ee2e14_79026493($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
+<?php if ($_valid && !is_callable('content_53d13ed3a9c108_59597703')) {function content_53d13ed3a9c108_59597703($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
 <?php if (is_array($_smarty_tpl->tpl_vars['flash_messages']->value)&&count($_smarty_tpl->tpl_vars['flash_messages']->value)>0) {?>
     <?php  $_smarty_tpl->tpl_vars['flash_message'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['flash_message']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['flash_messages']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
@@ -121,3 +196,19 @@ $_smarty_tpl->tpl_vars['flash_message']->_loop = true;
         <?php }?>
     <?php } ?>
 <?php }?><?php }} ?>
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:13:55
+         compiled from "application\views\web\partials\logoutDialog.tpl" */ ?>
+<?php if ($_valid && !is_callable('content_53d13ed3af3cd5_31192228')) {function content_53d13ed3af3cd5_31192228($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
+    <div data-role="header" data-theme="d">
+    <h1>Odhlásiť sa?</h1>
+    </div>
+    <div role="main" class="ui-content">
+        <h3 class="ui-title">Naozaj sa chceš odhlásiť?</h3>
+        <?php if (auth_is_admin()) {?>
+        <p>Neuložené zmeny budú stratené.</p>
+        <?php }?>
+        <a href="<?php echo site_url('user/logout');?>
+" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-ajax="false">Áno</a>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-c" data-rel="back" data-transition="flip">Nie</a>
+    </div>
+</div><?php }} ?>

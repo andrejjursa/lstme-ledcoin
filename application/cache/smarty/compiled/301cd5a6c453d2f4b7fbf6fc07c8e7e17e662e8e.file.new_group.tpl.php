@@ -1,13 +1,13 @@
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:09:53
-         compiled from "application\views\web\controllers\persons\edit_person.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:92453cff46eaeffc2-22756426%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:22:08
+         compiled from "application\views\web\controllers\groups\new_group.tpl" */ ?>
+<?php /*%%SmartyHeaderCode:1947653d13a269394c4-00144912%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
-    'fc4656ce2ee458f93eaa3bb50e719b242b2ccf38' => 
+    '301cd5a6c453d2f4b7fbf6fc07c8e7e17e662e8e' => 
     array (
-      0 => 'application\\views\\web\\controllers\\persons\\edit_person.tpl',
-      1 => 1406138282,
+      0 => 'application\\views\\web\\controllers\\groups\\new_group.tpl',
+      1 => 1406220989,
       2 => 'file',
     ),
     'da973a66f1b8150ce141d2f611ea06a8b729feb5' => 
@@ -19,7 +19,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '3fbf8869f9133a2dcb36200bfd275fde4aa88b2a' => 
     array (
       0 => 'application\\views\\web\\partials\\navpanel.tpl',
-      1 => 1406221678,
+      1 => 1406222033,
       2 => 'file',
     ),
     'f55371eff71ae32ec6531cdb4f5413d25646fdda' => 
@@ -59,12 +59,12 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '92453cff46eaeffc2-22756426',
+  'nocache_hash' => '1947653d13a269394c4-00144912',
   'function' => 
   array (
   ),
   'version' => 'Smarty-3.1.17',
-  'unifunc' => 'content_53cff46ed7c4d4_14956113',
+  'unifunc' => 'content_53d13a26aab528_03901381',
   'variables' => 
   array (
     'this' => 0,
@@ -75,7 +75,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_53cff46ed7c4d4_14956113')) {function content_53cff46ed7c4d4_14956113($_smarty_tpl) {?><!DOCTYPE html><?php $_smarty_tpl->tpl_vars['app_version'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->config->item('app_version'), null, 0);?>
+<?php if ($_valid && !is_callable('content_53d13a26aab528_03901381')) {function content_53d13a26aab528_03901381($_smarty_tpl) {?><!DOCTYPE html><?php $_smarty_tpl->tpl_vars['app_version'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->config->item('app_version'), null, 0);?>
 <html lang="sk">
     <head>
         <title>Strojový čas<?php if ($_smarty_tpl->tpl_vars['title']->value) {?>: <?php echo $_smarty_tpl->tpl_vars['title']->value;?>
@@ -103,8 +103,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
             <div data-role="panel" id="navpanel" data-position="right" data-position-fixed="true" data-display="push" data-swipe-close="false">
                 <?php /*  Call merged included template "web/partials/navpanel.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/navpanel.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '92453cff46eaeffc2-22756426');
-content_53d13de2007a13_47225620($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/navpanel.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1947653d13a269394c4-00144912');
+content_53d140c082e442_19882751($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/navpanel.tpl" */?>
             </div>
@@ -126,21 +126,20 @@ $_smarty_tpl = array_pop($_tpl_stack);
             <div data-role="content">
                 <?php /*  Call merged included template "web/partials/flashmessages.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/flashmessages.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '92453cff46eaeffc2-22756426');
-content_53d13de20501b8_29691481($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/flashmessages.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1947653d13a269394c4-00144912');
+content_53d140c0876bf0_78767759($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/flashmessages.tpl" */?>
                 
-    <form action="<?php ob_start();?><?php echo intval($_smarty_tpl->tpl_vars['person']->value->id);?>
-<?php $_tmp1=ob_get_clean();?><?php echo site_url("persons/update_person/".$_tmp1);?>
+    <form action="<?php echo site_url('groups/create_group');?>
 " method="post" data-ajax="false">
-    <?php /*  Call merged included template "web/partials/form.tpl" */
+        <?php /*  Call merged included template "web/partials/form.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/form.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form'=>$_smarty_tpl->tpl_vars['form']->value,'source'=>$_smarty_tpl->tpl_vars['person']->value), 0, '92453cff46eaeffc2-22756426');
-content_53d13de20af795_53146079($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/form.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form'=>$_smarty_tpl->tpl_vars['form']->value), 0, '1947653d13a269394c4-00144912');
+content_53d140c08caab4_06152685($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/form.tpl" */?>
-    <button type="submit" class="ui-shadow ui-btn ui-corner-all">Uložiť</button>
+        <button type="submit" class="ui-shadow ui-btn ui-corner-all">Vytvoriť</button>
     </form>
 
             </div>
@@ -151,16 +150,16 @@ $_smarty_tpl = array_pop($_tpl_stack);
             
             <?php /*  Call merged included template "web/partials/logoutDialog.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/logoutDialog.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '92453cff46eaeffc2-22756426');
-content_53d13de22123e8_09744190($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/logoutDialog.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1947653d13a269394c4-00144912');
+content_53d140c0a2d709_75957420($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/logoutDialog.tpl" */?>
         </div>
     </body>
 </html><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:09:54
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:22:08
          compiled from "application\views\web\partials\navpanel.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13de2007a13_47225620')) {function content_53d13de2007a13_47225620($_smarty_tpl) {?><div class="ui-panel-inner">
+<?php if ($_valid && !is_callable('content_53d140c082e442_19882751')) {function content_53d140c082e442_19882751($_smarty_tpl) {?><div class="ui-panel-inner">
 <?php if (auth_is_authentificated()) {?>
     <p><strong>Používateľ:</strong> <?php echo auth_get_name();?>
 </p>
@@ -172,7 +171,7 @@ $_smarty_tpl = array_pop($_tpl_stack);
         <li><a href="<?php echo site_url('strojak/bufet');?>
 " class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Bufet</a></li>
         <?php if (auth_is_authentificated()) {?>
-            <li><a href="#logoutDialog" class="ui-btn ui-btn-b ui-shadow" data-rel="popup" data-position-to="window" data-transition="flip">Odhlásiť sa</a></li>
+            <li><a href="#logoutDialog" class="ui-btn ui-btn-b ui-shadow" data-rel="popup" data-position-to="window" data-transition="pop">Odhlásiť sa</a></li>
         <?php }?>
     </ul>
         
@@ -181,11 +180,11 @@ $_smarty_tpl = array_pop($_tpl_stack);
 " method="post" id="login-form" data-ajax="false">
         <h3>Prihlásenie</h3>
         <label for="login-login">Prihlasovacie meno:</label>
-        <input type="text" name="login[login]" id="login-login" value="" data-clear-btn="true" data-mini="true" />
+        <input type="text" name="login[login]" id="login-login" value="" data-clear-btn="true" data-mini="true" data-theme="a" />
         <label for="login-password">Heslo:</label>
-        <input type="password" name="login[password]" id="login-password" value="" data-clear-btn="true" data-mini="true" />
-        <input type="submit" value="Prihlásiť sa" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini" />
-        <input type="hidden" name="return_url" value="<?php if ($_smarty_tpl->tpl_vars['this']->value->uri->segment(1)!='error') {?><?php echo current_url();?>
+        <input type="password" name="login[password]" id="login-password" value="" data-clear-btn="true" data-mini="true" data-theme="a" />
+        <input type="submit" value="Prihlásiť sa" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini" data-theme="a" />
+        <input type="hidden" name="return_url" value="<?php if ($_smarty_tpl->tpl_vars['this']->value->router->class!='error') {?><?php echo current_url();?>
 <?php } else { ?><?php echo site_url('/');?>
 <?php }?>" />
     </form>
@@ -204,9 +203,9 @@ $_smarty_tpl = array_pop($_tpl_stack);
     </ul>
 <?php }?>
 </div><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:09:54
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:22:08
          compiled from "application\views\web\partials\flashmessages.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13de20501b8_29691481')) {function content_53d13de20501b8_29691481($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
+<?php if ($_valid && !is_callable('content_53d140c0876bf0_78767759')) {function content_53d140c0876bf0_78767759($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
 <?php if (is_array($_smarty_tpl->tpl_vars['flash_messages']->value)&&count($_smarty_tpl->tpl_vars['flash_messages']->value)>0) {?>
     <?php  $_smarty_tpl->tpl_vars['flash_message'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['flash_message']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['flash_messages']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
@@ -233,9 +232,9 @@ $_smarty_tpl->tpl_vars['flash_message']->_loop = true;
         <?php }?>
     <?php } ?>
 <?php }?><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:09:54
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:22:08
          compiled from "application\views\web\partials\form.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13de20af795_53146079')) {function content_53d13de20af795_53146079($_smarty_tpl) {?><?php  $_smarty_tpl->tpl_vars['form_element'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['form_element']->_loop = false;
+<?php if ($_valid && !is_callable('content_53d140c08caab4_06152685')) {function content_53d140c08caab4_06152685($_smarty_tpl) {?><?php  $_smarty_tpl->tpl_vars['form_element'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['form_element']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['form']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['form_element']->key => $_smarty_tpl->tpl_vars['form_element']->value) {
 $_smarty_tpl->tpl_vars['form_element']->_loop = true;
@@ -243,36 +242,36 @@ $_smarty_tpl->tpl_vars['form_element']->_loop = true;
     <?php if ($_smarty_tpl->tpl_vars['form_element']->value['type']=='text_input') {?>
         <?php /*  Call merged included template "web/forms/input.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/forms/input.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form_element'=>$_smarty_tpl->tpl_vars['form_element']->value,'form_source'=>$_smarty_tpl->tpl_vars['source']->value), 0, '92453cff46eaeffc2-22756426');
-content_53d13de20c28c9_12168149($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/forms/input.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form_element'=>$_smarty_tpl->tpl_vars['form_element']->value,'form_source'=>$_smarty_tpl->tpl_vars['source']->value), 0, '1947653d13a269394c4-00144912');
+content_53d140c08ddbe5_78054808($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/forms/input.tpl" */?>
     <?php } elseif ($_smarty_tpl->tpl_vars['form_element']->value['type']=='password_input') {?>
         <?php /*  Call merged included template "web/forms/input.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/forms/input.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form_element'=>$_smarty_tpl->tpl_vars['form_element']->value,'form_source'=>$_smarty_tpl->tpl_vars['source']->value), 0, '92453cff46eaeffc2-22756426');
-content_53d13de20c28c9_12168149($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/forms/input.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form_element'=>$_smarty_tpl->tpl_vars['form_element']->value,'form_source'=>$_smarty_tpl->tpl_vars['source']->value), 0, '1947653d13a269394c4-00144912');
+content_53d140c08ddbe5_78054808($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/forms/input.tpl" */?>
     <?php } elseif ($_smarty_tpl->tpl_vars['form_element']->value['type']=='select') {?>
         <?php /*  Call merged included template "web/forms/select.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/forms/select.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form_element'=>$_smarty_tpl->tpl_vars['form_element']->value,'form_source'=>$_smarty_tpl->tpl_vars['source']->value), 0, '92453cff46eaeffc2-22756426');
-content_53d13de2148103_23873349($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/forms/select.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form_element'=>$_smarty_tpl->tpl_vars['form_element']->value,'form_source'=>$_smarty_tpl->tpl_vars['source']->value), 0, '1947653d13a269394c4-00144912');
+content_53d140c0963426_01022626($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/forms/select.tpl" */?>
     <?php } elseif ($_smarty_tpl->tpl_vars['form_element']->value['type']=='flipswitch') {?>
         <?php /*  Call merged included template "web/forms/flipswitch.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/forms/flipswitch.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form_element'=>$_smarty_tpl->tpl_vars['form_element']->value,'form_source'=>$_smarty_tpl->tpl_vars['source']->value), 0, '92453cff46eaeffc2-22756426');
-content_53d13de21a76e6_42934695($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/forms/flipswitch.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('form_element'=>$_smarty_tpl->tpl_vars['form_element']->value,'form_source'=>$_smarty_tpl->tpl_vars['source']->value), 0, '1947653d13a269394c4-00144912');
+content_53d140c09c2a07_16441519($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/forms/flipswitch.tpl" */?>
     <?php }?>
 <?php } ?><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:09:54
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:22:08
          compiled from "application\views\web\forms\input.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13de20c28c9_12168149')) {function content_53d13de20c28c9_12168149($_smarty_tpl) {?><?php if (!is_callable('smarty_function_form_value')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\function.form_value.php';
+<?php if ($_valid && !is_callable('content_53d140c08ddbe5_78054808')) {function content_53d140c08ddbe5_78054808($_smarty_tpl) {?><?php if (!is_callable('smarty_function_form_value')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\function.form_value.php';
 ?><div class="ui-field-contain">
     <label <?php if ($_smarty_tpl->tpl_vars['form_element']->value['id']) {?>for="<?php echo $_smarty_tpl->tpl_vars['form_element']->value['id'];?>
 "<?php }?>><?php echo (($tmp = @$_smarty_tpl->tpl_vars['form_element']->value['label'])===null||$tmp==='' ? 'Textový vstup' : $tmp);?>
@@ -288,9 +287,9 @@ $_smarty_tpl = array_pop($_tpl_stack);
 </em></p><?php }?>
 <?php if ($_smarty_tpl->tpl_vars['form_element']->value['name']) {?><?php echo form_error($_smarty_tpl->tpl_vars['form_element']->value['name'],'<div class="ui-bar ui-bar-b ui-corner-all">','</div>');?>
 <?php }?><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:09:54
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:22:08
          compiled from "application\views\web\forms\select.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13de2148103_23873349')) {function content_53d13de2148103_23873349($_smarty_tpl) {?><?php if (!is_callable('smarty_function_form_value')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\function.form_value.php';
+<?php if ($_valid && !is_callable('content_53d140c0963426_01022626')) {function content_53d140c0963426_01022626($_smarty_tpl) {?><?php if (!is_callable('smarty_function_form_value')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\function.form_value.php';
 if (!is_callable('smarty_function_html_options')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\function.html_options.php';
 ?><div class="ui-field-contain">
     <label <?php if ($_smarty_tpl->tpl_vars['form_element']->value['id']) {?>for="<?php echo $_smarty_tpl->tpl_vars['form_element']->value['id'];?>
@@ -300,7 +299,7 @@ if (!is_callable('smarty_function_html_options')) include 'C:\\xampp\\htdocs\\ls
 " <?php if ($_smarty_tpl->tpl_vars['form_element']->value['id']) {?>id="<?php echo $_smarty_tpl->tpl_vars['form_element']->value['id'];?>
 "<?php }?> <?php if (form_error($_smarty_tpl->tpl_vars['form_element']->value['name'])!='') {?>data-theme="b"<?php }?>>
         <?php ob_start();?><?php echo smarty_function_form_value(array('default'=>(($tmp = @$_smarty_tpl->tpl_vars['form_element']->value['default'])===null||$tmp==='' ? '' : $tmp),'source'=>(($tmp = @$_smarty_tpl->tpl_vars['form_source']->value)===null||$tmp==='' ? '' : $tmp),'name'=>(($tmp = @$_smarty_tpl->tpl_vars['form_element']->value['name'])===null||$tmp==='' ? '' : $tmp),'property'=>(($tmp = @$_smarty_tpl->tpl_vars['form_element']->value['object_property'])===null||$tmp==='' ? '' : $tmp)),$_smarty_tpl);?>
-<?php $_tmp2=ob_get_clean();?><?php echo smarty_function_html_options(array('options'=>$_smarty_tpl->tpl_vars['form_element']->value['values'],'selected'=>$_tmp2),$_smarty_tpl);?>
+<?php $_tmp1=ob_get_clean();?><?php echo smarty_function_html_options(array('options'=>$_smarty_tpl->tpl_vars['form_element']->value['values'],'selected'=>$_tmp1),$_smarty_tpl);?>
 
     </select>
 </div>
@@ -308,9 +307,9 @@ if (!is_callable('smarty_function_html_options')) include 'C:\\xampp\\htdocs\\ls
 </em></p><?php }?>
 <?php if ($_smarty_tpl->tpl_vars['form_element']->value['name']) {?><?php echo form_error($_smarty_tpl->tpl_vars['form_element']->value['name'],'<div class="ui-bar ui-bar-b ui-corner-all">','</div>');?>
 <?php }?><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:09:54
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:22:08
          compiled from "application\views\web\forms\flipswitch.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13de21a76e6_42934695')) {function content_53d13de21a76e6_42934695($_smarty_tpl) {?><?php if (!is_callable('smarty_function_form_value')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\function.form_value.php';
+<?php if ($_valid && !is_callable('content_53d140c09c2a07_16441519')) {function content_53d140c09c2a07_16441519($_smarty_tpl) {?><?php if (!is_callable('smarty_function_form_value')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\function.form_value.php';
 if (!is_callable('smarty_function_html_options')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\function.html_options.php';
 ?><div class="ui-field-contain">
     <label <?php if ($_smarty_tpl->tpl_vars['form_element']->value['id']) {?>for="<?php echo $_smarty_tpl->tpl_vars['form_element']->value['id'];?>
@@ -321,7 +320,7 @@ if (!is_callable('smarty_function_html_options')) include 'C:\\xampp\\htdocs\\ls
 "<?php }?> data-role="slider" <?php if (form_error($_smarty_tpl->tpl_vars['form_element']->value['name'])!='') {?>data-theme="b"<?php }?>>
         <?php $_smarty_tpl->tpl_vars['values'] = new Smarty_variable(array($_smarty_tpl->tpl_vars['form_element']->value['value_off']=>$_smarty_tpl->tpl_vars['form_element']->value['text_off'],$_smarty_tpl->tpl_vars['form_element']->value['value_on']=>$_smarty_tpl->tpl_vars['form_element']->value['text_on']), null, 0);?>
         <?php ob_start();?><?php echo smarty_function_form_value(array('default'=>(($tmp = @$_smarty_tpl->tpl_vars['form_element']->value['default'])===null||$tmp==='' ? '' : $tmp),'source'=>(($tmp = @$_smarty_tpl->tpl_vars['form_source']->value)===null||$tmp==='' ? '' : $tmp),'name'=>(($tmp = @$_smarty_tpl->tpl_vars['form_element']->value['name'])===null||$tmp==='' ? '' : $tmp),'property'=>(($tmp = @$_smarty_tpl->tpl_vars['form_element']->value['object_property'])===null||$tmp==='' ? '' : $tmp)),$_smarty_tpl);?>
-<?php $_tmp3=ob_get_clean();?><?php echo smarty_function_html_options(array('options'=>$_smarty_tpl->tpl_vars['values']->value,'selected'=>$_tmp3),$_smarty_tpl);?>
+<?php $_tmp2=ob_get_clean();?><?php echo smarty_function_html_options(array('options'=>$_smarty_tpl->tpl_vars['values']->value,'selected'=>$_tmp2),$_smarty_tpl);?>
 
     </select>
 </div>
@@ -329,9 +328,9 @@ if (!is_callable('smarty_function_html_options')) include 'C:\\xampp\\htdocs\\ls
 </em></p><?php }?>
 <?php if ($_smarty_tpl->tpl_vars['form_element']->value['name']) {?><?php echo form_error($_smarty_tpl->tpl_vars['form_element']->value['name'],'<div class="ui-bar ui-bar-b ui-corner-all">','</div>');?>
 <?php }?><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:09:54
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:22:08
          compiled from "application\views\web\partials\logoutDialog.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13de22123e8_09744190')) {function content_53d13de22123e8_09744190($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
+<?php if ($_valid && !is_callable('content_53d140c0a2d709_75957420')) {function content_53d140c0a2d709_75957420($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="d">
     <h1>Odhlásiť sa?</h1>
     </div>
