@@ -1,6 +1,7 @@
 {extends file='web/layouts/admin.tpl'}
 {block content_block}
     <div class="ui-body ui-body-c ui-corner-all">
+        {if $persons->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
                data-gridtable-operations="edit:Upraviť,delete:Vymazať"
                data-gridtable-operation-edit-url="{'persons/edit_person/--ID--'|site_url}"
@@ -32,6 +33,9 @@
                 {/foreach}
             </tbody>
         </table>
+        {else}
+            Momentálne v systéme neexistujú žiadne osoby.
+        {/if}
     </div>
 {/block}
 {block header_block}

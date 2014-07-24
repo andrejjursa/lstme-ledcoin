@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:12:30
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:56:16
          compiled from "application\views\web\controllers\persons\index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2549553cd67311d1640-44249875%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '658b0474042077230f1713a17a7d47770186db9f' => 
     array (
       0 => 'application\\views\\web\\controllers\\persons\\index.tpl',
-      1 => 1406218648,
+      1 => 1406224573,
       2 => 'file',
     ),
     'da973a66f1b8150ce141d2f611ea06a8b729feb5' => 
@@ -19,7 +19,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '3fbf8869f9133a2dcb36200bfd275fde4aa88b2a' => 
     array (
       0 => 'application\\views\\web\\partials\\navpanel.tpl',
-      1 => 1406221933,
+      1 => 1406224195,
       2 => 'file',
     ),
     'f55371eff71ae32ec6531cdb4f5413d25646fdda' => 
@@ -87,7 +87,7 @@ $(document).ready(function(){
                 <?php /*  Call merged included template "web/partials/navpanel.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/navpanel.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '2549553cd67311d1640-44249875');
-content_53d13e7e388156_55355796($_smarty_tpl);
+content_53d148c0269fb5_31794479($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/navpanel.tpl" */?>
             </div>
@@ -110,11 +110,12 @@ $_smarty_tpl = array_pop($_tpl_stack);
                 <?php /*  Call merged included template "web/partials/flashmessages.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/flashmessages.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '2549553cd67311d1640-44249875');
-content_53d13e7e3d0905_42031433($_smarty_tpl);
+content_53d148c02b2754_10524597($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/flashmessages.tpl" */?>
                 
     <div class="ui-body ui-body-c ui-corner-all">
+        <?php if ($_smarty_tpl->tpl_vars['persons']->value->exists()) {?>
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
                data-gridtable-operations="edit:Upraviť,delete:Vymazať"
                data-gridtable-operation-edit-url="<?php echo site_url('persons/edit_person/--ID--');?>
@@ -162,6 +163,9 @@ $_smarty_tpl->tpl_vars['person']->_loop = true;
                 <?php } ?>
             </tbody>
         </table>
+        <?php } else { ?>
+            Momentálne v systéme neexistujú žiadne osoby.
+        <?php }?>
     </div>
 
             </div>
@@ -173,15 +177,15 @@ $_smarty_tpl->tpl_vars['person']->_loop = true;
             <?php /*  Call merged included template "web/partials/logoutDialog.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/logoutDialog.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '2549553cd67311d1640-44249875');
-content_53d13e7e470c70_47432288($_smarty_tpl);
+content_53d148c03567e5_86228988($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/logoutDialog.tpl" */?>
         </div>
     </body>
 </html><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:12:30
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:56:16
          compiled from "application\views\web\partials\navpanel.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13e7e388156_55355796')) {function content_53d13e7e388156_55355796($_smarty_tpl) {?><div class="ui-panel-inner">
+<?php if ($_valid && !is_callable('content_53d148c0269fb5_31794479')) {function content_53d148c0269fb5_31794479($_smarty_tpl) {?><div class="ui-panel-inner">
 <?php if (auth_is_authentificated()) {?>
     <p><strong>Používateľ:</strong> <?php echo auth_get_name();?>
 </p>
@@ -193,7 +197,7 @@ $_smarty_tpl = array_pop($_tpl_stack);
         <li><a href="<?php echo site_url('strojak/bufet');?>
 " class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Bufet</a></li>
         <?php if (auth_is_authentificated()) {?>
-            <li><a href="#logoutDialog" class="ui-btn ui-btn-b ui-shadow" data-rel="popup" data-position-to="window" data-transition="flip">Odhlásiť sa</a></li>
+            <li><a href="#logoutDialog" class="ui-btn ui-btn-b ui-shadow" data-rel="popup" data-position-to="window" data-transition="pop">Odhlásiť sa</a></li>
         <?php }?>
     </ul>
         
@@ -202,10 +206,10 @@ $_smarty_tpl = array_pop($_tpl_stack);
 " method="post" id="login-form" data-ajax="false">
         <h3>Prihlásenie</h3>
         <label for="login-login">Prihlasovacie meno:</label>
-        <input type="text" name="login[login]" id="login-login" value="" data-clear-btn="true" data-mini="true" />
+        <input type="text" name="login[login]" id="login-login" value="" data-clear-btn="true" data-mini="true" data-theme="a" />
         <label for="login-password">Heslo:</label>
-        <input type="password" name="login[password]" id="login-password" value="" data-clear-btn="true" data-mini="true" />
-        <input type="submit" value="Prihlásiť sa" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini" />
+        <input type="password" name="login[password]" id="login-password" value="" data-clear-btn="true" data-mini="true" data-theme="a" />
+        <input type="submit" value="Prihlásiť sa" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini" data-theme="a" />
         <input type="hidden" name="return_url" value="<?php if ($_smarty_tpl->tpl_vars['this']->value->router->class!='error') {?><?php echo current_url();?>
 <?php } else { ?><?php echo site_url('/');?>
 <?php }?>" />
@@ -219,15 +223,16 @@ $_smarty_tpl = array_pop($_tpl_stack);
 " class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Ľudia</a></li>
         <li><a href="<?php echo site_url('groups');?>
 " class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Skupiny</a></li>
-        <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Zamestnania</a></li>
+        <li><a href="<?php echo site_url('workplaces');?>
+" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Zamestnania</a></li>
         <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bufet</a></li>
         <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Strojový čas</a></li>
     </ul>
 <?php }?>
 </div><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:12:30
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:56:16
          compiled from "application\views\web\partials\flashmessages.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13e7e3d0905_42031433')) {function content_53d13e7e3d0905_42031433($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
+<?php if ($_valid && !is_callable('content_53d148c02b2754_10524597')) {function content_53d148c02b2754_10524597($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
 <?php if (is_array($_smarty_tpl->tpl_vars['flash_messages']->value)&&count($_smarty_tpl->tpl_vars['flash_messages']->value)>0) {?>
     <?php  $_smarty_tpl->tpl_vars['flash_message'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['flash_message']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['flash_messages']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
@@ -254,9 +259,9 @@ $_smarty_tpl->tpl_vars['flash_message']->_loop = true;
         <?php }?>
     <?php } ?>
 <?php }?><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:12:30
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-24 19:56:16
          compiled from "application\views\web\partials\logoutDialog.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d13e7e470c70_47432288')) {function content_53d13e7e470c70_47432288($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
+<?php if ($_valid && !is_callable('content_53d148c03567e5_86228988')) {function content_53d148c03567e5_86228988($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="d">
     <h1>Odhlásiť sa?</h1>
     </div>

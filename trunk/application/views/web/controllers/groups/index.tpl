@@ -1,6 +1,7 @@
 {extends file='web/layouts/admin.tpl'}
 {block content_block}
     <div class="ui-body ui-body-c ui-corner-all">
+        {if $groups->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
                data-gridtable-operations="edit:Upraviť,delete:Vymazať"
                data-gridtable-operation-edit-url="{'groups/edit_group/--ID--'|site_url}"
@@ -23,11 +24,14 @@
                 <tr data-gridtable-unique="group_{$group->id|intval}" data-gridtable-id="{$group->id|intval}" data-gridtable-title="{$group->title|escape:'html'|addslashes}">
                     <td>{$group->id|intval}</td>
                     <td>{$group->title}</td>
-                    <td>{$group->persons_count|intval}</td>
+                    <td><em>{$group->persons_count|intval}</em> {get_inflection_by_numbers($group->persons_count|intval, 'účastníkov', 'účastník', 'účastníci', 'účastníci', 'účastníci', 'účastníkov')}</td>
                 </tr>
                 {/foreach}
             </tbody>
         </table>
+        {else}
+            Momentálne nie sú k dispozícii žiadne skupiny.
+        {/if}
     </div>
 {/block}
 {block header_block}

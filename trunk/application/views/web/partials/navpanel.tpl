@@ -28,7 +28,7 @@
     <ul data-role="listview" data-inset="true">
         <li><a href="{'persons'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Ľudia</a></li>
         <li><a href="{'groups'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Skupiny</a></li>
-        <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Zamestnania</a></li>
+        <li><a href="{'workplaces'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Zamestnania</a></li>
         <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bufet</a></li>
         <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Strojový čas</a></li>
     </ul>
