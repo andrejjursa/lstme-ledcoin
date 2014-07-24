@@ -13,8 +13,13 @@
     </head>
     <body>
         <div data-role="page" id="strojak-main-page" data-theme="b">
+            <div data-role="panel" id="navpanel" data-position="right" data-position-fixed="true" data-display="push" data-swipe-close="false">
+                {include file='web/partials/navpanel.tpl' inline}
+            </div>
+            
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>Strojový čas{if $title} / {$title}{/if}</h1>
+                <a href="#navpanel" class="strojak-navigation-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-right">Navigácia</a>
             </div>
             
             <div data-role="content">
@@ -25,6 +30,8 @@
             <div data-role="footer" data-position="fixed" data-tap-toggle="false">
                 <p style="text-align: center;">&copy; LSTME 2014</p>
             </div>
+            
+            {include file='web/partials/logoutDialog.tpl' inline}
         </div>
     </body>
 </html>

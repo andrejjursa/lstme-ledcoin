@@ -7,11 +7,12 @@ $cache = array (
     1 => 'created',
     2 => 'updated',
     3 => 'name',
-    4 => 'login',
-    5 => 'password',
-    6 => 'group_id',
-    7 => 'admin',
-    8 => 'organisation',
+    4 => 'surname',
+    5 => 'login',
+    6 => 'password',
+    7 => 'group_id',
+    8 => 'admin',
+    9 => 'organisation',
   ),
   'validation' => 
   array (
@@ -40,6 +41,13 @@ $cache = array (
     'name' => 
     array (
       'field' => 'name',
+      'rules' => 
+      array (
+      ),
+    ),
+    'surname' => 
+    array (
+      'field' => 'surname',
       'rules' => 
       array (
       ),

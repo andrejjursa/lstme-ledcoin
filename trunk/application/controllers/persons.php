@@ -22,6 +22,7 @@ class Persons extends CI_Controller {
         $this->inject_persons();
         
         $persons = new Person();
+        $persons->include_related('group', 'title');
         $persons->order_by('admin', 'asc')->order_by('name', 'asc');
         $persons->get_iterated();
         
@@ -41,7 +42,7 @@ class Persons extends CI_Controller {
             $person_data = $this->input->post('person');
             
             $person = new Person();
-            $person->from_array($person_data, array('name', 'login', 'organisation', 'admin'));
+            $person->from_array($person_data, array('name', 'surname', 'login', 'organisation', 'admin'));
             $person->password = sha1($person_data['password']);
             
             $group = new Group();
@@ -49,7 +50,7 @@ class Persons extends CI_Controller {
             
             if ($person->save($group) && $this->db->trans_status()) {
                 $this->db->trans_commit();
-                add_success_flash_message('Osoba menom <strong>' . $person_data['name'] . '</strong> s loginom <strong>' . $person_data['login'] . '</strong> bola vytvorená s ID <strong>' . $person->id . '</strong>.');
+                add_success_flash_message('Osoba menom <strong>' . $person_data['name'] . ' ' . $person_data['surname'] . '</strong> s loginom <strong>' . $person_data['login'] . '</strong> bola vytvorená s ID <strong>' . $person->id . '</strong>.');
                 redirect(site_url('persons'));
             } else {
                 $this->db->trans_rollback();
@@ -109,7 +110,7 @@ class Persons extends CI_Controller {
             if ($person_data['password'] != '') {
                 $person->password = sha1($person_data['password']);
             }
-            $person->from_array($person_data, array('name', 'login', 'organisation', 'admin'));
+            $person->from_array($person_data, array('name', 'surname', 'login', 'organisation', 'admin'));
             
             $group = new Group();
             if ($person_data['group_id'] != '') {
@@ -150,8 +151,8 @@ class Persons extends CI_Controller {
             redirect(site_url('persons'));
         }
         
-        $success_message = 'Osoba <strong>' . $person->name . '</strong> s loginom <strong>' . $person->login . '</strong>, a s ID <strong>' . $person->id . '</strong> bola úspešne vymazaná.';
-        $error_message = 'Osobu <strong>' . $person->name . '</strong> s loginom <strong>' . $person->login . '</strong>, a s ID <strong>' . $person->id . '</strong> sa nepodarilo vymazať.';
+        $success_message = 'Osoba <strong>' . $person->name . ' ' . $person->surname . '</strong> s loginom <strong>' . $person->login . '</strong>, a s ID <strong>' . $person->id . '</strong> bola úspešne vymazaná.';
+        $error_message = 'Osobu <strong>' . $person->name . ' ' . $person->surname . '</strong> s loginom <strong>' . $person->login . '</strong>, a s ID <strong>' . $person->id . '</strong> sa nepodarilo vymazať.';
         
         if ($person->delete()) {
             add_success_flash_message($success_message);
@@ -186,11 +187,18 @@ class Persons extends CI_Controller {
             'name' => array(
                 'name' => 'person[name]',
                 'type' => 'text_input',
-                'label' => 'Celé meno osoby',
-                'placeholder' => 'Sem zadajte celé meno osoby, v poradí Meno Priezvisko.',
+                'label' => 'Meno osoby',
                 'id' => 'person-name',
                 'validation' => 'required',
                 'object_property' => 'name',
+            ),
+            'surname' => array(
+                'name' => 'person[surname]',
+                'type' => 'text_input',
+                'label' => 'Priezvisko',
+                'id' => 'person-surname',
+                'validation' => 'required',
+                'object_property' => 'surname',
             ),
             'login' => array(
                 'name' => 'person[login]',

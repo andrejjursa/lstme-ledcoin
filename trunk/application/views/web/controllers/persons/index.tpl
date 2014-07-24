@@ -16,15 +16,17 @@
                     <th>ID</th>
                     <th>Meno</th>
                     <th>Login</th>
+                    <th>Skupina</th>
                     <th>Admin?</th>
                 </tr>
             </thead>
             <tbody>
                 {foreach $persons as $person}
-                <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}" data-gridtable-name="{$person->name|escape:'html'|addslashes}" data-gridtable-login="{$person->login|escape:'html'|addslashes}">
+                <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}" data-gridtable-name="{$person->name|escape:'html'|addslashes} {$person->surname|escape:'html'|addslashes}" data-gridtable-login="{$person->login|escape:'html'|addslashes}">
                     <td>{$person->id|intval}</td>
-                    <td>{$person->name}</td>
+                    <td>{$person->name} {$person->surname}</td>
                     <td>{$person->login}</td>
+                    <td>{$person->group_title|default:'<strong>---</strong>'}</td>
                     <td>{if $person->admin}Áno{else}Nie{/if}</td>
                 </tr>
                 {/foreach}

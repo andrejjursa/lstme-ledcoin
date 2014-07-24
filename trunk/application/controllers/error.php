@@ -24,6 +24,10 @@ class Error extends CI_Controller {
         $this->parser->parse('web/controllers/error/no_admin.tpl', array('title' => 'Chyba prihlásenia'));
     }
     
+    public function page_not_found() {
+        $this->parser->parse('web/controllers/error/page_not_found.tpl', array('title' => 'Stránka neexistuje'));
+    }
+    
 }
 
 ?>
