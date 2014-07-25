@@ -44,6 +44,7 @@ class Persons extends CI_Controller {
             $person = new Person();
             $person->from_array($person_data, array('name', 'surname', 'login', 'organisation', 'admin'));
             $person->password = sha1($person_data['password']);
+            $person->enabled = 1;
             
             $group = new Group();
             $group->get_by_id((int)$person_data['group_id']);
@@ -107,10 +108,15 @@ class Persons extends CI_Controller {
                 add_error_flash_message('Nie je možné odobrať oprávnenie administrátora vlastnému účtu.');
                 redirect(site_url('persons/edit_person/' . $person->id));
             } 
+            if (auth_get_id() == $person->id && $person_data['enabled'] != 1) {
+                $this->db->trans_rollback();
+                add_error_flash_message('Nie je možné odobrať oprávnenie na prihlasovanie sa vlastnému účtu.');
+                redirect(site_url('persons/edit_person/' . $person->id));
+            }
             if ($person_data['password'] != '') {
                 $person->password = sha1($person_data['password']);
             }
-            $person->from_array($person_data, array('name', 'surname', 'login', 'organisation', 'admin'));
+            $person->from_array($person_data, array('name', 'surname', 'login', 'organisation', 'admin', 'enabled'));
             
             $group = new Group();
             if ($person_data['group_id'] != '') {
@@ -184,79 +190,84 @@ class Persons extends CI_Controller {
         }
         
         $form = array(
-            'name' => array(
-                'name' => 'person[name]',
-                'type' => 'text_input',
-                'label' => 'Meno osoby',
-                'id' => 'person-name',
-                'validation' => 'required',
-                'object_property' => 'name',
-            ),
-            'surname' => array(
-                'name' => 'person[surname]',
-                'type' => 'text_input',
-                'label' => 'Priezvisko',
-                'id' => 'person-surname',
-                'validation' => 'required',
-                'object_property' => 'surname',
-            ),
-            'login' => array(
-                'name' => 'person[login]',
-                'type' => 'text_input',
-                'label' => 'Prihlasovacie meno',
-                'id' => 'person-login',
-                'validation' => 'required|is_unique[persons.login]',
-                'object_property' => 'login',
-            ),
-            'password' => array(
-                'name' => 'person[password]',
-                'type' => 'password_input',
-                'label' => 'Heslo',
-                'id' => 'person-password',
-                'validation' => 'required|min_length[6]|max_length[20]',
-            ),
-            'password_check' => array(
-                'name' => 'person_password_check',
-                'type' => 'password_input',
-                'label' => 'Heslo pre kontrolu',
-                'id' => 'person_password_check',
-                'hint' => 'Heslá sa musia zhodovať.',
-                'validation' => 'required|matches[person[password]]',
-            ),
-            'organisation' => array(
-                'name' => 'person[organisation]',
-                'type' => 'text_input',
-                'label' => 'Škola / organizácia',
-                'id' => 'person-organisation',
-                'validation' => 'required',
-                'object_property' => 'organisation',
-            ),
-            'group_id' => array(
-                'name' => 'person[group_id]',
-                'type' => 'select',
-                'label' => 'Skupina',
-                'id' => 'person-group_id',
-                'values' => $groups_to_form,
-                'validation' => array(
-                    array(
-                        'if-field-equals' => array('field' => 'person[admin]', 'value' => '0'),
-                        'rules' => 'required',
-                    ),
+            'fields' => array(
+                'name' => array(
+                    'name' => 'person[name]',
+                    'type' => 'text_input',
+                    'label' => 'Meno osoby',
+                    'id' => 'person-name',
+                    'validation' => 'required',
+                    'object_property' => 'name',
                 ),
-                'object_property' => 'group_id',
+                'surname' => array(
+                    'name' => 'person[surname]',
+                    'type' => 'text_input',
+                    'label' => 'Priezvisko',
+                    'id' => 'person-surname',
+                    'validation' => 'required',
+                    'object_property' => 'surname',
+                ),
+                'login' => array(
+                    'name' => 'person[login]',
+                    'type' => 'text_input',
+                    'label' => 'Prihlasovacie meno',
+                    'id' => 'person-login',
+                    'validation' => 'required|is_unique[persons.login]',
+                    'object_property' => 'login',
+                ),
+                'password' => array(
+                    'name' => 'person[password]',
+                    'type' => 'password_input',
+                    'label' => 'Heslo',
+                    'id' => 'person-password',
+                    'validation' => 'required|min_length[6]|max_length[20]',
+                ),
+                'password_check' => array(
+                    'name' => 'person_password_check',
+                    'type' => 'password_input',
+                    'label' => 'Heslo pre kontrolu',
+                    'id' => 'person_password_check',
+                    'hint' => 'Heslá sa musia zhodovať.',
+                    'validation' => 'required|matches[person[password]]',
+                ),
+                'organisation' => array(
+                    'name' => 'person[organisation]',
+                    'type' => 'text_input',
+                    'label' => 'Škola / organizácia',
+                    'id' => 'person-organisation',
+                    'validation' => 'required',
+                    'object_property' => 'organisation',
+                ),
+                'group_id' => array(
+                    'name' => 'person[group_id]',
+                    'type' => 'select',
+                    'label' => 'Skupina',
+                    'id' => 'person-group_id',
+                    'values' => $groups_to_form,
+                    'validation' => array(
+                        array(
+                            'if-field-equals' => array('field' => 'person[admin]', 'value' => '0'),
+                            'rules' => 'required',
+                        ),
+                    ),
+                    'object_property' => 'group_id',
+                ),
+                'admin' => array(
+                    'name' => 'person[admin]',
+                    'type' => 'flipswitch',
+                    'label' => 'Administrátor',
+                    'value_off' => '0',
+                    'text_off' => 'Nie',
+                    'value_on' => '1',
+                    'text_on' => 'Áno',
+                    'id' => 'person-admin',
+                    'default' => '0',
+                    'object_property' => 'admin',
+                    'hint' => 'Administrátor spravuje všetok obsah a udeluje strojový čas, nedávajte tieto práva účastníkom!',
+                ),
             ),
-            'admin' => array(
-                'name' => 'person[admin]',
-                'type' => 'flipswitch',
-                'label' => 'Administrátor',
-                'value_off' => '0',
-                'text_off' => 'Nie',
-                'value_on' => '1',
-                'text_on' => 'Áno',
-                'id' => 'person-admin',
-                'default' => '0',
-                'object_property' => 'admin',
-                'hint' => 'Administrátor spravuje všetok obsah a udeluje strojový čas, nedávajte tieto práva účastníkom!',
+            'arangement' => array(
+                'name', 'surname', 'login', 'password', 'password_check', 'organisation', 'group_id', 'admin'
             ),
         );
         return $form;
@@ -264,21 +275,21 @@ class Persons extends CI_Controller {
     
     protected function get_edit_form($person = NULL) {
         $form = $this->get_form();
-        $form['password']['validation'] = array(
+        $form['fields']['password']['validation'] = array(
             array(
                 'if-field-not-equals' => array('field' => 'person[password]', 'value' => ''),
                 'rules' => 'required|min_length[6]|max_length[20]',
             ),
         );
-        $form['password']['hint'] = 'Heslá vypisujte iba v prípade ak ich chcete zmeniť.';
-        $form['password_check']['validation'] = array(
+        $form['fields']['password']['hint'] = 'Heslá vypisujte iba v prípade ak ich chcete zmeniť.';
+        $form['fields']['password_check']['validation'] = array(
             array(
                 'if-field-not-equals' => array('field' => 'person[password]', 'value' => ''),
                 'rules' => 'required|matches[person[password]]',
             ),
         );
         if ($person instanceof Person) {
-            $form['login']['validation'] = array(
+            $form['fields']['login']['validation'] = array(
                 array(
                     'if-field-equals' => array('field' => 'person[login]', 'value' => $person->login),
                     'rules' => 'required',
@@ -289,6 +300,20 @@ class Persons extends CI_Controller {
                 ),
             );
         }
+        $form['fields']['enabled'] = array(
+            'name' => 'person[enabled]',
+            'type' => 'flipswitch',
+            'label' => 'Povolenie prihlásenia',
+            'value_off' => '0',
+            'text_off' => 'Nie',
+            'value_on' => '1',
+            'text_on' => 'Áno',
+            'id' => 'person-enabled',
+            'default' => '1',
+            'object_property' => 'enabled',
+            'hint' => 'Zakázaním prihlásenia odopriete tejto osobe prístup k aplikácii.',
+        );
+        $form['arangement'][] = 'enabled';
         return $form;
     }
     

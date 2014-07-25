@@ -4,23 +4,27 @@ function build_validator_from_form($form) {
     $rules = array();
     $CI =& get_instance();
     
-    if (is_array($form) && count($form) > 0) {
-        foreach ($form as $index => $form_element) {
-            if (array_key_exists('validation', $form_element) && isset($form_element['name']) && trim($form_element['name']) != '') {
-                if (is_string($form_element['validation'])) {
-                    $rules[] = array(
-                        'field' => $form_element['name'],
-                        'label' => @$form_element['label'],
-                        'rules' => $form_element['validation'],
-                    );
-                } elseif (is_array($form_element['validation'])) {
-                    $rules_from_tree = recurse_validation_condition_tree($form_element['validation']);
-                    if (!is_null($rules_from_tree)) {
+    if (is_array($form) && isset($form['fields']) && isset($form['arangement']) && is_array($form['fields']) && is_array($form['arangement']) 
+            && count($form['fields']) > 0 && count($form['arangement']) > 0) {
+        foreach ($form['arangement'] as $index) {
+            $form_element = isset($form['fields'][$index]) ? $form['fields'][$index] : NULL;
+            if (!is_null($form_element) && is_array($form_element)) {
+                if (array_key_exists('validation', $form_element) && isset($form_element['name']) && trim($form_element['name']) != '') {
+                    if (is_string($form_element['validation'])) {
                         $rules[] = array(
                             'field' => $form_element['name'],
                             'label' => @$form_element['label'],
-                            'rules' => $rules_from_tree,
+                            'rules' => $form_element['validation'],
                         );
+                    } elseif (is_array($form_element['validation'])) {
+                        $rules_from_tree = recurse_validation_condition_tree($form_element['validation']);
+                        if (!is_null($rules_from_tree)) {
+                            $rules[] = array(
+                                'field' => $form_element['name'],
+                                'label' => @$form_element['label'],
+                                'rules' => $rules_from_tree,
+                            );
+                        }
                     }
                 }
             }

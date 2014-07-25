@@ -156,13 +156,18 @@ class Groups extends CI_Controller {
     
     private function get_form() {
         $form = array(
-            'title' => array(
-                'name' => 'group[title]',
-                'type' => 'text_input',
-                'id' => 'group-title',
-                'label' => 'Názov',
-                'object_property' => 'title',
-                'validation' => 'required',
+            'fields' => array(
+                'title' => array(
+                    'name' => 'group[title]',
+                    'type' => 'text_input',
+                    'id' => 'group-title',
+                    'label' => 'Názov',
+                    'object_property' => 'title',
+                    'validation' => 'required',
+                ),
+            ),
+            'arangement' => array(
+                'title',
             ),
         );
         return $form;

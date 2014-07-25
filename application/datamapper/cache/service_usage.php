@@ -1,15 +1,15 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 $cache = array (
-  'table' => 'quantities',
+  'table' => 'service_usages',
   'fields' => 
   array (
     0 => 'id',
     1 => 'created',
     2 => 'updated',
-    3 => 'product_id',
-    4 => 'operation_id',
+    3 => 'operation_id',
+    4 => 'service_id',
     5 => 'quantity',
-    6 => 'type',
+    6 => 'price',
   ),
   'validation' => 
   array (
@@ -35,16 +35,16 @@ $cache = array (
       array (
       ),
     ),
-    'product_id' => 
+    'operation_id' => 
     array (
-      'field' => 'product_id',
+      'field' => 'operation_id',
       'rules' => 
       array (
       ),
     ),
-    'operation_id' => 
+    'service_id' => 
     array (
-      'field' => 'operation_id',
+      'field' => 'service_id',
       'rules' => 
       array (
       ),
@@ -56,16 +56,16 @@ $cache = array (
       array (
       ),
     ),
-    'type' => 
+    'price' => 
     array (
-      'field' => 'type',
+      'field' => 'price',
       'rules' => 
       array (
       ),
     ),
-    'product' => 
+    'service' => 
     array (
-      'field' => 'product',
+      'field' => 'service',
       'rules' => 
       array (
       ),
@@ -80,12 +80,12 @@ $cache = array (
   ),
   'has_one' => 
   array (
-    'product' => 
+    'service' => 
     array (
-      'class' => 'product',
-      'other_field' => 'quantity',
-      'join_self_as' => 'quantity',
-      'join_other_as' => 'product',
+      'class' => 'service',
+      'other_field' => 'service_usage',
+      'join_self_as' => 'service_usage',
+      'join_other_as' => 'service',
       'join_table' => '',
       'reciprocal' => false,
       'auto_populate' => NULL,
@@ -94,8 +94,8 @@ $cache = array (
     'operation' => 
     array (
       'class' => 'operation',
-      'other_field' => 'quantity',
-      'join_self_as' => 'quantity',
+      'other_field' => 'service_usage',
+      'join_self_as' => 'service_usage',
       'join_other_as' => 'operation',
       'join_table' => '',
       'reciprocal' => false,

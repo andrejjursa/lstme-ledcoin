@@ -15,9 +15,9 @@
                 {foreach $products as $product}
                 <tr>
                     <td>{$product->title}</td>
-                    <td>{$product->price}</td>
-                    <td>{$product->plus_quantity - $product->minus_quantity}</td>
-                    <td>{$product->minus_quantity}</td>
+                    <td>{include file='web/partials/minutes_inflection.tpl' minutes=$product->price inline}</td>
+                    <td>{include file='web/partials/pieces_inflection.tpl' pieces={$product->plus_quantity - $product->minus_quantity}|intval inline}</td>
+                    <td>{include file='web/partials/pieces_inflection.tpl' pieces=$product->minus_quantity|intval inline}</td>
                 </tr>
                 {/foreach}
             </tbody>

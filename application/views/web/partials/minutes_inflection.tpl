@@ -1,0 +1,1 @@
+{$minutes} {get_inflection_by_numbers($minutes, 'minút', 'minúta', 'minúty', 'minúty', 'minúty', 'minút')}

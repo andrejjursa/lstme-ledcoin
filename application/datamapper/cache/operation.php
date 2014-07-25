@@ -100,9 +100,16 @@ $cache = array (
       array (
       ),
     ),
-    'quantity' => 
+    'product_quantity' => 
     array (
-      'field' => 'quantity',
+      'field' => 'product_quantity',
+      'rules' => 
+      array (
+      ),
+    ),
+    'service_usage' => 
+    array (
+      'field' => 'service_usage',
       'rules' => 
       array (
       ),
@@ -146,12 +153,23 @@ $cache = array (
   ),
   'has_many' => 
   array (
-    'quantity' => 
+    'product_quantity' => 
     array (
-      'class' => 'quantity',
+      'class' => 'product_quantity',
       'other_field' => 'operation',
       'join_self_as' => 'operation',
-      'join_other_as' => 'quantity',
+      'join_other_as' => 'product_quantity',
+      'join_table' => '',
+      'reciprocal' => false,
+      'auto_populate' => NULL,
+      'cascade_delete' => true,
+    ),
+    'service_usage' => 
+    array (
+      'class' => 'service_usage',
+      'other_field' => 'operation',
+      'join_self_as' => 'operation',
+      'join_other_as' => 'service_usage',
       'join_table' => '',
       'reciprocal' => false,
       'auto_populate' => NULL,

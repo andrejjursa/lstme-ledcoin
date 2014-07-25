@@ -1,0 +1,1 @@
+{$pieces} {get_inflection_by_numbers($pieces, 'kusov', 'kus', 'kusy', 'kusy', 'kusy', 'kusov')}

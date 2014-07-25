@@ -15,9 +15,9 @@
     <form action="{'user/login'|site_url}" method="post" id="login-form" data-ajax="false">
         <h3>Prihlásenie</h3>
         <label for="login-login">Prihlasovacie meno:</label>
-        <input type="text" name="login[login]" id="login-login" value="" data-clear-btn="true" data-mini="true" data-theme="a" />
+        <input type="text" name="login[login]" id="login-login" value="" data-mini="true" data-theme="a" />
         <label for="login-password">Heslo:</label>
-        <input type="password" name="login[password]" id="login-password" value="" data-clear-btn="true" data-mini="true" data-theme="a" />
+        <input type="password" name="login[password]" id="login-password" value="" data-mini="true" data-theme="a" />
         <input type="submit" value="Prihlásiť sa" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini" data-theme="a" />
         <input type="hidden" name="return_url" value="{if $this->router->class neq 'error'}{current_url()}{else}{'/'|site_url}{/if}" />
     </form>
@@ -29,7 +29,8 @@
         <li><a href="{'persons'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Ľudia</a></li>
         <li><a href="{'groups'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Skupiny</a></li>
         <li><a href="{'workplaces'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Zamestnania</a></li>
-        <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bufet</a></li>
+        <li><a href="{'products'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bufet</a></li>
+        <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Služby</a></li>
         <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Strojový čas</a></li>
     </ul>
 {/if}

@@ -10,8 +10,8 @@
  *
  * @author Andrej
  */
-class Quantity extends DataMapper {
-    public $table_name = 'quantities';
+class Product_quantity extends DataMapper {
+    public $table_name = 'product_quantities';
     
     public $has_one = array(
         'product',
