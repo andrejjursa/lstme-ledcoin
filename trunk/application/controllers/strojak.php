@@ -13,32 +13,46 @@ class Strojak extends CI_Controller {
         $operations_subtraction_simple->select_sum('time', 'time_sum');
         $operations_subtraction_simple->where_related_person('id', '${parent}.id');
         
-        $operations_subtraction_advanced = new Operation();
-        $operations_subtraction_advanced->where('type', 'subtraction');
-        $operations_subtraction_advanced->where_related('quantity/product', 'price >', 0);
-        unset($operations_subtraction_advanced->db->ar_select[0]);
-        $operations_subtraction_advanced->select_func('SUM', array('@quantities.quantity', '*', '@quantity_products.price'), 'time_sum');
-        $operations_subtraction_advanced->where_related_person('id', '${parent}.id');
+        $operations_subtraction_advanced_1 = new Operation();
+        $operations_subtraction_advanced_1->where('type', 'subtraction');
+        $operations_subtraction_advanced_1->where_related('product_quantity', 'price >', 0);
+        $operations_subtraction_advanced_1->group_start(' NOT', 'AND');
+        $operations_subtraction_advanced_1->where_related('product_quantity', 'product_id', NULL);
+        $operations_subtraction_advanced_1->group_end();
+        unset($operations_subtraction_advanced_1->db->ar_select[0]);
+        $operations_subtraction_advanced_1->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'time_sum');
+        $operations_subtraction_advanced_1->where_related_person('id', '${parent}.id');
+        
+        $operations_subtraction_advanced_2 = new Operation();
+        $operations_subtraction_advanced_2->where('type', 'subtraction');
+        $operations_subtraction_advanced_2->where_related('service_usage', 'price >', 0);
+        $operations_subtraction_advanced_2->group_start(' NOT', 'AND');
+        $operations_subtraction_advanced_2->where_related('service_usage', 'service_id', NULL);
+        $operations_subtraction_advanced_2->group_end();
+        unset($operations_subtraction_advanced_2->db->ar_select[0]);
+        $operations_subtraction_advanced_2->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'time_sum');
+        $operations_subtraction_advanced_2->where_related_person('id', '${parent}.id');
         
         $persons_non_admins = new Person();
         $persons_non_admins->where('admin', 0);
         $persons_non_admins->select('*');
         $persons_non_admins->select_subquery($operations_addition, 'plus_time');
         $persons_non_admins->select_subquery($operations_subtraction_simple, 'minus_time_1');
-        $persons_non_admins->select_subquery($operations_subtraction_advanced, 'minus_time_2');
+        $persons_non_admins->select_subquery($operations_subtraction_advanced_1, 'minus_time_2');
+        $persons_non_admins->select_subquery($operations_subtraction_advanced_2, 'minus_time_3');
         $persons_non_admins->include_related('group', 'title');
-        $persons_non_admins->order_by_func('', array('@plus_time', '-', '@minus_time_1', '-', '@minus_time_2'), 'asc');
+        $persons_non_admins->db->ar_orderby[] = '(IFNULL(`plus_time`, 0) - IFNULL(`minus_time_1`, 0) - IFNULL(`minus_time_2`, 0) - IFNULL(`minus_time_3`, 0)) DESC';
         $persons_non_admins->get_iterated();
         $this->parser->parse('web/controllers/strojak/index.tpl', array('persons' => $persons_non_admins, 'title' => 'Účastníci'));
     }
     
     public function bufet() {
-        $quantity_addition = new Quantity();
+        $quantity_addition = new Product_quantity();
         $quantity_addition->select_sum('quantity', 'quantity_sum');
         $quantity_addition->where('type', 'addition');
         $quantity_addition->where_related('product', 'id', '${parent}.id');
         
-        $quantity_subtraction = new Quantity();
+        $quantity_subtraction = new Product_quantity();
         $quantity_subtraction->select_sum('quantity', 'quantity_sum');
         $quantity_subtraction->where('type', 'subtraction');
         $quantity_subtraction->where_related('product', 'id', '${parent}.id');

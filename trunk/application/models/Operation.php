@@ -13,7 +13,7 @@
 class Operation extends DataMapper {
     public $table_name = 'operations';
     
-    public $has_many = array('quantity');
+    public $has_many = array('product_quantity', 'service_usage');
     public $has_one = array(
         'person',
         'workplace',

@@ -1,13 +1,13 @@
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:07:05
-         compiled from "application\views\web\controllers\groups\index.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:1613053d12be43e7738-08400404%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:41:00
+         compiled from "application\views\web\controllers\products\stock.tpl" */ ?>
+<?php /*%%SmartyHeaderCode:88953d277c39357b1-51638440%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
-    'a5e35e2cdd580a0ab292f7fd605e80e2498e182f' => 
+    '005ab4b35a339fb768a7dc9b66ba9ef5f015350f' => 
     array (
-      0 => 'application\\views\\web\\controllers\\groups\\index.tpl',
-      1 => 1406227666,
+      0 => 'application\\views\\web\\controllers\\products\\stock.tpl',
+      1 => 1406302858,
       2 => 'file',
     ),
     'da973a66f1b8150ce141d2f611ea06a8b729feb5' => 
@@ -28,6 +28,12 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       1 => 1406046995,
       2 => 'file',
     ),
+    '40186ece033bba8551d64d747de1083b009af49f' => 
+    array (
+      0 => 'application\\views\\web\\partials\\pieces_inflection.tpl',
+      1 => 1406300950,
+      2 => 'file',
+    ),
     'd6e2cedd3cb1b56eb26745753243a1acf2548024' => 
     array (
       0 => 'application\\views\\web\\partials\\logoutDialog.tpl',
@@ -35,12 +41,12 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '1613053d12be43e7738-08400404',
+  'nocache_hash' => '88953d277c39357b1-51638440',
   'function' => 
   array (
   ),
   'version' => 'Smarty-3.1.17',
-  'unifunc' => 'content_53d12be43e7731_07294755',
+  'unifunc' => 'content_53d277c3a7d8c5_52810304',
   'variables' => 
   array (
     'this' => 0,
@@ -51,7 +57,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_53d12be43e7731_07294755')) {function content_53d12be43e7731_07294755($_smarty_tpl) {?><!DOCTYPE html><?php $_smarty_tpl->tpl_vars['app_version'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->config->item('app_version'), null, 0);?>
+<?php if ($_valid && !is_callable('content_53d277c3a7d8c5_52810304')) {function content_53d277c3a7d8c5_52810304($_smarty_tpl) {?><?php if (!is_callable('smarty_modifier_date_format')) include 'C:\\xampp\\htdocs\\lstme_strojak\\application\\third_party\\Smarty\\plugins\\modifier.date_format.php';
+?><!DOCTYPE html><?php $_smarty_tpl->tpl_vars['app_version'] = new Smarty_variable($_smarty_tpl->tpl_vars['this']->value->config->item('app_version'), null, 0);?>
 <html lang="sk">
     <head>
         <title>Strojový čas<?php if ($_smarty_tpl->tpl_vars['title']->value) {?>: <?php echo $_smarty_tpl->tpl_vars['title']->value;?>
@@ -86,8 +93,8 @@ $(document).ready(function(){
             <div data-role="panel" id="navpanel" data-position="right" data-position-fixed="true" data-display="overlay" data-swipe-close="false">
                 <?php /*  Call merged included template "web/partials/navpanel.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/navpanel.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1613053d12be43e7738-08400404');
-content_53d272990a4082_59456447($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/navpanel.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '88953d277c39357b1-51638440');
+content_53d27a8cb626d1_55108856($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/navpanel.tpl" */?>
             </div>
@@ -109,55 +116,55 @@ $_smarty_tpl = array_pop($_tpl_stack);
             <div data-role="content">
                 <?php /*  Call merged included template "web/partials/flashmessages.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/flashmessages.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1613053d12be43e7738-08400404');
-content_53d272990ec823_44433218($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/flashmessages.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '88953d277c39357b1-51638440');
+content_53d27a8cbaeb91_43531048($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/flashmessages.tpl" */?>
                 
+    <a href="<?php echo site_url('products');?>
+" class="ui-btn ui-icon-back ui-shadow ui-corner-all ui-btn-icon-left" data-ajax="false">Nazad na zoznam</a>
     <div class="ui-body ui-body-c ui-corner-all">
-        <?php if ($_smarty_tpl->tpl_vars['groups']->value->exists()) {?>
+        <h4><?php echo $_smarty_tpl->tpl_vars['product']->value->title;?>
+</h4>
+        <?php if ($_smarty_tpl->tpl_vars['product_quantities']->value->exists()) {?>
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-               data-gridtable-operations="edit:Upraviť,delete:Vymazať"
-               data-gridtable-operation-edit-url="<?php echo site_url('groups/edit_group/--ID--');?>
-"
-               data-gridtable-operation-delete-prompt="true"
-               data-gridtable-operation-delete-prompt-title="Vymazať skupinu?"
-               data-gridtable-operation-delete-prompt-text="Naozaj chcete vymazať skupinu --TITLE--?"
-               data-gridtable-operation-delete-prompt-cancel="Nie, nechcem"
-               data-gridtable-operation-delete-prompt-ok="Áno, chcem"
-               data-gridtable-operation-delete-prompt-ok-url="<?php echo site_url('groups/delete_group/--ID--');?>
+               data-gridtable-operations="edit:Upraviť"
+               data-gridtable-operation-edit-url="<?php echo site_url('products/edit_product_quantity/--PRODUCT-ID--/--ID--');?>
 "
         >
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Názov</th>
-                    <th>Počet účastníkov</th>
+                    <th>Počet</th>
+                    <th>Pridaný</th>
                 </tr>
             </thead>
             <tbody>
-                <?php  $_smarty_tpl->tpl_vars['group'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['group']->_loop = false;
- $_from = $_smarty_tpl->tpl_vars['groups']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
-foreach ($_from as $_smarty_tpl->tpl_vars['group']->key => $_smarty_tpl->tpl_vars['group']->value) {
-$_smarty_tpl->tpl_vars['group']->_loop = true;
+                <?php  $_smarty_tpl->tpl_vars['product_quantity'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['product_quantity']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['product_quantities']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+foreach ($_from as $_smarty_tpl->tpl_vars['product_quantity']->key => $_smarty_tpl->tpl_vars['product_quantity']->value) {
+$_smarty_tpl->tpl_vars['product_quantity']->_loop = true;
 ?>
-                <tr data-gridtable-unique="group_<?php echo intval($_smarty_tpl->tpl_vars['group']->value->id);?>
-" data-gridtable-id="<?php echo intval($_smarty_tpl->tpl_vars['group']->value->id);?>
-" data-gridtable-title="<?php echo addslashes(htmlspecialchars($_smarty_tpl->tpl_vars['group']->value->title, ENT_QUOTES, 'UTF-8', true));?>
+                <tr data-gridtable-unique="product_quantity_<?php echo intval($_smarty_tpl->tpl_vars['product_quantity']->value->id);?>
+" data-gridtable-id="<?php echo intval($_smarty_tpl->tpl_vars['product_quantity']->value->id);?>
+" data-gridtable-product-id="<?php echo intval($_smarty_tpl->tpl_vars['product_quantity']->value->product_id);?>
 ">
-                    <td><?php echo intval($_smarty_tpl->tpl_vars['group']->value->id);?>
+                    <td><?php echo intval($_smarty_tpl->tpl_vars['product_quantity']->value->id);?>
 </td>
-                    <td><?php echo $_smarty_tpl->tpl_vars['group']->value->title;?>
-</td>
-                    <td><em><?php echo intval($_smarty_tpl->tpl_vars['group']->value->persons_count);?>
-</em> <?php echo get_inflection_by_numbers(intval($_smarty_tpl->tpl_vars['group']->value->persons_count),'účastníkov','účastník','účastníci','účastníci','účastníci','účastníkov');?>
+                    <td><?php /*  Call merged included template "web/partials/pieces_inflection.tpl" */
+$_tpl_stack[] = $_smarty_tpl;
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/pieces_inflection.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('pieces'=>$_smarty_tpl->tpl_vars['product_quantity']->value->quantity), 0, '88953d277c39357b1-51638440');
+content_53d27a8cc28cb0_45334433($_smarty_tpl);
+$_smarty_tpl = array_pop($_tpl_stack); 
+/*  End of included template "web/partials/pieces_inflection.tpl" */?></td>
+                    <td><?php echo (($tmp = @smarty_modifier_date_format($_smarty_tpl->tpl_vars['product_quantity']->value->created,'%d. %m. %Y'))===null||$tmp==='' ? 'Neznámy dátum' : $tmp);?>
 </td>
                 </tr>
                 <?php } ?>
             </tbody>
         </table>
         <?php } else { ?>
-            Momentálne nie sú k dispozícii žiadne skupiny.
+            Momentálne tu nie sú záznamy o žiadnych pridaných množstvách.
         <?php }?>
     </div>
 
@@ -169,16 +176,16 @@ $_smarty_tpl->tpl_vars['group']->_loop = true;
             
             <?php /*  Call merged included template "web/partials/logoutDialog.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
- $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/logoutDialog.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1613053d12be43e7738-08400404');
-content_53d27299181487_43723125($_smarty_tpl);
+ $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/logoutDialog.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '88953d277c39357b1-51638440');
+content_53d27a8cc4b200_06371134($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/logoutDialog.tpl" */?>
         </div>
     </body>
 </html><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:07:05
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:41:00
          compiled from "application\views\web\partials\navpanel.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d272990a4082_59456447')) {function content_53d272990a4082_59456447($_smarty_tpl) {?><div class="ui-panel-inner">
+<?php if ($_valid && !is_callable('content_53d27a8cb626d1_55108856')) {function content_53d27a8cb626d1_55108856($_smarty_tpl) {?><div class="ui-panel-inner">
 <?php if (auth_is_authentificated()) {?>
     <p><strong>Používateľ:</strong> <?php echo auth_get_name();?>
 </p>
@@ -225,9 +232,9 @@ $_smarty_tpl = array_pop($_tpl_stack);
     </ul>
 <?php }?>
 </div><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:07:05
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:41:00
          compiled from "application\views\web\partials\flashmessages.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d272990ec823_44433218')) {function content_53d272990ec823_44433218($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
+<?php if ($_valid && !is_callable('content_53d27a8cbaeb91_43531048')) {function content_53d27a8cbaeb91_43531048($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
 <?php if (is_array($_smarty_tpl->tpl_vars['flash_messages']->value)&&count($_smarty_tpl->tpl_vars['flash_messages']->value)>0) {?>
     <?php  $_smarty_tpl->tpl_vars['flash_message'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['flash_message']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['flash_messages']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
@@ -254,9 +261,14 @@ $_smarty_tpl->tpl_vars['flash_message']->_loop = true;
         <?php }?>
     <?php } ?>
 <?php }?><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:07:05
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:41:00
+         compiled from "application\views\web\partials\pieces_inflection.tpl" */ ?>
+<?php if ($_valid && !is_callable('content_53d27a8cc28cb0_45334433')) {function content_53d27a8cc28cb0_45334433($_smarty_tpl) {?><?php echo $_smarty_tpl->tpl_vars['pieces']->value;?>
+ <?php echo get_inflection_by_numbers($_smarty_tpl->tpl_vars['pieces']->value,'kusov','kus','kusy','kusy','kusy','kusov');?>
+<?php }} ?>
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-25 17:41:00
          compiled from "application\views\web\partials\logoutDialog.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d27299181487_43723125')) {function content_53d27299181487_43723125($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
+<?php if ($_valid && !is_callable('content_53d27a8cc4b200_06371134')) {function content_53d27a8cc4b200_06371134($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="d">
     <h1>Odhlásiť sa?</h1>
     </div>

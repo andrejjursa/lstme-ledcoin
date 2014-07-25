@@ -8,7 +8,7 @@
                     <th data-priority="persist">Meno</th>
                     <th data-priority="persist">Skupina</th>
                     <th data-priority="persist">Škola</th>
-                    <th data-priority="1">Strojový čas</th>
+                    <th data-priority="1">Zostávajúci čas</th>
                     <th data-priority="2">Získaný čas</th>
                     <th data-priority="3">Použitý čas</th>
                 </tr>
@@ -19,9 +19,9 @@
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->group_title}</td>
                     <td>{$person->organisation}</td>
-                    <td>{{$person->plus_time - $person->minus_time_1 - $person->minus_time_2}|floatval}</td>
-                    <td>{$person->plus_time|floatval}</td>
-                    <td>{{$person->minus_time_1 + $person->minus_time_2}|floatval}</td>
+                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={{$person->plus_time - $person->minus_time_1 - $person->minus_time_2 - $person->minus_time_3}|intval} inline}</td>
+                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->plus_time|intval} inline}</td>
+                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={{$person->minus_time_1 + $person->minus_time_2 + $person->minus_time_3}|intval} inline}</td>
                 </tr>
                 {/foreach}
             </tbody>

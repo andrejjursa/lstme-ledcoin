@@ -1,19 +1,16 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 $cache = array (
-  'table' => 'persons',
+  'table' => 'product_quantities',
   'fields' => 
   array (
     0 => 'id',
     1 => 'created',
     2 => 'updated',
-    3 => 'name',
-    4 => 'surname',
-    5 => 'login',
-    6 => 'enabled',
-    7 => 'password',
-    8 => 'group_id',
-    9 => 'admin',
-    10 => 'organisation',
+    3 => 'product_id',
+    4 => 'operation_id',
+    5 => 'quantity',
+    6 => 'price',
+    7 => 'type',
   ),
   'validation' => 
   array (
@@ -39,65 +36,44 @@ $cache = array (
       array (
       ),
     ),
-    'name' => 
+    'product_id' => 
     array (
-      'field' => 'name',
+      'field' => 'product_id',
       'rules' => 
       array (
       ),
     ),
-    'surname' => 
+    'operation_id' => 
     array (
-      'field' => 'surname',
+      'field' => 'operation_id',
       'rules' => 
       array (
       ),
     ),
-    'login' => 
+    'quantity' => 
     array (
-      'field' => 'login',
+      'field' => 'quantity',
       'rules' => 
       array (
       ),
     ),
-    'enabled' => 
+    'price' => 
     array (
-      'field' => 'enabled',
+      'field' => 'price',
       'rules' => 
       array (
       ),
     ),
-    'password' => 
+    'type' => 
     array (
-      'field' => 'password',
+      'field' => 'type',
       'rules' => 
       array (
       ),
     ),
-    'group_id' => 
+    'product' => 
     array (
-      'field' => 'group_id',
-      'rules' => 
-      array (
-      ),
-    ),
-    'admin' => 
-    array (
-      'field' => 'admin',
-      'rules' => 
-      array (
-      ),
-    ),
-    'organisation' => 
-    array (
-      'field' => 'organisation',
-      'rules' => 
-      array (
-      ),
-    ),
-    'group' => 
-    array (
-      'field' => 'group',
+      'field' => 'product',
       'rules' => 
       array (
       ),
@@ -112,12 +88,23 @@ $cache = array (
   ),
   'has_one' => 
   array (
-    'group' => 
+    'product' => 
     array (
-      'class' => 'group',
-      'other_field' => 'person',
-      'join_self_as' => 'person',
-      'join_other_as' => 'group',
+      'class' => 'product',
+      'other_field' => 'product_quantity',
+      'join_self_as' => 'product_quantity',
+      'join_other_as' => 'product',
+      'join_table' => '',
+      'reciprocal' => false,
+      'auto_populate' => NULL,
+      'cascade_delete' => true,
+    ),
+    'operation' => 
+    array (
+      'class' => 'operation',
+      'other_field' => 'product_quantity',
+      'join_self_as' => 'product_quantity',
+      'join_other_as' => 'operation',
       'join_table' => '',
       'reciprocal' => false,
       'auto_populate' => NULL,
@@ -126,17 +113,6 @@ $cache = array (
   ),
   'has_many' => 
   array (
-    'operation' => 
-    array (
-      'class' => 'operation',
-      'other_field' => 'person',
-      'join_self_as' => 'person',
-      'join_other_as' => 'operation',
-      'join_table' => '',
-      'reciprocal' => false,
-      'auto_populate' => NULL,
-      'cascade_delete' => true,
-    ),
   ),
   '_field_tracking' => 
   array (

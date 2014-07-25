@@ -15,7 +15,7 @@
     </head>
     <body>
         <div data-role="page" id="strojak-main-page" data-theme="c">
-            <div data-role="panel" id="navpanel" data-position="right" data-position-fixed="true" data-display="push" data-swipe-close="false">
+            <div data-role="panel" id="navpanel" data-position="right" data-position-fixed="true" data-display="overlay" data-swipe-close="false">
                 {include file='web/partials/navpanel.tpl' inline}
             </div>
             

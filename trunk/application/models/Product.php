@@ -14,8 +14,7 @@ class Product extends DataMapper {
     public $table_name = 'products';
     
     public $has_many = array(
-        'quantity',
-        'operation'
+        'product_quantity',
     );
 }
 

@@ -18,7 +18,8 @@
                     <th>Meno</th>
                     <th>Login</th>
                     <th>Skupina</th>
-                    <th>Admin?</th>
+                    <th>Prihlasovanie</th>
+                    <th>Administrátor</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,7 +29,8 @@
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->login}</td>
                     <td>{$person->group_title|default:'<strong>---</strong>'}</td>
-                    <td>{if $person->admin}Áno{else}Nie{/if}</td>
+                    <td>{if $person->enabled}povolené{else}zakázané{/if}</td>
+                    <td>{if $person->admin}áno{else}nie{/if}</td>
                 </tr>
                 {/foreach}
             </tbody>

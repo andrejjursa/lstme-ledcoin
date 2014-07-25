@@ -13,6 +13,7 @@ function auth_is_authentificated() {
     $uid = $CI->session->userdata('user-id');
     if (!is_null($uid)) {
         $person = new Person();
+        $person->where('enabled', 1);
         $person->get_by_id((int)$uid);
         if ($person->exists() && $person->id == (int)$uid) {
             $GLOBALS['strojak-user-data'] = $person->to_array();
@@ -42,6 +43,7 @@ function auth_authentificate($login, $password) {
     $CI =& get_instance();
     
     $person = new Person();
+    $person->where('enabled', 1);
     $person->where('login', $login);
     $person->where('password', sha1($password));
     $person->get();
