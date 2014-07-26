@@ -17,7 +17,7 @@
 
 $.mobile.switchPopup = function(sourceElement, destinationElement, onswitched) {
     var afterClose = function() {
-        destinationElement.popup("open");
+        destinationElement.popup('open', {transition: 'pop'});
         sourceElement.off("popupafterclose", afterClose);
 
         if (onswitched && typeof onswitched === "function"){
