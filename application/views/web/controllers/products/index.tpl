@@ -36,6 +36,7 @@
             Momentálne nie sú v systéme žiadne produkty.
         {/if}
     </div>
+    <a href="{'products/batch_stock_addition'|site_url}" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-plus" data-ajax="false">Hromadné pridanie skladových zásob</a>
 {/block}
 {block header_block}
 <script type="text/javascript">

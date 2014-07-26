@@ -30,7 +30,7 @@
         <li><a href="{'groups'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Skupiny</a></li>
         <li><a href="{'workplaces'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Zamestnania</a></li>
         <li><a href="{'products'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bufet</a></li>
-        <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Služby</a></li>
+        <li><a href="{'services'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Služby</a></li>
         <li><a href="#" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Strojový čas</a></li>
     </ul>
 {/if}
