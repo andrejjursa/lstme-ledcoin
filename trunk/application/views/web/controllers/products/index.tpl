@@ -3,7 +3,7 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $products->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-               data-gridtable-operations="edit:Upraviť,delete:Vymazať,stock:Sklad"
+               data-gridtable-operations="edit:Upraviť,delete:Vymazať,stock:Sklad,overview:Prehľad"
                data-gridtable-operation-edit-url="{'products/edit_product/--ID--'|site_url}"
                data-gridtable-operation-delete-prompt="true"
                data-gridtable-operation-delete-prompt-title="Vymazať produkt?"
@@ -12,6 +12,7 @@
                data-gridtable-operation-delete-prompt-ok="Áno, chcem"
                data-gridtable-operation-delete-prompt-ok-url="{'products/delete_product/--ID--'|site_url}"
                data-gridtable-operation-stock-url="{'products/stock/--ID--'|site_url}"
+               data-gridtable-operation-overview-url="{'products/overview/--ID--'|site_url}"
         >
             <thead>
                 <tr>
