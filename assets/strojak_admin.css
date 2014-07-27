@@ -5,3 +5,11 @@ table.admin_grid_table tbody tr:nth-child(odd) td { background-color: #99ff99; }
 table.admin_grid_table tbody tr:nth-child(even) td { background-color: #ccffcc; }
 
 .ui-field-contain { border: none !important; }
+
+span.operation_type_addition_highlight { color: blue; }
+span.operation_type_subtraction_highlight { color: red; }
+
+hr.form_divider_advanced, hr.form_divider_simple { border: 1px solid green; }
+hr.form_divider_advanced.form_divider_top { margin-bottom: 0.1em; }
+hr.form_divider_advanced.form_divider_bottom { margin-top: 0.1em; }
+p.form_divider_text { margin: 0; padding: 0 0.5em; }

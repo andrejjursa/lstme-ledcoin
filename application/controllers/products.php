@@ -419,6 +419,40 @@ class Products extends CI_Controller {
         }
     }
     
+    public function overview($product_id = NULL) {
+        if (is_null($product_id)) {
+            add_error_flash_message('Produkt sa nenašiel.');
+            redirect(site_url('products'));
+        }
+        
+        $product = new Product();
+        $product->get_by_id((int)$product_id);
+        
+        if (!$product->exists()) {
+            add_error_flash_message('Produkt sa nenašiel.');
+            redirect(site_url('products'));
+        }
+        
+        $product_quantities = new Product_quantity();
+        $product_quantities->where_related_product($product);
+        $product_quantities->include_related('operation', array('id', 'type', 'created'));
+        $product_quantities->include_related('operation/person', array('name', 'surname'));
+        $product_quantities->include_related('operation/admin', array('name', 'surname'));
+        $product_quantities->include_related('operation/workplace', array('title'));
+        $product_quantities->order_by('created', 'desc');
+        $product_quantities->order_by_related('operation', 'created', 'desc');
+        $product_quantities->get_iterated();
+        //$product_quantities->check_last_query();
+        //die();
+        
+        $this->parser->parse('web/controllers/products/overview.tpl', array(
+            'title' => 'Administrácia / Bufet / Prehľad o produkte / ' . $product->title,
+            'product' => $product,
+            'product_quantities' => $product_quantities,
+            'back_url' => site_url('products'),
+        ));
+    }
+    
     public function _ok($str) {
         return TRUE;
     }

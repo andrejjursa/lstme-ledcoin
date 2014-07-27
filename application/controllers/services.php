@@ -56,6 +56,64 @@ class Services extends CI_Controller {
         }
     }
     
+    public function edit_service($service_id = NULL) {
+        if (is_null($service_id)) {
+            add_error_flash_message('Služba sa nenašla.');
+            redirect(site_ur('services'));
+        }
+        
+        $service = new Service();
+        $service->get_by_id((int)$service_id);
+        
+        if (!$service->exists()) {
+            add_error_flash_message('Služba sa nenašla.');
+            redirect(site_ur('services'));
+        }
+        
+        $this->parser->parse('web/controllers/services/edit_service.tpl', array(
+            'service' => $service,
+            'title' => 'Administrácia / Služby / Úprava sluźby',
+            'back_url' => site_url('services'),
+            'form' => $this->get_form(),
+        ));
+    }
+    
+    public function update_service($service_id = NULL) {
+        if (is_null($service_id)) {
+            add_error_flash_message('Služba sa nenašla.');
+            redirect(site_ur('services'));
+        }
+        
+        $this->db->trans_begin();
+        $service = new Service();
+        $service->get_by_id((int)$service_id);
+        
+        if (!$service->exists()) {
+            $this->db->trans_rollback();
+            add_error_flash_message('Služba sa nenašla.');
+            redirect(site_ur('services'));
+        }
+        
+        build_validator_from_form($this->get_form());
+        if ($this->form_validation->run()) {
+            $service_data = $this->input->post('service');
+            $service->from_array($service_data, array('title', 'price'));
+            if ($service->save() && $this->db->trans_status()) {
+                $this->db->trans_commit();
+                add_success_flash_message('Služba s ID <strong>' . $service->id . '</strong> bola úspešne upravená.');
+                redirect(site_url('services'));
+            } else {
+                $this->db->trans_rollback();
+                add_error_flash_message('Službu s ID <strong>' . $service->id . '</strong> sa nepodarilo upraviť.');
+                redirect(site_url('services/edit_service/' . (int)$service->id));
+            }
+        } else {
+            $this->db->trans_rollback();
+            $this->edit_service($service->id);
+        }
+    }
+
+
     public function delete_service($service_id = NULL) {
         if (is_null($service_id)) {
             add_error_flash_message('Služba sa nenašla.');
@@ -90,6 +148,38 @@ class Services extends CI_Controller {
             add_error_flash_message($error_message);
         }
         redirect(site_url('services'));
+    }
+    
+    public function overview($service_id = NULL) {
+        if (is_null($service_id)) {
+            add_error_flash_message('Služba sa nenašla.');
+            redirect(site_ur('services'));
+        }
+        
+        $service = new Service();
+        $service->get_by_id((int)$service_id);
+        
+        if (!$service->exists()) {
+            add_error_flash_message('Služba sa nenašla.');
+            redirect(site_ur('services'));
+        }
+        
+        $service_usages = new Service_usage();
+        $service_usages->where_related_service($service);
+        $service_usages->include_related('operation', array('id', 'type', 'created'));
+        $service_usages->include_related('operation/person', array('name', 'surname'));
+        $service_usages->include_related('operation/admin', array('name', 'surname'));
+        $service_usages->include_related('operation/workplace', array('title'));
+        $service_usages->order_by('created', 'desc');
+        $service_usages->order_by_related('operation', 'created', 'desc');
+        $service_usages->get_iterated();
+        
+        $this->parser->parse('web/controllers/services/overview.tpl', array(
+            'title' => 'Administrácia / Služby / Prehľad služby / ' . $service->title,
+            'service' => $service,
+            'service_usages' => $service_usages,
+            'back_url' => site_url('services'),
+        ));
     }
 
     protected function get_form() {
