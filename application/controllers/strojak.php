@@ -2,6 +2,11 @@
 
 class Strojak extends CI_Controller {
     
+    public function __construct() {
+        parent::__construct();
+        $this->load->library('session');
+    }
+
     public function index() {
         $operations_addition = new Operation();
         $operations_addition->where('type', 'addition');
