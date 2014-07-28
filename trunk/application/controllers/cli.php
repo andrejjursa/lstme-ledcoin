@@ -28,15 +28,17 @@ class Cli extends CI_Controller {
         echo "Vitajte v konfiguracii aplikacie Strojovy cas.\n\n";
         echo "Prosim vyberte si z nasledujucej ponuky:\n\n";
         echo "(1) - databazove migracie\n";
-        echo "(2) - koniec\n";
+        echo "(2) - vytvorenie administratora\n";
+        echo "(3) - koniec\n";
         echo "\n";
         $choice = '';
         do {
             $choice = $this->_get_cli_user_input('Volba');
-        } while (!preg_match('/^[0-9]+$/', $choice) || ((int)$choice < 1 || (int)$choice > 2));
+        } while (!preg_match('/^[0-9]+$/', $choice) || ((int)$choice < 1 || (int)$choice > 3));
         
         switch ((int)$choice) {
             case 1: $this->migration(); break;
+            case 2: $this->admin(); break;
         }
     }
 
@@ -69,6 +71,65 @@ class Cli extends CI_Controller {
                 $this->_clear_production_cache();
                 echo 'Migracia uspesna.';
             }
+        }
+    }
+    
+    public function admin() {
+        echo "Vytvorenie noveho administratora\n\n";
+        $name = $this->_get_cli_user_input('Meno');
+        $surname = $this->_get_cli_user_input('Priezvisko');
+        $login = $this->_get_cli_user_input('Prihlasovacie meno');
+        $password = $this->_get_cli_user_input('Heslo');
+        $password_check = $this->_get_cli_user_input('Heslo (kontrola)');
+        $organisation = $this->_get_cli_user_input('Organizacia');
+        
+        if (trim($name) == '') {
+            echo "\n\nMeno je prazdne ...";
+            return;
+        }
+        
+        if (trim($surname) == '') {
+            echo "\n\nPriezvisko je prazdne ...";
+            return;
+        }
+        
+        if (trim($login) == '') {
+            echo "\n\nPrihlasovacie meno je prazdne ...";
+            return;
+        }
+        
+        if ($password != $password_check) {
+            echo "\n\nHesla sa nezhoduju ...";
+            return;
+        }
+        
+        if (mb_strlen($password) < 6) {
+            echo "\n\nHeslo musi mat aspon 6 znakov ...";
+            return;
+        }
+        
+        if (mb_strlen($password) > 20) {
+            echo "\n\nHeslo moze mat najviac 20 znakov ...";
+            return;
+        }
+        
+        if (trim($organisation) == '') {
+            echo "\n\nOrganizacia je prazdna ...";
+            return;
+        }
+        
+        $person = new Person();
+        $person->name = trim($name);
+        $person->surname = trim($surname);
+        $person->login = trim($login);
+        $person->password = sha1($password);
+        $person->admin = 1;
+        $person->enabled = 1;
+        $person->organisation = trim($organisation);
+        if ($person->save()) {
+            echo "\n\nOsoba vytvorena.";
+        } else {
+            echo "\n\nOsoba nebola vytvorena.";
         }
     }
     
