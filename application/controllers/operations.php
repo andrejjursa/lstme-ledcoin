@@ -20,9 +20,50 @@ class Operations extends CI_Controller {
     }
     
     public function index() {
+        $operations_addition = new Operation();
+        $operations_addition->where('type', 'addition');
+        $operations_addition->select_sum('time', 'time_sum');
+        $operations_addition->where_related_person('id', '${parent}.id');
+
+        $operations_subtraction_simple = new Operation();
+        $operations_subtraction_simple->where('type', 'subtraction');
+        $operations_subtraction_simple->select_sum('time', 'time_sum');
+        $operations_subtraction_simple->where_related_person('id', '${parent}.id');
+
+        $operations_subtraction_advanced_1 = new Operation();
+        $operations_subtraction_advanced_1->where('type', 'subtraction');
+        $operations_subtraction_advanced_1->where_related('product_quantity', 'price >', 0);
+        $operations_subtraction_advanced_1->group_start(' NOT', 'AND');
+        $operations_subtraction_advanced_1->where_related('product_quantity', 'product_id', NULL);
+        $operations_subtraction_advanced_1->group_end();
+        unset($operations_subtraction_advanced_1->db->ar_select[0]);
+        $operations_subtraction_advanced_1->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'time_sum');
+        $operations_subtraction_advanced_1->where_related_person('id', '${parent}.id');
+
+        $operations_subtraction_advanced_2 = new Operation();
+        $operations_subtraction_advanced_2->where('type', 'subtraction');
+        $operations_subtraction_advanced_2->where_related('service_usage', 'price >', 0);
+        $operations_subtraction_advanced_2->group_start(' NOT', 'AND');
+        $operations_subtraction_advanced_2->where_related('service_usage', 'service_id', NULL);
+        $operations_subtraction_advanced_2->group_end();
+        unset($operations_subtraction_advanced_2->db->ar_select[0]);
+        $operations_subtraction_advanced_2->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'time_sum');
+        $operations_subtraction_advanced_2->where_related_person('id', '${parent}.id');
+
+        $persons = new Person();
+        $persons->where('admin', 0);
+        $persons->select('*');
+        $persons->select_subquery($operations_addition, 'plus_time');
+        $persons->select_subquery($operations_subtraction_simple, 'minus_time_1');
+        $persons->select_subquery($operations_subtraction_advanced_1, 'minus_time_2');
+        $persons->select_subquery($operations_subtraction_advanced_2, 'minus_time_3');
+        $persons->include_related('group', 'title');
+        $persons->get_iterated();
+        
         $this->parser->parse('web/controllers/operations/index.tpl', array(
             'title' => 'Administrácia / Strojový čas',
             'new_item_url' => site_url('operations/new_operation'),
+            'persons' => $persons,
         ));
     }
     
@@ -235,6 +276,37 @@ class Operations extends CI_Controller {
         }
     }
     
+    public function transactions($person_id = NULL, $page_size = 20, $page = 1) {
+        if (is_null($person_id)) {
+            add_error_flash_message('Osoba sa nenašla.');
+            redirect(site_url('operations'));
+        }
+        
+        $person = new Person();
+        $person->where('admin', 0);
+        $person->get_by_id((int)$person_id);
+        
+        if (!$person->exists()) {
+            add_error_flash_message('Osoba sa nenašla.');
+            redirect(site_url('operations'));
+        }
+        
+        $operations = new Operation();
+        $operations->where_related_person($person);
+        $operations->include_related('admin', array('name', 'surname'));
+        $operations->include_related('workplace', 'title');
+        $operations->order_by('created', 'desc');
+        $operations->get_paged_iterated($page, $page_size);
+        
+        $this->parser->parse('web/controllers/operations/transactions.tpl', array(
+            'person' => $person,
+            'operations' => $operations,
+            'title' => 'Administrácia / Strojový čas / Prehľad transakcií / ' . $person->name . ' ' . $person->surname,
+            'back_url' => site_url('operations'),
+        ));
+    }
+
+
     public function get_form($type = '') {
         $operations_addition = new Operation();
         $operations_addition->where('type', 'addition');
@@ -462,6 +534,8 @@ class Operations extends CI_Controller {
             $form['fields']['time']['validation'] = 'required|integer|greater_than[0]';
         } elseif ($type == 'subtraction') {
             $form['fields']['time']['hint'] = 'Voliteľne sem môžete vložiť ďalší strojový čas na dobratie. Pre konkrétne služby a produkty, využite položky nižšie.';
+        } else {
+            $form['arangement'] = array('type');
         }
         
         return $form;
