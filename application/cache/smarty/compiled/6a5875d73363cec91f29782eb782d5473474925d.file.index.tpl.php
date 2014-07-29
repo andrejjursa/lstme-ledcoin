@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-28 18:41:32
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-29 10:45:55
          compiled from "application\views\web\controllers\operations\index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1148853d50312433be2-50113481%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,37 +7,37 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6a5875d73363cec91f29782eb782d5473474925d' => 
     array (
       0 => 'application\\views\\web\\controllers\\operations\\index.tpl',
-      1 => 1406565690,
+      1 => 1406622469,
       2 => 'file',
     ),
     'da973a66f1b8150ce141d2f611ea06a8b729feb5' => 
     array (
       0 => 'application\\views\\web\\layouts\\admin.tpl',
-      1 => 1406413776,
+      1 => 1406622469,
       2 => 'file',
     ),
     '3fbf8869f9133a2dcb36200bfd275fde4aa88b2a' => 
     array (
       0 => 'application\\views\\web\\partials\\navpanel.tpl',
-      1 => 1406468847,
+      1 => 1406622469,
       2 => 'file',
     ),
     'f55371eff71ae32ec6531cdb4f5413d25646fdda' => 
     array (
       0 => 'application\\views\\web\\partials\\flashmessages.tpl',
-      1 => 1406046995,
+      1 => 1406622469,
       2 => 'file',
     ),
     '24eafb9773b36e1e89f36d2f4b4ce25a4e25a2ec' => 
     array (
       0 => 'application\\views\\web\\partials\\minutes_inflection.tpl',
-      1 => 1406286416,
+      1 => 1406622469,
       2 => 'file',
     ),
     'd6e2cedd3cb1b56eb26745753243a1acf2548024' => 
     array (
       0 => 'application\\views\\web\\partials\\logoutDialog.tpl',
-      1 => 1406045507,
+      1 => 1406622469,
       2 => 'file',
     ),
   ),
@@ -93,7 +93,7 @@ $(document).ready(function(){
                 <?php /*  Call merged included template "web/partials/navpanel.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/navpanel.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1148853d50312433be2-50113481');
-content_53d67d3ca299f2_42290645($_smarty_tpl);
+content_53d75f43db02f3_98197115($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/navpanel.tpl" */?>
             </div>
@@ -116,7 +116,7 @@ $_smarty_tpl = array_pop($_tpl_stack);
                 <?php /*  Call merged included template "web/partials/flashmessages.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/flashmessages.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1148853d50312433be2-50113481');
-content_53d67d3ca7d8c5_88995154($_smarty_tpl);
+content_53d75f43e907a4_07144967($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/flashmessages.tpl" */?>
                 
@@ -160,20 +160,20 @@ $_smarty_tpl->tpl_vars['person']->_loop = true;
 <?php $_tmp1=ob_get_clean();?><?php /*  Call merged included template "web/partials/minutes_inflection.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/minutes_inflection.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('minutes'=>$_tmp1), 0, '1148853d50312433be2-50113481');
-content_53d67d3cb0e811_55853014($_smarty_tpl);
+content_53d75f440ca143_62376449($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/minutes_inflection.tpl" */?></td>
                     <td><?php /*  Call merged included template "web/partials/minutes_inflection.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/minutes_inflection.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('minutes'=>intval($_smarty_tpl->tpl_vars['person']->value->plus_time)), 0, '1148853d50312433be2-50113481');
-content_53d67d3cb0e811_55853014($_smarty_tpl);
+content_53d75f440ca143_62376449($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/minutes_inflection.tpl" */?></td>
                     <td><?php ob_start();?><?php echo intval($_smarty_tpl->tpl_vars['person']->value->minus_time_1)+intval($_smarty_tpl->tpl_vars['person']->value->minus_time_2)+intval($_smarty_tpl->tpl_vars['person']->value->minus_time_3);?>
 <?php $_tmp2=ob_get_clean();?><?php /*  Call merged included template "web/partials/minutes_inflection.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/minutes_inflection.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array('minutes'=>$_tmp2), 0, '1148853d50312433be2-50113481');
-content_53d67d3cb0e811_55853014($_smarty_tpl);
+content_53d75f440ca143_62376449($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/minutes_inflection.tpl" */?></td>
                 </tr>
@@ -194,15 +194,15 @@ $_smarty_tpl = array_pop($_tpl_stack);
             <?php /*  Call merged included template "web/partials/logoutDialog.tpl" */
 $_tpl_stack[] = $_smarty_tpl;
  $_smarty_tpl = $_smarty_tpl->setupInlineSubTemplate('web/partials/logoutDialog.tpl', $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, null, array(), 0, '1148853d50312433be2-50113481');
-content_53d67d3cb40186_52474432($_smarty_tpl);
+content_53d75f4411e1e3_64992342($_smarty_tpl);
 $_smarty_tpl = array_pop($_tpl_stack); 
 /*  End of included template "web/partials/logoutDialog.tpl" */?>
         </div>
     </body>
 </html><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-28 18:41:32
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-29 10:45:55
          compiled from "application\views\web\partials\navpanel.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d67d3ca299f2_42290645')) {function content_53d67d3ca299f2_42290645($_smarty_tpl) {?><div class="ui-panel-inner">
+<?php if ($_valid && !is_callable('content_53d75f43db02f3_98197115')) {function content_53d75f43db02f3_98197115($_smarty_tpl) {?><div class="ui-panel-inner">
 <?php if (auth_is_authentificated()) {?>
     <p><strong>Používateľ:</strong> <?php echo auth_get_name();?>
 </p>
@@ -251,9 +251,9 @@ $_smarty_tpl = array_pop($_tpl_stack);
     </ul>
 <?php }?>
 </div><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-28 18:41:32
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-29 10:45:55
          compiled from "application\views\web\partials\flashmessages.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d67d3ca7d8c5_88995154')) {function content_53d67d3ca7d8c5_88995154($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
+<?php if ($_valid && !is_callable('content_53d75f43e907a4_07144967')) {function content_53d75f43e907a4_07144967($_smarty_tpl) {?><?php $_smarty_tpl->tpl_vars['flash_messages'] = new Smarty_variable(get_flash_messages(), null, 0);?>
 <?php if (is_array($_smarty_tpl->tpl_vars['flash_messages']->value)&&count($_smarty_tpl->tpl_vars['flash_messages']->value)>0) {?>
     <?php  $_smarty_tpl->tpl_vars['flash_message'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['flash_message']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['flash_messages']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
@@ -280,14 +280,14 @@ $_smarty_tpl->tpl_vars['flash_message']->_loop = true;
         <?php }?>
     <?php } ?>
 <?php }?><?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-28 18:41:32
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-29 10:45:56
          compiled from "application\views\web\partials\minutes_inflection.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d67d3cb0e811_55853014')) {function content_53d67d3cb0e811_55853014($_smarty_tpl) {?><?php echo $_smarty_tpl->tpl_vars['minutes']->value;?>
+<?php if ($_valid && !is_callable('content_53d75f440ca143_62376449')) {function content_53d75f440ca143_62376449($_smarty_tpl) {?><?php echo $_smarty_tpl->tpl_vars['minutes']->value;?>
  <?php echo get_inflection_by_numbers($_smarty_tpl->tpl_vars['minutes']->value,'minút','minúta','minúty','minúty','minúty','minút');?>
 <?php }} ?>
-<?php /* Smarty version Smarty-3.1.17, created on 2014-07-28 18:41:32
+<?php /* Smarty version Smarty-3.1.17, created on 2014-07-29 10:45:56
          compiled from "application\views\web\partials\logoutDialog.tpl" */ ?>
-<?php if ($_valid && !is_callable('content_53d67d3cb40186_52474432')) {function content_53d67d3cb40186_52474432($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
+<?php if ($_valid && !is_callable('content_53d75f4411e1e3_64992342')) {function content_53d75f4411e1e3_64992342($_smarty_tpl) {?><div data-role="popup" id="logoutDialog" data-overlay-theme="d" data-theme="d" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="d">
     <h1>Odhlásiť sa?</h1>
     </div>
