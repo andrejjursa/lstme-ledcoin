@@ -10,6 +10,7 @@ function auth_is_authentificated() {
         if ($GLOBALS['strojak-user-auth'] === FALSE) { return FALSE; }
     }
     $CI =& get_instance();
+    $CI->load->library('session');
     $uid = $CI->session->userdata('user-id');
     if (!is_null($uid)) {
         $person = new Person();
@@ -41,6 +42,7 @@ function auth_authentificate($login, $password) {
     if (auth_is_authentificated()) { return TRUE; }
     
     $CI =& get_instance();
+    $CI->load->library('session');
     
     $person = new Person();
     $person->where('enabled', 1);
@@ -66,6 +68,7 @@ function auth_authentificate($login, $password) {
  */
 function auth_remove_authentification() {
     $CI =& get_instance();
+    $CI->load->library('session');
     $CI->session->unset_userdata('user-id');
     $GLOBALS['strojak-user-auth'] = FALSE;
     if (isset($GLOBALS['strojak-user-data'])) {
