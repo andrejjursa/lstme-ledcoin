@@ -67,8 +67,22 @@ class Operations extends CI_Controller {
         ));
     }
     
-    public function new_operation() {
+    public function new_operation($type_override = NULL, $person_id_override = NULL) {
         $operation_data = $this->input->post('operation');
+        
+        if (!is_null($type_override) && ($type_override == 'addition' || $type_override == 'subtraction')) {
+            $operation_data['type'] = $type_override;
+            $_POST['operation']['type'] = $type_override;
+        }
+        
+        if (!is_null($person_id_override)) {
+            $person = new Person();
+            $person->where('admin', 0);
+            $person->get_by_id((int)$person_id_override);
+            if ($person->exists()) {
+                $_POST['operation']['person_id'] = $person->id;
+            }
+        }
         
         $this->parser->parse('web/controllers/operations/new_operation.tpl', array(
             'title' => 'Administrácia / Strojový čas / Nový záznam',
@@ -303,9 +317,22 @@ class Operations extends CI_Controller {
             'operations' => $operations,
             'title' => 'Administrácia / Strojový čas / Prehľad transakcií / ' . $person->name . ' ' . $person->surname,
             'back_url' => site_url('operations'),
+            'form' => $this->get_transaction_pagination_form($operations->paged),
         ));
     }
-
+    
+    public function set_transactions_pagination($person_id = NULL) {
+        if (is_null($person_id)) {
+            redirect(site_url('operations/transactions'));
+        }
+        
+        $pagination_data = $this->input->post('pagination');
+        
+        if (array_key_exists('page', $pagination_data) && array_key_exists('page_size', $pagination_data) && (int)$pagination_data['page'] > 0 && (int)$pagination_data['page_size'] > 0) {
+            redirect(site_url('operations/transactions/' . $person_id . '/' . (int)$pagination_data['page_size'] . '/' . (int)$pagination_data['page']));
+        }
+        redirect(site_url('operations/transactions/' . $person_id));
+    }
 
     public function get_form($type = '') {
         $operations_addition = new Operation();
@@ -538,6 +565,45 @@ class Operations extends CI_Controller {
             $form['arangement'] = array('type');
         }
         
+        return $form;
+    }
+    
+    protected function get_transaction_pagination_form($pagination) {
+        $pages = array();
+        for ($i = 1; $i <= $pagination->total_pages; $i++) {
+            $pages[$i] = $i . '. stránka';
+        }
+        $form = array(
+            'fields' => array(
+                'page' => array(
+                    'name' => 'pagination[page]',
+                    'type' => 'select',
+                    'id' => 'pagination-page',
+                    'label' => 'Stránka',
+                    'values' => $pages,
+                    'default' => $pagination->current_page,
+                    'object_property' => 'current_page',
+                ),
+                'page_size' => array(
+                    'name' => 'pagination[page_size]',
+                    'type' => 'select',
+                    'id' => 'pagination-page_size',
+                    'label' => 'Veľkosť stránky',
+                    'values' => array(
+                        10 => '10 záznamov',
+                        20 => '20 záznamov',
+                        30 => '30 záznamov',
+                        40 => '40 záznamov',
+                        50 => '50 záznamov',
+                    ),
+                    'default' => $pagination->page_size,
+                    'object_property' => 'page_size',
+                ),
+            ),
+            'arangement' => array(
+                'page', 'page_size',
+            ),
+        );
         return $form;
     }
 }

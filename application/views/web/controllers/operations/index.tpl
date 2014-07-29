@@ -3,8 +3,10 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $persons->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-               data-gridtable-operations="transactions:Transakcie"
+               data-gridtable-operations="add:Pridať čas,subtract:Odobrať čas,transactions:Transakcie"
                data-gridtable-operation-transactions-url="{'operations/transactions/--ID--'|site_url}"
+               data-gridtable-operation-add-url="{'operations/new_operation/addition/--ID--'|site_url}"
+               data-gridtable-operation-subtract-url="{'operations/new_operation/subtraction/--ID--'|site_url}"
         >
             <thead>
                 <tr>
