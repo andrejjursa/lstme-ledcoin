@@ -60,8 +60,22 @@
                 {/foreach}
             </tbody>
         </table>
+        {if $operations->paged->total_rows gte $operations->paged->page_size}
+        <form action="{"operations/set_transactions_pagination/{$person->id|intval}"|site_url}" method="post" id="pagination_form" data-ajax="false">
+            {include file='web/partials/form.tpl' form=$form inline}
+        </form>
+        {/if}
         {else}
             Momentálne nie sú k dispozícii žiadne transakcie strojového času pre účastníka <strong>{$person->name} {$person->surname}</strong>.
         {/if}
     </div>
+{/block}
+{block header_block}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#pagination-page, #pagination-page_size').change(function() {
+        $('#pagination_form').submit();
+    });
+});
+</script>
 {/block}
