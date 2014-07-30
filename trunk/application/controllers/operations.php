@@ -435,7 +435,7 @@ class Operations extends CI_Controller {
                     'id' => 'comment-time',
                     'label' => 'Čas',
                     'min' => 0,
-                    'max' => 24 * 60,
+                    'max' => 240,
                     'default' => 0,
                     'validation' => array(
                         array(
@@ -456,20 +456,33 @@ class Operations extends CI_Controller {
             $services->get_iterated();
             
             if ($services->exists()) {
+                $form['fields']['services_enable'] = array(
+                    'type' => 'flipswitch',
+                    'name' => 'services_enable',
+                    'id' => 'services_enable',
+                    'label' => 'Zobraziť služby',
+                    'value_off' => '0',
+                    'text_off' => 'Nie',
+                    'value_on' => '1',
+                    'text_on' => 'Áno',
+                );
                 $form['fields']['services_divider'] = array(
                     'type' => 'divider',
                     'text' => 'Služby',
+                    'class' => 'controlls-services',
                 );
+                $form['arangement'][] = 'services_enable';
                 $form['arangement'][] = 'services_divider';
             }
             
             foreach ($services as $service) {
                 $form['fields']['service_' . $service->id . '_quantity'] = array(
                     'name' => 'operation_service[' . $service->id . '][quantity]',
+                    'class' => 'controlls-services',
                     'id' => 'operation_service-' . $service->id . '-quantity',
                     'type' => 'slider',
                     'min' => 0,
-                    'max' => 24 * 60,
+                    'max' => 240,
                     'label' => $service->title . ' (čas)',
                     'default' => 0,
                     'validation' => array(
@@ -481,6 +494,7 @@ class Operations extends CI_Controller {
                 );
                 $form['fields']['service_' . $service->id . '_price'] = array(
                     'name' => 'operation_service[' . $service->id . '][price]',
+                    'class' => 'controlls-services',
                     'id' => 'operation_service-' . $service->id . '-price',
                     'type' => 'text_input',
                     'label' => $service->title . ' (cena za minútu)',
@@ -515,16 +529,29 @@ class Operations extends CI_Controller {
             $products->get_iterated();
             
             if ($products->exists()) {
+                $form['fields']['products_enable'] = array(
+                    'type' => 'flipswitch',
+                    'name' => 'products_enable',
+                    'id' => 'products_enable',
+                    'label' => 'Zobraziť produkty',
+                    'value_off' => '0',
+                    'text_off' => 'Nie',
+                    'value_on' => '1',
+                    'text_on' => 'Áno',
+                );
                 $form['fields']['products_divider'] = array(
                     'type' => 'divider',
                     'text' => 'Produkty z bufetu',
+                    'class' => 'controlls-products',
                 );
+                $form['arangement'][] = 'products_enable';
                 $form['arangement'][] = 'products_divider';
             }
             
             foreach ($products as $product) {
                 $form['fields']['product_' . $product->id . '_quantity'] = array(
                     'name' => 'operation_product[' . $product->id . '][quantity]',
+                    'class' => 'controlls-products',
                     'id' => 'operation_product-' . $product->id . '-quantity',
                     'type' => 'slider',
                     'min' => 0,
@@ -540,6 +567,7 @@ class Operations extends CI_Controller {
                 );
                 $form['fields']['product_' . $product->id . '_price'] = array(
                     'name' => 'operation_product[' . $product->id . '][price]',
+                    'class' => 'controlls-products',
                     'id' => 'operation_product-' . $product->id . '-price',
                     'type' => 'text_input',
                     'label' => $product->title . ' (cena za kus)',
