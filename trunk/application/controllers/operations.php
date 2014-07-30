@@ -333,6 +333,87 @@ class Operations extends CI_Controller {
         }
         redirect(site_url('operations/transactions/' . $person_id));
     }
+    
+    public function batch_time_addition() {
+        $this->parser->parse('web/controllers/operations/batch_time_addition.tpl', array(
+            'title' => 'Administrácia / Strojový čas / Hromadné pridanie strojového času',
+            'form' => $this->get_batch_time_addition_form(),
+            'back_url' => site_url('operations'),
+        ));
+    }
+    
+    public function do_batch_time_addition() {
+        add_common_flash_message('Zatial nie je implementované!!!!');
+        redirect(site_url('operations'));
+    }
+    
+    public function get_batch_time_addition_form() {
+        $workplaces = new Workplace();
+        $workplaces->order_by('title', 'asc');
+        $workplaces->get_iterated();
+        
+        $workplace_values = array('' => '');
+        foreach ($workplaces as $workplace) {
+            $workplace_values[$workplace->id] = $workplace->title;
+        }
+        
+        $form = array(
+            'fields' => array(
+                'comment' => array(
+                    'name' => 'batch_time[comment]',
+                    'id' => 'batch_time-comment',
+                    'label' => 'Komentár',
+                    'type' => 'text_input',
+                    'placeholder' => 'Sem pridajte komentár, alebo nechajte prázdne.',
+                    'hint' => 'Pozor, globálne nastavenie pre všetkých účastníkov.',
+                ),
+                'workplace' => array(
+                    'name' => 'batch_time[workplace_id]',
+                    'id' => 'batch_time-workplace_id',
+                    'label' => 'Zamestnanie',
+                    'type' => 'select',
+                    'values' => $workplace_values,
+                    'hint' => 'Pozor, globálne nastavenie pre všetkých účastníkov.',
+                ),
+            ),
+            'arangement' => array(
+                'workplace', 'comment',
+            ),
+        );
+        
+        $persons = new Person();
+        $persons->where('admin', '0');
+        $persons->order_by('surname', 'asc')->order_by('name', 'asc');
+        $persons->get_iterated();
+        
+        if ($persons->exists()) {
+            $form['fields']['persons_divider'] = array(
+                'type' => 'divider',
+            );
+            $form['arangement'][] = 'persons_divider';
+        }
+        
+        foreach ($persons as $person) {
+            $form['fields']['person_' . $person->id] = array(
+                'name' => 'person_time[' . $person->id . ']',
+                'id' => 'person_time-' . $person->id,
+                'label' => $person->name . ' ' . $person->surname,
+                'type' => 'slider',
+                'min' => 0,
+                'max' => 240,
+                'default' => 0,
+                'validation' => array(
+                    array(
+                        'if-field-not-equals' => array('field' => 'person_time[' . $person->id . ']', 'value' => 0),
+                        'rules' => 'required|integer|greater_than[0]',
+                    ),
+                ),
+            );
+            $form['arangement'][] = 'person_' . $person->id;
+        }
+        
+        return $form;
+    }
 
     public function get_form($type = '') {
         $operations_addition = new Operation();
