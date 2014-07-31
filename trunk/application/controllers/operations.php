@@ -343,8 +343,69 @@ class Operations extends CI_Controller {
     }
     
     public function do_batch_time_addition() {
-        add_common_flash_message('Zatial nie je implementované!!!!');
-        redirect(site_url('operations'));
+        $this->db->trans_begin();
+        build_validator_from_form($this->get_batch_time_addition_form());
+        if ($this->form_validation->run()) {
+            $batch_time_data = $this->input->post('batch_time');
+            $person_time_data = $this->input->post('person_time');
+            
+            $workplace = new Workplace();
+            if ((int)$batch_time_data['workplace_id'] > 0) {
+                $workplace->get_by_id((int)$batch_time_data['workplace_id']);
+                if (!$workplace->exists()) {
+                    $this->db->trans_rollback();
+                    add_error_flash_message('Zamestnanie sa nenašlo.');
+                    redirect(site_url('operations/batch_time_addition'));
+                }
+            }
+            
+            $persons = new Person();
+            $persons->where('admin', 0);
+            $persons->get_iterated();
+            
+            $successful_count = 0;
+            $error_count = 0;
+            $successful_messages = array();
+            $error_messages = array();
+            
+            foreach ($persons as $person) {
+                if (array_key_exists($person->id, $person_time_data) && (int)$person_time_data[$person->id] > 0) {
+                    $operation = new Operation();
+                    $operation->admin_id = auth_get_id();
+                    $operation->time = (int)$person_time_data[$person->id];
+                    $operation->type = 'addition';
+                    $operation->comment = @$batch_time_data['comment'];
+                    if ($operation->save(array('person' => $person, 'workplace' => $workplace))) {
+                        $successful_messages[] = 'Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . (int)$operation->time . '</strong> ' . get_inflection_by_numbers((int)$operation->time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' strojového času.';
+                        $successful_count++;
+                    } else {
+                        $error_count++;
+                        $error_messages[] = 'Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo prideliť strojový čas.';
+                    }
+                }
+            }
+            
+            if ($successful_count == 0 && $error_count == 0) {
+                $this->db->trans_rollback();
+                add_error_flash_message('Nikomu nebol pridelený strojový čas, nakoľko bol odoslaný prázdny formulár.');
+                redirect(site_url('operations'));
+            } elseif ($successful_count == 0 && $error_count > 0) {
+                $this->db->trans_rollback();
+                add_error_flash_message('Nepodarilo sa nikomu pridať strojový čas:<br /><br />' . implode('<br />', $error_messages));
+            } else {
+                $this->db->trans_commit();
+                if ($successful_count > 0) {
+                    add_success_flash_message('Strojový čas bol pridelený <strong>' . $successful_count . '</strong> ' . get_inflection_by_numbers($successful_count, 'účastníkom', 'účastníkovi', 'účastníkom', 'účastníkom', 'účastníkom', 'účastníkom') . ':<br /><br />' . implode('<br />', $successful_messages));
+                }
+                if ($error_count > 0) {
+                    add_error_flash_message('Strojový čas sa nepodarilo udeliť <strong>' . $error_count . '</strong> ' . get_inflection_by_numbers($error_count, 'účastníkom', 'účastníkovi', 'účastníkom', 'účastníkom', 'účastníkom', 'účastníkom') . ':<br /><br />' . implode('<br />', $error_messages));
+                }
+                redirect(site_url('operations'));
+            }
+        } else {
+            $this->db->trans_rollback();
+            $this->batch_time_addition();
+        }        
     }
     
     public function get_batch_time_addition_form() {
