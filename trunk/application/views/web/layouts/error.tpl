@@ -10,6 +10,7 @@
         <link rel="stylesheet" type="text/css" href="{"assets/strojak_error.css?strojak_version={$app_version}"|base_url}}" />
         <script type="text/javascript" src="{"assets/jquery-1.11.1.min.js?strojak_version={$app_version}"|base_url}"></script>
         <script type="text/javascript" src="{"assets/jquery.mobile-1.4.3.min.js?strojak_version={$app_version}"|base_url}"></script>
+        <script type="text/javascript"> jQuery.mobile.ajaxEnabled = false; </script>
     </head>
     <body>
         <div data-role="page" id="strojak-main-page" data-theme="b">

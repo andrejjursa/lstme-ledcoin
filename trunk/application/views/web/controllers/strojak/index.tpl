@@ -19,9 +19,9 @@
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->group_title}</td>
                     <td>{$person->organisation}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={{$person->plus_time - $person->minus_time_1 - $person->minus_time_2 - $person->minus_time_3}|intval} inline}</td>
+                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={{$person->plus_time - $person->minus_time_direct - $person->minus_time_products - $person->minus_time_services}|intval} inline}</td>
                     <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->plus_time|intval} inline}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={{$person->minus_time_1 + $person->minus_time_2 + $person->minus_time_3}|intval} inline}</td>
+                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={{$person->minus_time_direct + $person->minus_time_products + $person->minus_time_services}|intval} inline}</td>
                 </tr>
                 {/foreach}
             </tbody>

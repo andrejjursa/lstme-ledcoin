@@ -10,7 +10,6 @@
                     <th>Počet minút</th>
                     <th>Účastník</th>
                     <th>Vedúci</th>
-                    <th>Zamestnanie</th>
                     <th>Cena za minútu</th>
                 </tr>
             </thead>
@@ -18,11 +17,10 @@
                 {foreach $service_usages as $usage}
                 <tr>
                     <td>{$usage->id}</td>
-                    <td>{$usage->created|date_format:'%d. %m. %Y'|default:'neznámy'}</td>
+                    <td>{$usage->created|date_format:'%d. %m. %H:%M'|default:'neznámy'}</td>
                     <td>{include file='web/partials/minutes_inflection.tpl' minutes=$usage->quantity|intval inline}</td>
                     <td>{$usage->operation_person_name} {$usage->operation_person_surname}</td>
                     <td>{$usage->operation_admin_name} {$usage->operation_admin_surname}</td>
-                    <td>{$usage->operation_workplace_title|default:'---'}</td>
                     <td>{include file='web/partials/minutes_inflection.tpl' minutes=$usage->price|intval inline}</td>
                 </tr>
                 {/foreach}

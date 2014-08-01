@@ -9,7 +9,7 @@
 <script type="text/javascript" src="{"assets/js/operation_form.js?strojak_version={$app_version}"|base_url}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#operation-type').change(function() {
+    $('#operation-type, #operation-subtraction_type').change(function() {
         $('form').prop('action', '{'operations/new_operation'|site_url}').submit();
     });
 });

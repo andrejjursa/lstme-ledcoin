@@ -20,7 +20,7 @@
                 <tr data-gridtable-unique="product_quantity_{$product_quantity->id|intval}" data-gridtable-id="{$product_quantity->id|intval}" data-gridtable-product-id="{$product_quantity->product_id|intval}">
                     <td>{$product_quantity->id|intval}</td>
                     <td>{include file='web/partials/pieces_inflection.tpl' pieces=$product_quantity->quantity inline}</td>
-                    <td>{$product_quantity->created|date_format:'%d. %m. %Y'|default:'Neznámy dátum'}</td>
+                    <td>{$product_quantity->created|date_format:'%d. %m. %H:%M'|default:'Neznámy dátum'}</td>
                 </tr>
                 {/foreach}
             </tbody>

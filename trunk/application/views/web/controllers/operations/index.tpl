@@ -26,9 +26,9 @@
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->login}</td>
                     <td>{$person->group_title|default:'<strong>---</strong>'}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->plus_time|intval - $person->minus_time_1|intval - $person->minus_time_2|intval - $person->minus_time_3|intval} inline}</td>
+                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->plus_time|intval - $person->minus_time_direct|intval - $person->minus_time_products|intval - $person->minus_time_services|intval} inline}</td>
                     <td>{include file='web/partials/minutes_inflection.tpl' minutes=$person->plus_time|intval inline}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->minus_time_1|intval + $person->minus_time_2|intval + $person->minus_time_3|intval} inline}</td>
+                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->minus_time_direct|intval + $person->minus_time_products|intval + $person->minus_time_services|intval} inline}</td>
                 </tr>
                 {/foreach}
             </tbody>
