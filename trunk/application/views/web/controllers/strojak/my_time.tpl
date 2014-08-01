@@ -1,0 +1,1 @@
+{extends file='web/layouts/standard.tpl'}

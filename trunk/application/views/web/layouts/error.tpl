@@ -29,7 +29,7 @@
             </div>
             
             <div data-role="footer" data-position="fixed" data-tap-toggle="false">
-                <p style="text-align: center;">&copy; LSTME 2014</p>
+                <p style="text-align: center;">&copy; LSTME 2014, verzia {$app_version}</p>
             </div>
             
             {include file='web/partials/logoutDialog.tpl' inline}

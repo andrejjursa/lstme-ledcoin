@@ -9,3 +9,5 @@
 }
 
 .ui-table-cell-label::after { content: ':'; }
+
+.ui-field-contain { border: none !important; }

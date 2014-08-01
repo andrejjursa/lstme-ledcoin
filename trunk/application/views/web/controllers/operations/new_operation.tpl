@@ -6,7 +6,6 @@
     </form>
 {/block}
 {block header_block}
-<script type="text/javascript" src="{"assets/js/operation_form.js?strojak_version={$app_version}"|base_url}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     $('#operation-type, #operation-subtraction_type').change(function() {
