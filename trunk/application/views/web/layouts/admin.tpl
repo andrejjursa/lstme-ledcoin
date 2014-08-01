@@ -1,4 +1,4 @@
-<!DOCTYPE html>{$app_version = $this->config->item('app_version')}
+<!DOCTYPE html>{$this->load->config('strojak')}{$app_version = $this->config->item('app_version')}
 <html lang="sk">
     <head>
         <title>Strojový čas{if $title}: {$title}{/if}</title>
