@@ -4,8 +4,6 @@ table.admin_grid_table thead tr { border-bottom: thin solid black; }
 table.admin_grid_table tbody tr:nth-child(odd) td { background-color: #99ff99; }
 table.admin_grid_table tbody tr:nth-child(even) td { background-color: #ccffcc; }
 
-.ui-field-contain { border: none !important; }
-
 span.operation_type_addition_highlight { color: blue; }
 span.operation_type_subtraction_highlight { color: red; }
 

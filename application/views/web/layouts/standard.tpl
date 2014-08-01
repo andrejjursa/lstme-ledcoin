@@ -11,6 +11,7 @@
         <script type="text/javascript" src="{"assets/jquery-1.11.1.min.js?strojak_version={$app_version}"|base_url}"></script>
         <script type="text/javascript" src="{"assets/jquery.mobile-1.4.3.min.js?strojak_version={$app_version}"|base_url}"></script>
         <script type="text/javascript"> jQuery.mobile.ajaxEnabled = false; </script>
+        {block header_block}{/block}
     </head>
     <body>
         <div data-role="page" id="strojak-main-page">
@@ -29,7 +30,7 @@
             </div>
             
             <div data-role="footer" data-position="fixed" data-tap-toggle="false">
-                <p style="text-align: center;">&copy; LSTME 2014</p>
+                <p style="text-align: center;">&copy; LSTME 2014, verzia {$app_version}</p>
             </div>
             
             {include file='web/partials/logoutDialog.tpl' inline}

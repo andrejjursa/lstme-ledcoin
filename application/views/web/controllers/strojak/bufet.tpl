@@ -2,7 +2,7 @@
 {block content_block}
     <div class="ui-body ui-body-a ui-corner-all">
         <h3>Zoznam tovaru v bufete</h3>
-        <table data-role="table" data-mode="reflow" class="ui-responsive">
+        <table data-role="table" data-mode="reflow" class="ui-responsive grid_table">
             <thead>
                 <tr>
                     <th data-priority="persist">Názov</th>

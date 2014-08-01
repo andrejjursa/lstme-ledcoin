@@ -95,6 +95,15 @@ function auth_get_name() {
 }
 
 /**
+ * Returns user real surname when user is authentificated.
+ * @return string user real surname.
+ */
+function auth_get_surname() {
+    if (!auth_is_authentificated()) { return ''; }
+    return $GLOBALS['strojak-user-data']['surname'];
+}
+
+/**
  * Returns current user id.
  * @return int user id.
  */

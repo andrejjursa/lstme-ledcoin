@@ -1,12 +1,15 @@
 <div class="ui-panel-inner">
 {if auth_is_authentificated()}
-    <p><strong>Používateľ:</strong> {auth_get_name()}</p>
+    <p><strong>Používateľ:</strong> {auth_get_name()} {auth_get_surname()}</p>
 {/if}
     <h3>Navigácia</h3>
     <ul data-role="listview" data-inset="true">
         <li><a href="{'/'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Účastníci</a></li>
         <li><a href="{'strojak/bufet'|site_url}" class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Bufet</a></li>
         {if auth_is_authentificated()}
+            {if !auth_is_admin()}
+            <li><a href="{'strojak/my_time'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Môj strojový čas</a></li>
+            {/if}
             <li><a href="#logoutDialog" class="ui-btn ui-btn-b ui-shadow" data-rel="popup" data-position-to="window" data-transition="pop">Odhlásiť sa</a></li>
         {/if}
     </ul>
