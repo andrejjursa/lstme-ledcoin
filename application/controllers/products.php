@@ -22,12 +22,14 @@ class Products extends CI_Controller {
     public function index() {
         $quantity_addition = new Product_quantity();
         $quantity_addition->select_sum('quantity', 'quantity_sum');
-        $quantity_addition->where('type', 'addition');
+        $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
         $quantity_addition->where_related('product', 'id', '${parent}.id');
         
         $quantity_subtraction = new Product_quantity();
         $quantity_subtraction->select_sum('quantity', 'quantity_sum');
-        $quantity_subtraction->where('type', 'subtraction');
+        $quantity_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
+        $quantity_subtraction->where_related('operation', 'type', Operation::TYPE_SUBTRACTION);
+        $quantity_subtraction->where_related('operation', 'subtraction_type', Operation::SUBTRACTION_TYPE_PRODUCTS);
         $quantity_subtraction->where_related('product', 'id', '${parent}.id');
         
         $products = new Product();
@@ -180,7 +182,7 @@ class Products extends CI_Controller {
         
         $product_quantities = new Product_quantity();
         $product_quantities->where_related_product($product);
-        $product_quantities->where('type', 'addition');
+        $product_quantities->where('type', Product_quantity::TYPE_ADDITION);
         $product_quantities->order_by('created', 'desc');
         $product_quantities->get_iterated();
         
@@ -235,7 +237,7 @@ class Products extends CI_Controller {
             $product_quantity_data = $this->input->post('product_quantity');
             $product_quantity = new Product_quantity();
             $product_quantity->from_array($product_quantity_data, array('quantity'));
-            $product_quantity->type = 'addition';
+            $product_quantity->type = Product_quantity::TYPE_ADDITION;
             $product_quantity->price = NULL;
             $product_quantity->operation_id = NULL;
             if ($product_quantity->save($product) && $this->db->trans_status()) {
@@ -274,7 +276,7 @@ class Products extends CI_Controller {
         
         $product_quantity = new Product_quantity();
         $product_quantity->where_related_product($product);
-        $product_quantity->where('type', 'addition');
+        $product_quantity->where('type', Product_quantity::TYPE_ADDITION);
         $product_quantity->get_by_id((int)$product_quantity_id);
         
         if (!$product_quantity->exists()) {
@@ -313,7 +315,7 @@ class Products extends CI_Controller {
         
         $product_quantity = new Product_quantity();
         $product_quantity->where_related_product($product);
-        $product_quantity->where('type', 'addition');
+        $product_quantity->where('type', Product_quantity::TYPE_ADDITION);
         $product_quantity->get_by_id((int)$product_quantity_id);
         
         if (!$product_quantity->exists()) {
@@ -327,13 +329,13 @@ class Products extends CI_Controller {
             $product_quantity->from_array($product_quantity_data, array('quantity'));
             if ($product_quantity->save()) {
                 $product_quantities_addition = new Product_quantity();
-                $product_quantities_addition->where('type', 'addition');
+                $product_quantities_addition->where('type', Product_quantity::TYPE_ADDITION);
                 $product_quantities_addition->where_related_product($product);
                 $product_quantities_addition->select_func('SUM', array('@quantity'), 'quantity_sum');
                 $product_quantities_addition->get();
                 
                 $product_quantities_subtraction = new Product_quantity();
-                $product_quantities_subtraction->where('type', 'subtraction');
+                $product_quantities_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
                 $product_quantities_subtraction->where_related_product($product);
                 $product_quantities_subtraction->select_func('SUM', array('@quantity'), 'quantity_sum');
                 $product_quantities_subtraction->get();
@@ -383,7 +385,7 @@ class Products extends CI_Controller {
             foreach ($products as $product) {
                 if (isset($product_quantity_data[$product->id]['quantity']) && (int)$product_quantity_data[$product->id]['quantity'] > 0) {
                     $product_quantity = new Product_quantity();
-                    $product_quantity->type = 'addition';
+                    $product_quantity->type = Product_quantity::TYPE_ADDITION;
                     $product_quantity->quantity = (int)$product_quantity_data[$product->id]['quantity'];
                     $product_quantity->price = NULL;
                     $product_quantity->operation_id = NULL;

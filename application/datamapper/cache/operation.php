@@ -11,7 +11,8 @@ $cache = array (
     5 => 'workplace_id',
     6 => 'time',
     7 => 'type',
-    8 => 'comment',
+    8 => 'subtraction_type',
+    9 => 'comment',
   ),
   'validation' => 
   array (
@@ -68,6 +69,13 @@ $cache = array (
     'type' => 
     array (
       'field' => 'type',
+      'rules' => 
+      array (
+      ),
+    ),
+    'subtraction_type' => 
+    array (
+      'field' => 'subtraction_type',
       'rules' => 
       array (
       ),
