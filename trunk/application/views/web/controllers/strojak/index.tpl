@@ -29,7 +29,8 @@
         </table>
         {else}
         <div style="overflow-x: auto">
-            <div id="graph_container" style="height: 500px; min-width: {$persons->result_count() * 50 + 200}px;"></div>
+            {$cols_cnt = $persons->result_count()}{if $cols_cnt lt 16}{$cols_cnt = 14}{/if}
+            <div id="graph_container" style="height: 500px; min-width: {$cols_cnt * 50 + 200}px;"></div>
         </div>
         {/if}
         <form action="{'strojak'|site_url}" method="post">
@@ -41,14 +42,13 @@
 {block header_block}
 {if $filter.renderas eq 'graph'}
 <script type="text/javascript" src="{"assets/highcharts/highcharts.js?strojak_version={$app_version}"|base_url}"></script>
+<script type="text/javascript" src="{"assets/highcharts/modules/data.js?strojak_version={$app_version}"|base_url}"></script>
+<script type="text/javascript" src="{"assets/highcharts/modules/drilldown.js?strojak_version={$app_version}"|base_url}"></script>
 <script type="text/javascript" src="{"assets/highcharts/themes/grid-light.js?strojak_version={$app_version}"|base_url}"></script>
-{/if}
-{capture assign='data_content' name='data_content'}{foreach $persons as $person}
-{if !$person@first},{/if}['{$person->name|addslashes} {$person->surname|addslashes}', {if $filter.orderby eq 'time_left'}{{$person->plus_time - $person->minus_time_direct - $person->minus_time_products - $person->minus_time_services}|intval}{elseif $filter.orderby eq 'time_acquired'}{$person->plus_time|intval}{else}{{$person->minus_time_direct + $person->minus_time_products + $person->minus_time_services}|intval}{/if}]
-{/foreach}{/capture}
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#graph_container').highcharts({
+    var graph_data = {$this->get_persons_graph_json($persons, $filter.orderby)};
+    var graph_options = {
         chart: { type: 'column' },
         title: 'Zoznam účastníkov',
         xAxis: {
@@ -64,30 +64,22 @@ $(document).ready(function() {
         yAxis: {
             min: 0,
             title: {
-                text: '{if $filter.orderby eq 'time_left'}Zostávajúci čas{elseif $filter.orderby eq 'time_acquired'}Získaný čas{else}Použitý čas{/if}'
+                text: graph_data.yAxis
             }
         },
         legend: { enabled: false },
         series: [{
-            name: '{if $filter.orderby eq 'time_left'}Zostávajúci čas{elseif $filter.orderby eq 'time_acquired'}Získaný čas{else}Použitý čas{/if}',
-            data: [
-                {$data_content}
-            ],
-            dataLabels: {
-                enabled: true,
-                format: '{ldelim}y{rdelim} min.',
-                color: '#7cb5ec',
-                align: 'center',
-                /*x: 4,
-                y: 10,*/
-                style: {
-                    fontSize: '11px',
-                    fontFamily: 'Verdana, sans-serif',
-                    fontWeight: 'bold'
-                }
-            }
-        }]
-    });
+            colorByPoint: true,
+            name: graph_data.series_name,
+            data: graph_data.series,
+            dataLabels: graph_data.series_dataLabels
+        }],
+        drilldown: {
+            series: graph_data.drilldown
+        }
+    };
+    $('#graph_container').highcharts(graph_options);
 });
 </script>
+{/if}
 {/block}
