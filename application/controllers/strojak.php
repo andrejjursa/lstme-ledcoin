@@ -157,4 +157,138 @@ class Strojak extends CI_Controller {
         return $form;
     }
     
+    public function get_persons_graph_json(DataMapper $persons, $filter_orderby) {
+        $series = array();
+        $drilldown = array();
+        
+        $dataLabels = new stdClass();
+        $dataLabels->enabled = TRUE;
+        $dataLabels->format = '{y} min.';
+        $dataLabels->align = 'center';
+        $dataLabels->style = new stdClass();
+        $dataLabels->style->fontSize = '11px';
+        $dataLabels->style->fontFamily = 'Verdana, sans-serif';
+        $dataLabels->style->fontWeight = 'bold';
+        
+        foreach ($persons as $person) {
+            $series_item = new stdClass();
+            $series_item->name = $person->name . ' ' . $person->surname;
+            $time_plus = (int)$person->plus_time;
+            $time_minus = (int)$person->minus_time_direct + (int)$person->minus_time_products + (int)$person->minus_time_services;
+            if ($filter_orderby == 'time_left') {
+                $series_item->y = $time_plus - $time_minus;
+            } elseif ($filter_orderby == 'time_acquired') {
+                $series_item->y = $time_plus;
+            } else {
+                $series_item->y = $time_minus;
+            }
+            $drilldown_data = $this->get_persons_graph_drilldown_json($person->id, $filter_orderby);
+            if (count($drilldown_data) > 2) {
+                $series_item->drilldown = 'person_' . $person->id;
+                $drilldown_item = new stdClass();
+                $drilldown_item->id = 'person_' . $person->id;
+                $drilldown_item->name = $person->name . ' ' . $person->surname;
+                $drilldown_item->data = $drilldown_data;
+                $drilldown_item->type = 'area';
+                $drilldown_item->dataLabels = $dataLabels;
+                $drilldown[] = $drilldown_item;
+            }
+            $series[] = $series_item;
+        }
+        
+        $output = new stdClass();
+        $output->series = $series;
+        $output->drilldown = $drilldown;
+        $output->series_dataLabels = $dataLabels;
+        if ($filter_orderby == 'time_left') {
+            $output->series_name = 'Zostávajúci čas';
+            $output->yAxis = 'Zostávajúci čas';
+        } elseif ($filter_orderby == 'time_acquired') {
+            $output->series_name = 'Získaný čas';
+            $output->yAxis = 'Získaný čas';
+        } else {
+            $output->series_name = 'Použitý čas';
+            $output->yAxis = 'Použitý čas';
+        }
+        
+        return json_encode($output);
+    }
+    
+    protected function get_persons_graph_drilldown_json($person_id, $filter_orderby) {
+        $operations = new Operation();
+        $operations->select('*');
+        $operations->where_related_person('id', (int)$person_id);
+        $operations->order_by('created', 'asc');
+        $operations->include_related('product_quantity');
+        $operations->include_related('product_quantity/product');
+        $operations->include_related('service_usage');
+        $operations->include_related('service_usage/service');
+        $operations->get_iterated();
+        
+        $series = array();
+        
+        $days = array();
+        $days_plus_time = array();
+        $days_minus_time = array();
+        
+        $current_day_index = '';
+        
+        foreach ($operations as $operation) {
+            $day_index = date('d.m.Y', strtotime($operation->created));
+            if ($day_index != $current_day_index) { 
+                $days_plus_time[$day_index] = 0;
+                $days_minus_time[$day_index] = 0;
+                $days[] = $day_index;
+                $current_day_index = $day_index;
+            }
+            if ($operation->type == Operation::TYPE_ADDITION && (int)$operation->time > 0) {
+                $days_plus_time[$day_index] += (int)$operation->time;
+            } elseif ($operation->type == Operation::TYPE_SUBTRACTION) {
+                if ($operation->subtraction_type == Operation::SUBTRACTION_TYPE_DIRECT && (int)$operation->time > 0) {
+                    $days_minus_time[$day_index] += (int)$operation->time;
+                } elseif ($operation->subtraction_type == Operation::SUBTRACTION_TYPE_PRODUCTS && !is_null($operation->product_quantity_id) && !is_null($operation->product_quantity_product_id)
+                          && (int)$operation->product_quantity_quantity * (int)$operation->product_quantity_price > 0) {
+                    $days_minus_time[$day_index] += (int)$operation->product_quantity_quantity * (int)$operation->product_quantity_price;
+                } elseif ($operation->subtraction_type == Operation::SUBTRACTION_TYPE_SERVICES && !is_null($operation->service_usage_id) && !is_null($operation->service_usage_service_id)
+                          && (int)$operation->service_usage_quantity * (int)$operation->service_usage_price > 0) {
+                    $days_minus_time[$day_index] += (int)$operation->service_usage_quantity * (int)$operation->service_usage_price;
+                }
+            }
+        }
+        
+        $total_plus = 0;
+        $total_minus = 0;
+        
+        $series_item_start = new stdClass();
+        $series_item_start->name = 'Začiatok sústredenia';
+        $series_item_start->y = 0;
+        
+        $series[] = $series_item_start;
+        
+        if (count($days) > 0) { foreach ($days as $day) {
+            $series_item = new stdClass();
+            $series_item->name = $day;
+            if ($filter_orderby == 'time_left') {
+                $total_plus += $days_plus_time[$day];
+                $total_minus += $days_minus_time[$day];
+                $series_item->y = $total_plus - $total_minus;
+            } elseif ($filter_orderby == 'time_acquired') {
+                $series_item->y = $days_plus_time[$day];
+            } else {
+                $series_item->y = $days_minus_time[$day];
+            }
+            if ($series_item->y > 0 || $filter_orderby == 'time_left') {
+                $series[] = $series_item;
+            }
+        }}
+        
+        $series_item_end = new stdClass();
+        $series_item_end->name = 'Koniec sústredenia';
+        $series_item_end->y = 0;
+        
+        $series[] = $series_item_end;
+        
+        return $series;
+    }
+    
 }
