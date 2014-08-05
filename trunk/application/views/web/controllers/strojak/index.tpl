@@ -78,6 +78,11 @@ $(document).ready(function() {
             series: graph_data.drilldown
         }
     };
+    Highcharts.setOptions({
+        lang: {
+            drillUpText: '<< Naspäť na "{ldelim}series.name{rdelim}"'
+        }
+    });
     $('#graph_container').highcharts(graph_options);
 });
 </script>
