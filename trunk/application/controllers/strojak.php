@@ -3,6 +3,9 @@
 class Strojak extends CI_Controller {
     
     const FILTER_PERSONS_TABLE = 'strojak_persons_table_filter';
+    const FILTER_MY_TIME_TABLE = 'strojak_my_time_table_filter';
+    
+    const MY_TIME_TABLE_ROWS_PER_PAGE = 30;
     
     public function __construct() {
         parent::__construct();
@@ -113,7 +116,106 @@ class Strojak extends CI_Controller {
     public function my_time() {
         auth_redirect_if_not_authentificated('error/no_auth');
         
-        $this->parser->parse('web/controllers/strojak/my_time.tpl');
+        $this->load->helper('filter');
+        
+        $post = $this->input->post();
+        if ($post !== FALSE) {
+            $post_filter = $this->input->post('filter');
+            if ($post_filter !== FALSE) {
+                filter_store_filter(self::FILTER_MY_TIME_TABLE, $post_filter);
+            }
+            redirect('strojak/my_time');
+        }
+        
+        $filter = filter_get_filter(self::FILTER_MY_TIME_TABLE, array('page' => 1));
+        
+        $operations_addition = new Operation();
+        $operations_addition->where('type', Operation::TYPE_ADDITION);
+        $operations_addition->select_sum('time', 'time_sum');
+        $operations_addition->where_related_person('id', '${parent}.id');
+        
+        $operations_subtraction_direct = new Operation();
+        $operations_subtraction_direct->where('type', Operation::TYPE_SUBTRACTION);
+        $operations_subtraction_direct->where('subtraction_type', Operation::SUBTRACTION_TYPE_DIRECT);
+        $operations_subtraction_direct->select_sum('time', 'time_sum');
+        $operations_subtraction_direct->where_related_person('id', '${parent}.id');
+        
+        $operations_subtraction_products = new Operation();
+        $operations_subtraction_products->where('type', Operation::TYPE_SUBTRACTION);
+        $operations_subtraction_products->where('subtraction_type', Operation::SUBTRACTION_TYPE_PRODUCTS);
+        $operations_subtraction_products->where_related('product_quantity', 'price >', 0);
+        $operations_subtraction_products->group_start(' NOT', 'AND');
+        $operations_subtraction_products->where_related('product_quantity', 'product_id', NULL);
+        $operations_subtraction_products->group_end();
+        unset($operations_subtraction_products->db->ar_select[0]);
+        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'time_sum');
+        $operations_subtraction_products->where_related_person('id', '${parent}.id');
+        
+        $operations_subtraction_services = new Operation();
+        $operations_subtraction_services->where('type', Operation::TYPE_SUBTRACTION);
+        $operations_subtraction_services->where('subtraction_type', Operation::SUBTRACTION_TYPE_SERVICES);
+        $operations_subtraction_services->where_related('service_usage', 'price >', 0);
+        $operations_subtraction_services->group_start(' NOT', 'AND');
+        $operations_subtraction_services->where_related('service_usage', 'service_id', NULL);
+        $operations_subtraction_services->group_end();
+        unset($operations_subtraction_services->db->ar_select[0]);
+        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'time_sum');
+        $operations_subtraction_services->where_related_person('id', '${parent}.id');
+        
+        $person = new Person();
+        $person->where('admin', 0);
+        $person->select('*');
+        $person->select_subquery($operations_addition, 'plus_time');
+        $person->select_subquery($operations_subtraction_direct, 'minus_time_direct');
+        $person->select_subquery($operations_subtraction_products, 'minus_time_products');
+        $person->select_subquery($operations_subtraction_services, 'minus_time_services');
+        $person->include_related('group', 'title');
+        $person->get_by_id(auth_get_id());
+        
+        if (!$person->exists()) {
+            add_error_flash_message('Nenašla sa informácia o prihlásenom používateľovi. Nemôžete si pozrieť svoj strojový čas.');
+            redirect(site_url('strojak'));
+        }
+        
+        $operations = new Operation();
+        $operations->select('id, created, time, type, subtraction_type, comment');
+        $operations->include_related('admin', array('name', 'surname'));
+        $operations->include_related('workplace', 'title');
+        $operations->where_related_person($person);
+        $operations->order_by('created', 'asc');
+        $operations->get_paged_iterated($filter['page'], self::MY_TIME_TABLE_ROWS_PER_PAGE);
+        
+        $this->parser->parse('web/controllers/strojak/my_time.tpl', array(
+            'title' => 'Môj strojový čas',
+            'operations' => $operations,
+            'person' => $person,
+            'form' => $this->get_my_time_filter_form($filter, $operations->paged),
+        ));
+    }
+    
+    protected function get_my_time_filter_form($filter, $paged) {
+        $pages = array();
+        for ($i = 1; $i <= $paged->total_pages; $i++) {
+            $pages[$i] = $i . '. strana';
+        }
+        
+        $form = array(
+            'fields' => array(
+                'page' => array(
+                    'name' => 'filter[page]',
+                    'id' => 'filter-page',
+                    'label' => 'Strana',
+                    'type' => 'select',
+                    'values' => $pages,
+                    'default' => isset($filter['page']) ? $filter['page'] : 1,
+                ),
+            ),
+            'arangement' => array(
+                'page'
+            ),
+        );
+        
+        return $form;
     }
     
     protected function get_persons_filter_form($filter) {
@@ -152,8 +254,11 @@ class Strojak extends CI_Controller {
                     'default' => isset($filter['renderas']) ? $filter['renderas'] : 'table',
                 ),
             ),
-            'arangement' => array( 'orderby', 'renderas' ),
+            'arangement' => array(  'renderas', 'orderby' ),
         );
+        if ($filter['renderas'] == 'graph') {
+            $form['fields']['orderby']['label'] = 'Zobraziť graf podľa';
+        }
         return $form;
     }
     
