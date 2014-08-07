@@ -11,3 +11,7 @@
 .ui-table-cell-label::after { content: ':'; }
 
 .ui-field-contain { border: none !important; }
+
+ul.transaction_items_list { list-style-type: none; margin: 0; padding: 0; }
+ul.transaction_items_list li { border-bottom: 1px darkgray dashed; }
+ul.transaction_items_list li:last-child { border-bottom: none; }

@@ -11,7 +11,3 @@ hr.form_divider_advanced, hr.form_divider_simple { border: 1px solid green; }
 hr.form_divider_advanced.form_divider_top { margin-bottom: 0.1em; }
 hr.form_divider_advanced.form_divider_bottom { margin-top: 0.1em; }
 p.form_divider_text { margin: 0; padding: 0 0.5em; }
-
-ul.transaction_items_list { list-style-type: none; margin: 0; padding: 0; }
-ul.transaction_items_list li { border-bottom: 1px darkgray dashed; }
-ul.transaction_items_list li:last-child { border-bottom: none; }

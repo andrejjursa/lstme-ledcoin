@@ -3,3 +3,6 @@
 table.grid_table thead tr { border-bottom: thin solid black; }
 table.grid_table tbody tr:nth-child(odd) td { background-color: #b0e8ff; /*#99ff99;*/ }
 table.grid_table tbody tr:nth-child(even) td { background-color: #ccf0ff; }
+
+span.operation_type_addition_highlight { color: green; }
+span.operation_type_subtraction_highlight { color: red; }
