@@ -1,5 +1,5 @@
 <div class="ui-field-contain{if $form_element.class} {$form_element.class|escape:'html'}{/if}">
-    <label>{$form_element.label|default:'Textový vstup'}:</label>
+    <label>{$form_element.label|default:'Textový vstup'}</label>
     <img src="{$form_element.path}" alt="" />    
 </div>
 <div{if $form_element.class} class="{$form_element.class|escape:'html'}"{/if}>

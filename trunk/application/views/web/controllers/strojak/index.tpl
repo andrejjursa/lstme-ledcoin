@@ -6,6 +6,7 @@
         <table data-role="table" data-mode="reflow" class="ui-responsive grid_table">
             <thead>
                 <tr>
+                    <th data-priority="persist">Obr.</th>
                     <th data-priority="persist">Meno</th>
                     <th data-priority="persist">Skupina</th>
                     <th data-priority="persist">Škola</th>
@@ -17,6 +18,7 @@
             <tbody>
                 {foreach $persons as $person}
                 <tr>
+                    <td><img src="{get_person_image_min($person->id)}" alt="" /></td>
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->group_title}</td>
                     <td>{$person->organisation}</td>

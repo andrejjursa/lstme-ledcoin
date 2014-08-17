@@ -11,6 +11,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Obr.</th>
                     <th>Meno</th>
                     <th>Login</th>
                     <th>Skupina</th>
@@ -23,6 +24,7 @@
                 {foreach $persons as $person}
                 <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}">
                     <td>{$person->id|intval}</td>
+                    <td><img src="{get_person_image_min($person->id)}" alt="" /></td>
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->login}</td>
                     <td>{$person->group_title|default:'<strong>---</strong>'}</td>

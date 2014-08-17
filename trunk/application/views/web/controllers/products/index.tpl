@@ -3,8 +3,9 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $products->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-               data-gridtable-operations="edit:Upraviť,delete:Vymazať,stock:Sklad,overview:Prehľad"
+               data-gridtable-operations="edit:Upraviť,photo:Upraviť/pridať fotku produktu,delete:Vymazať,stock:Sklad,overview:Prehľad"
                data-gridtable-operation-edit-url="{'products/edit_product/--ID--'|site_url}"
+               data-gridtable-operation-photo-url="{'products/edit_photo/--ID--'|site_url}"
                data-gridtable-operation-delete-prompt="true"
                data-gridtable-operation-delete-prompt-title="Vymazať produkt?"
                data-gridtable-operation-delete-prompt-text="Naozaj chcete vymazať produkt --TITLE--?"
@@ -17,6 +18,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Obr.</th>
                     <th>Názov</th>
                     <th>Cena</th>
                     <th>Zostatok skladom</th>
@@ -26,6 +28,7 @@
                 {foreach $products as $product}
                 <tr data-gridtable-unique="product_{$product->id|intval}" data-gridtable-id="{$product->id|intval}" data-gridtable-title="{$product->title|escape:'html'|addslashes}">
                     <td>{$product->id|intval}</td>
+                    <td><img src="{get_product_image_min($product->id)}" alt="" /></td>
                     <td>{$product->title}</td>
                     <td>{include file='web/partials/minutes_inflection.tpl' minutes=$product->price inline}</td>
                     <td>{include file='web/partials/pieces_inflection.tpl' pieces={$product->plus_quantity - $product->minus_quantity}|intval inline}</td>
