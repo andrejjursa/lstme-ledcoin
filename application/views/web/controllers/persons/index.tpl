@@ -3,8 +3,9 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $persons->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-               data-gridtable-operations="edit:Upraviť,delete:Vymazať"
+               data-gridtable-operations="edit:Upraviť,photo:Pridať/upraviť fotku,delete:Vymazať"
                data-gridtable-operation-edit-url="{'persons/edit_person/--ID--'|site_url}"
+               data-gridtable-operation-photo-url="{'persons/edit_photo/--ID--'|site_url}"
                data-gridtable-operation-delete-prompt="true"
                data-gridtable-operation-delete-prompt-title="Vymazať osobu?"
                data-gridtable-operation-delete-prompt-text="Naozaj chcete vymazať osobu --NAME-- (--LOGIN--)?"
