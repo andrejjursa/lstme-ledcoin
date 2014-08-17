@@ -14,6 +14,10 @@
             {include file='web/forms/slider.tpl' form_element=$form_element form_source=$source inline}
         {elseif $form_element.type eq 'divider'}
             {include file='web/forms/divider.tpl' form_element=$form_element inline}
+        {elseif $form_element.type eq 'imagepreview'}
+            {include file='web/forms/imagepreview.tpl' form_element=$form_element inline}
+        {elseif $form_element.type eq 'upload'}
+            {include file='web/forms/upload.tpl' form_element=$form_element inline}
         {/if}
     {else}
         <p>Chyba, nedá da nájsť index {$index}.</p>

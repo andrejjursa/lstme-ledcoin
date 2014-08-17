@@ -169,6 +169,93 @@ class Persons extends CI_Controller {
         
         redirect(site_url('persons'));
     }
+    
+    public function edit_photo($person_id = NULL) {
+        if (is_null($person_id)) {
+            add_error_flash_message('Osoba sa nenašla.');
+            redirect(site_url('persons'));
+        }
+        
+        $person = new Person();
+        $person->get_by_id((int)$person_id);
+        
+        if (!$person->exists()) {
+            add_error_flash_message('Osoba sa nenašla.');
+            redirect(site_url('persons'));
+        }
+        
+        $current_photo = base_url('user/photos/data/' . (int)$person->id . '/photo.png');
+        if (!file_exists('user/photos/data/' . (int)$person->id . '/photo.png')) {
+            $current_photo = base_url('user/photos/default/photo.png');
+        }
+        
+        $this->parser->parse('web/controllers/persons/edit_photo.tpl', array(
+            'title' => 'Administrácia / Ľudia / Fotografia',
+            'back_url' => site_url('persons'),
+            'form' => $this->get_photo_edit_form($current_photo),
+            'person' => $person,
+        ));
+    }
+    
+    public function upload_photo($person_id = NULL) {
+        if (is_null($person_id)) {
+            add_error_flash_message('Osoba sa nenašla.');
+            redirect(site_url('persons'));
+        }
+        
+        $person = new Person();
+        $person->get_by_id((int)$person_id);
+        
+        if (!$person->exists()) {
+            add_error_flash_message('Osoba sa nenašla.');
+            redirect(site_url('persons'));
+        }
+        
+        
+        $upload_config = array(
+            'upload_path' => 'user/photos/data/' . (int)$person->id . '/',
+            'allowed_types' => 'jpg|png',
+            'max_size' => '1024',
+            'max_width' => '1024',
+            'max_height' => '1024',
+            'file_name' => 'temp_photo.png',
+            'overwrite' => TRUE,
+        );
+        $this->load->library('upload', $upload_config);
+        @mkdir($upload_config['upload_path'], DIR_WRITE_MODE, TRUE);
+        
+        if ($this->upload->do_upload('photo')) {
+            $resize_config = array(
+                'image_library' => 'gd2',
+                'source_image' => $upload_config['upload_path'] . $upload_config['file_name'],
+                'create_thumb' => FALSE,
+                'maintain_ratio' => TRUE,
+                'width' => 256,
+                'height' => 256,
+                'quality' => '90%',
+                'new_image' => $upload_config['upload_path'] . 'photo.png',
+            );
+            $this->load->library('image_lib', $resize_config);
+            if ($this->image_lib->resize()) {
+                $resize_config['width'] = 64;
+                $resize_config['height'] = 64;        
+                $resize_config['new_image'] = $upload_config['upload_path'] . 'photo_min.png';
+                @unlink($upload_config['new_image']);
+                $this->image_lib->initialize($resize_config);
+                $this->image_lib->resize();
+                @unlink($resize_config['source_image']);
+                add_success_flash_message('Súbor úspešne nahraný.');
+                redirect(site_url('persons/edit_photo/' . (int)$person->id));
+            } else {
+                @unlink($resize_config['source_image']);
+                add_error_flash_message('Súbor sa nepodarilo preškálovať:' . $this->image_lib->display_errors('<br /><br />', ''));
+                redirect(site_url('persons/edit_photo/' . (int)$person->id));
+            }
+        } else {
+            add_error_flash_message('Súbor sa nepodarilo nahrať, vznikla nasledujúca chyba:' . $this->upload->display_errors('<br /><br />', ''));
+            redirect(site_url('persons/edit_photo/' . (int)$person->id));
+        }
+    }
 
     protected function inject_persons() {
         $persons = new Person();
@@ -195,7 +282,7 @@ class Persons extends CI_Controller {
                 'name' => array(
                     'name' => 'person[name]',
                     'type' => 'text_input',
-                    'label' => 'Meno osoby',
+                    'label' => 'Meno',
                     'id' => 'person-name',
                     'validation' => 'required',
                     'object_property' => 'name',
@@ -315,6 +402,29 @@ class Persons extends CI_Controller {
             'hint' => 'Zakázaním prihlásenia odopriete tejto osobe prístup k aplikácii.',
         );
         $form['arangement'][] = 'enabled';
+        return $form;
+    }
+    
+    protected function get_photo_edit_form($current_photo) {
+        $form = array(
+            'fields' => array(
+                'current_photo' => array(
+                    'type' => 'imagepreview',
+                    'label' => 'Súčasná fotografia',
+                    'path' => $current_photo,
+                ),
+                'photo' => array(
+                    'type' => 'upload',
+                    'label' => 'Nová fotografia',
+                    'name' => 'photo',
+                    'id' => 'photo',
+                    'hint' => 'Fotografia vo formáte jpg alebo png.',
+                ),
+            ),
+            'arangement' => array(
+                'current_photo', 'photo',
+            ),
+        );
         return $form;
     }
     
