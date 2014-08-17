@@ -162,6 +162,7 @@ class Persons extends CI_Controller {
         $error_message = 'Osobu <strong>' . $person->name . ' ' . $person->surname . '</strong> s loginom <strong>' . $person->login . '</strong>, a s ID <strong>' . $person->id . '</strong> sa nepodarilo vymazať.';
         
         if ($person->delete()) {
+            unlink_recursive('user/photos/data/' . (int)$person_id . '/', TRUE);
             add_success_flash_message($success_message);
         } else {
             add_error_flash_message($error_message);

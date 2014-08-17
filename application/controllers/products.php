@@ -459,6 +459,93 @@ class Products extends CI_Controller {
     public function _ok($str) {
         return TRUE;
     }
+    
+    public function edit_photo($product_id = NULL) {
+        if (is_null($product_id)) {
+            add_error_flash_message('Produkt sa nenašiel.');
+            redirect(site_url('products'));
+        }
+        
+        $product = new Product();
+        $product->get_by_id((int)$product_id);
+        
+        if (!$product->exists()) {
+            add_error_flash_message('Produkt sa nenašiel.');
+            redirect(site_url('products'));
+        }
+        
+        $current_photo = base_url('user/products/data/' . (int)$product->id . '/product.png');
+        if (!file_exists('user/products/data/' . (int)$product->id . '/product.png')) {
+            $current_photo = base_url('user/products/default/product.png');
+        }
+        
+        $this->parser->parse('web/controllers/products/edit_photo.tpl', array(
+            'title' => 'Administrácia / Bufet / Fotografia',
+            'back_url' => site_url('products'),
+            'form' => $this->get_photo_edit_form($current_photo),
+            'product' => $product,
+        ));
+    }
+    
+    public function upload_photo($product_id = NULL) {
+        if (is_null($product_id)) {
+            add_error_flash_message('Produkt sa nenašiel.');
+            redirect(site_url('products'));
+        }
+        
+        $product = new Product();
+        $product->get_by_id((int)$product_id);
+        
+        if (!$product->exists()) {
+            add_error_flash_message('Produkt sa nenašiel.');
+            redirect(site_url('products'));
+        }
+        
+        
+        $upload_config = array(
+            'upload_path' => 'user/products/data/' . (int)$product->id . '/',
+            'allowed_types' => 'jpg|png',
+            'max_size' => '1024',
+            'max_width' => '1024',
+            'max_height' => '1024',
+            'file_name' => 'temp_product.png',
+            'overwrite' => TRUE,
+        );
+        $this->load->library('upload', $upload_config);
+        @mkdir($upload_config['upload_path'], DIR_WRITE_MODE, TRUE);
+        
+        if ($this->upload->do_upload('photo')) {
+            $resize_config = array(
+                'image_library' => 'gd2',
+                'source_image' => $upload_config['upload_path'] . $upload_config['file_name'],
+                'create_thumb' => FALSE,
+                'maintain_ratio' => TRUE,
+                'width' => 256,
+                'height' => 256,
+                'quality' => '90%',
+                'new_image' => $upload_config['upload_path'] . 'product.png',
+            );
+            $this->load->library('image_lib', $resize_config);
+            if ($this->image_lib->resize()) {
+                $resize_config['width'] = 64;
+                $resize_config['height'] = 64;        
+                $resize_config['new_image'] = $upload_config['upload_path'] . 'product_min.png';
+                @unlink($upload_config['new_image']);
+                $this->image_lib->initialize($resize_config);
+                $this->image_lib->resize();
+                @unlink($resize_config['source_image']);
+                add_success_flash_message('Súbor úspešne nahraný.');
+                redirect(site_url('products/edit_photo/' . (int)$product->id));
+            } else {
+                @unlink($resize_config['source_image']);
+                add_error_flash_message('Súbor sa nepodarilo preškálovať:' . $this->image_lib->display_errors('<br /><br />', ''));
+                redirect(site_url('products/edit_photo/' . (int)$product->id));
+            }
+        } else {
+            add_error_flash_message('Súbor sa nepodarilo nahrať, vznikla nasledujúca chyba:' . $this->upload->display_errors('<br /><br />', ''));
+            redirect(site_url('products/edit_photo/' . (int)$product->id));
+        }
+    }
 
     protected function get_product_form() {
         $form = array(
@@ -520,7 +607,7 @@ class Products extends CI_Controller {
             $form_fields['product_' . $product->id] = array(
                 'name' => 'product_quantity_addition[' . $product->id . '][quantity]',
                 'id' => 'product_quantity_addition-' . $product->id,
-                'label' => $product->title,
+                'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . '</span></span>',
                 'placeholder' => 'Nechajte prázdne, ak nie je čo pridať.',
                 'type' => 'text_input',
                 'validation' => array(
@@ -538,6 +625,29 @@ class Products extends CI_Controller {
         }
         
         return array('fields' => $form_fields, 'arangement' => $form_arangement);
+    }
+    
+    protected function get_photo_edit_form($current_photo) {
+        $form = array(
+            'fields' => array(
+                'current_photo' => array(
+                    'type' => 'imagepreview',
+                    'label' => 'Súčasná fotografia',
+                    'path' => $current_photo,
+                ),
+                'photo' => array(
+                    'type' => 'upload',
+                    'label' => 'Nová fotografia',
+                    'name' => 'photo',
+                    'id' => 'photo',
+                    'hint' => 'Fotografia vo formáte jpg alebo png.',
+                ),
+            ),
+            'arangement' => array(
+                'current_photo', 'photo',
+            ),
+        );
+        return $form;
     }
 }
 

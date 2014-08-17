@@ -477,7 +477,7 @@ class Operations extends CI_Controller {
             $form['fields']['person_' . $person->id] = array(
                 'name' => 'person_time[' . $person->id . ']',
                 'id' => 'person_time-' . $person->id,
-                'label' => $person->name . ' ' . $person->surname,
+                'label' => '<span class="person_name_label"><img src="' . get_person_image_min($person->id) . '" alt="" /><span class="person_name">' . $person->name . ' ' . $person->surname . '</span></span>',
                 'type' => 'slider',
                 'min' => 0,
                 'max' => 240,

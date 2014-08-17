@@ -11,3 +11,7 @@ hr.form_divider_advanced, hr.form_divider_simple { border: 1px solid green; }
 hr.form_divider_advanced.form_divider_top { margin-bottom: 0.1em; }
 hr.form_divider_advanced.form_divider_bottom { margin-top: 0.1em; }
 p.form_divider_text { margin: 0; padding: 0 0.5em; }
+
+span.person_name_label, span.product_title_label { display: table-row; }
+span.person_name_label > img, span.product_title_label > img { display: table-cell; }
+span.person_name_label > span.person_name, span.product_title_label > span.product_title { display: table-cell; vertical-align: top; padding-left: 0.5em; }

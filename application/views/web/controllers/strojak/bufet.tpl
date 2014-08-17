@@ -5,6 +5,7 @@
         <table data-role="table" data-mode="reflow" class="ui-responsive grid_table">
             <thead>
                 <tr>
+                    <th data-priority="persist">Obr.</th>
                     <th data-priority="persist">Názov</th>
                     <th data-priority="1">Cena</th>
                     <th data-priority="2">Množstvo skladom</th>
@@ -14,6 +15,7 @@
             <tbody>
                 {foreach $products as $product}
                 <tr>
+                    <td><img src="{get_product_image_min($product->id)}" alt="" /></td>
                     <td>{$product->title}</td>
                     <td>{include file='web/partials/minutes_inflection.tpl' minutes=$product->price inline}</td>
                     <td>{include file='web/partials/pieces_inflection.tpl' pieces={$product->plus_quantity - $product->minus_quantity}|intval inline}</td>
