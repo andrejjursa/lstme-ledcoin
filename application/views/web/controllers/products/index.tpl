@@ -3,7 +3,7 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $products->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-               data-gridtable-operations="edit:Upraviť,photo:Upraviť/pridať fotku produktu,delete:Vymazať,stock:Sklad,overview:Prehľad"
+               data-gridtable-operations="edit:Upraviť,photo:Upraviť/pridať fotku,delete:Vymazať,stock:Sklad,overview:Prehľad"
                data-gridtable-operation-edit-url="{'products/edit_product/--ID--'|site_url}"
                data-gridtable-operation-photo-url="{'products/edit_photo/--ID--'|site_url}"
                data-gridtable-operation-delete-prompt="true"
