@@ -32,7 +32,9 @@
         {else}
         <div style="overflow-x: auto">
             {$cols_cnt = $persons->result_count()}{if $cols_cnt lt 16}{$cols_cnt = 14}{/if}
-            <div id="graph_container" style="height: 500px; min-width: {$cols_cnt * 50 + 200}px;"></div>
+            {$min_width = "{$cols_cnt * 50 + 200}px"}
+            {if $filter.graph_type eq 'pie'}{$min_width = '100%'}{/if}
+            <div id="graph_container" style="height: {if $filter.graph_type eq 'pie'}600{else}500{/if}px; min-width: {$min_width};"></div>
         </div>
         {/if}
         <form action="{'strojak'|site_url}" method="post">
@@ -47,11 +49,11 @@
 <script type="text/javascript" src="{"assets/highcharts/modules/data.js?strojak_version={$app_version}"|base_url}"></script>
 <script type="text/javascript" src="{"assets/highcharts/modules/drilldown.js?strojak_version={$app_version}"|base_url}"></script>
 <script type="text/javascript" src="{"assets/highcharts/themes/grid-light.js?strojak_version={$app_version}"|base_url}"></script>
-<script type="text/javascript">
+<script type="text/javascript">{$graph_type = 'column'}{if $filter.graph_type eq 'pie'}{$graph_type = 'pie'}{/if}
 $(document).ready(function() {
-    var graph_data = {$this->get_persons_graph_json($persons, $filter.orderby)};
+    var graph_data = {$this->get_persons_graph_json($persons, $filter.orderby, $filter.graph_type)};
     var graph_options = {
-        chart: { type: 'column' },
+        chart: { type: '{$graph_type}' },
         title: 'Zoznam účastníkov',
         xAxis: {
             type: 'category',
@@ -69,7 +71,7 @@ $(document).ready(function() {
                 text: graph_data.yAxis
             }
         },
-        legend: { enabled: false },
+        legend: { enabled: {if $filter.graph_type eq 'pie'}true{else}false{/if} },
         series: [{
             colorByPoint: true,
             name: graph_data.series_name,
@@ -77,7 +79,20 @@ $(document).ready(function() {
             dataLabels: graph_data.series_dataLabels
         }],
         drilldown: {
-            series: graph_data.drilldown
+            series: graph_data.drilldown,
+            legend: { enabled: false }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: false,
+                cursor: 'pointer',
+                depth: 35,
+                dataLabels: {
+                    enabled: true,
+                    format: '{ldelim}point.name{rdelim} ({ldelim}point.y{rdelim})'
+                },
+                showInLegend: true
+            }
         }
     };
     Highcharts.setOptions({

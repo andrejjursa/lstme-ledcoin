@@ -28,7 +28,7 @@ class Strojak extends CI_Controller {
             redirect('strojak');
         }
         
-        $filter = filter_get_filter(self::FILTER_PERSONS_TABLE, array('orderby' => 'time_left', 'renderas' => 'table'));
+        $filter = filter_get_filter(self::FILTER_PERSONS_TABLE, array('orderby' => 'time_left', 'renderas' => 'table', 'graph_type' => 'column'));
         
         $operations_addition = new Operation();
         $operations_addition->where('type', Operation::TYPE_ADDITION);
@@ -253,22 +253,37 @@ class Strojak extends CI_Controller {
                     ),
                     'default' => isset($filter['renderas']) ? $filter['renderas'] : 'table',
                 ),
+                'graph_type' => array(
+                    'name' => 'filter[graph_type]',
+                    'id' => 'filter-graph_type',
+                    'type' => 'select',
+                    'label' => 'Typ grafu',
+                    'values' => array(
+                        'column' => 'stĺpcový',
+                        'pie' => 'koláčový',
+                    ),
+                    'default' => isset($filter['graph_type']) ? $filter['graph_type'] : 'column',
+                ),
             ),
             'arangement' => array(  'renderas', 'orderby' ),
         );
         if ($filter['renderas'] == 'graph') {
             $form['fields']['orderby']['label'] = 'Zobraziť graf podľa';
+            $form['arangement'] = array( 'renderas', 'graph_type', 'orderby' );
         }
         return $form;
     }
     
-    public function get_persons_graph_json(DataMapper $persons, $filter_orderby) {
+    public function get_persons_graph_json(DataMapper $persons, $filter_orderby, $format_graph_type = 'column') {
         $series = array();
         $drilldown = array();
         
         $dataLabels = new stdClass();
         $dataLabels->enabled = TRUE;
-        $dataLabels->format = '{y} min.';
+        $dataLabels->format = '{point.name} ({y} min.)';
+        if ($format_graph_type == 'column') {
+            $dataLabels->format = '{y} min.';
+        }
         $dataLabels->align = 'center';
         $dataLabels->style = new stdClass();
         $dataLabels->style->fontSize = '11px';
