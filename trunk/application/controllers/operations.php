@@ -691,6 +691,7 @@ class Operations extends CI_Controller {
                 $products->select_subquery($quantity_subtraction, 'minus_quantity');
                 $products->get_iterated();
 
+                $p = 1;
                 foreach ($products as $product) {
                     $form['fields']['product_' . $product->id . '_quantity'] = array(
                         'name' => 'operation_product[' . $product->id . '][quantity]',
@@ -699,7 +700,7 @@ class Operations extends CI_Controller {
                         'type' => 'slider',
                         'min' => 0,
                         'max' => intval($product->plus_quantity) - intval($product->minus_quantity),
-                        'label' => $product->title . ' (počet kusov)',
+                        'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . ' (počet kusov)</span></span>',
                         'default' => 0,
                         'validation' => array(
                             array(
@@ -725,6 +726,13 @@ class Operations extends CI_Controller {
 
                     $form['arangement'][] = 'product_' . $product->id . '_quantity';
                     $form['arangement'][] = 'product_' . $product->id . '_price';
+                    if ($p < $products->result_count()) {
+                        $form['fields']['product_' . $product->id . '_divider'] = array(
+                            'type' => 'divider',
+                        );
+                        $form['arangement'][] = 'product_' . $product->id . '_divider';
+                    }
+                    $p++;
                 }
             } else {
                 $form['arangement'] = array('type', 'subtraction_type', 'person');
