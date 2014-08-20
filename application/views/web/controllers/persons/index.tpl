@@ -47,7 +47,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
     make_gridtable_active('table.admin_grid_table');
-    window.location = '#';
 });
 </script>
 {/block}
