@@ -128,3 +128,25 @@ var make_gridtable_active = function(gridtable_selector) {
         }
     });
 };
+
+
+$(document).ready(function(){
+    $('div.ui-field-contain.group_common_slider').each(function() {
+        var $this = $(this);
+        var $range = $this.find('input[data-type=range]');
+        var group_id = $this.attr('data-group_id');
+        try {
+            group_id = parseInt(group_id);
+        } catch (e) {
+            return;
+        }
+        console.log(group_id);
+        if (group_id > 0 && $range.length === 1) {
+            var update = function(){
+                var current_value = $range.val();
+                $('div.ui-field-contain.group_' + group_id + ' input[data-type=range]').val(current_value).blur();
+            };
+            $range.change(update).keyup(update);
+        }
+    });
+});

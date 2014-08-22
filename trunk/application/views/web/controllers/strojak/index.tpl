@@ -79,8 +79,7 @@ $(document).ready(function() {
             dataLabels: graph_data.series_dataLabels
         }],
         drilldown: {
-            series: graph_data.drilldown,
-            legend: { enabled: false }
+            series: graph_data.drilldown
         },
         plotOptions: {
             pie: {
