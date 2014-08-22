@@ -462,8 +462,9 @@ class Operations extends CI_Controller {
         );
         
         $persons = new Person();
+        $persons->include_related('group', 'title');
         $persons->where('admin', '0');
-        $persons->order_by('surname', 'asc')->order_by('name', 'asc');
+        $persons->order_by_related('group', 'title', 'asc')->order_by('surname', 'asc')->order_by('name', 'asc');
         $persons->get_iterated();
         
         if ($persons->exists()) {
@@ -473,10 +474,35 @@ class Operations extends CI_Controller {
             $form['arangement'][] = 'persons_divider';
         }
         
+        $current_group = NULL;
+        
         foreach ($persons as $person) {
+            if ($person->group_id !== $current_group) {
+                $form['fields']['divider_group_' . $person->group_id] = array(
+                    'type' => 'divider',
+                );
+                if (trim($person->group_title) !== '') {
+                    $form['fields']['divider_group_' . $person->group_id]['text'] = 'Skupina: "' . $person->group_title . '"';
+                }
+                $form['arangement'][] = 'divider_group_' . $person->group_id;
+                $current_group = $person->group_id;
+                $form['fields']['group_' . $current_group . '_slider'] = array(
+                    'name' => 'person_time[' . $person->id . ']',
+                    'id' => 'person_time-' . $person->id,
+                    'class' => 'group_common_slider',
+                    'data' => array('group_id' => $current_group),
+                    'label' => 'Spoločné nastavenie času',
+                    'min' => 0,
+                    'max' => 240,
+                    'default' => 0,
+                    'type' => 'slider',
+                );
+                $form['arangement'][] = 'group_' . $current_group . '_slider';
+            }
             $form['fields']['person_' . $person->id] = array(
                 'name' => 'person_time[' . $person->id . ']',
                 'id' => 'person_time-' . $person->id,
+                'class' => 'group_' . $current_group,
                 'label' => '<span class="person_name_label"><img src="' . get_person_image_min($person->id) . '" alt="" /><span class="person_name">' . $person->name . ' ' . $person->surname . '</span></span>',
                 'type' => 'slider',
                 'min' => 0,

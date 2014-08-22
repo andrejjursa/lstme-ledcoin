@@ -280,9 +280,9 @@ class Strojak extends CI_Controller {
         
         $dataLabels = new stdClass();
         $dataLabels->enabled = TRUE;
-        $dataLabels->format = '{point.name} ({y} min.)';
-        if ($format_graph_type == 'column') {
-            $dataLabels->format = '{y} min.';
+        $dataLabels->format = '{y} min.';
+        if ($format_graph_type == 'pie') {
+            $dataLabels->format = '{point.name} ({y} min.)';
         }
         $dataLabels->align = 'center';
         $dataLabels->style = new stdClass();
