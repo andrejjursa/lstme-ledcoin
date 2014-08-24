@@ -31,3 +31,21 @@ function filter_store_filter($filter_name, $data = array()) {
     
     $CI->session->set_userdata('filters', $filters);
 }
+
+function filter_get_online_filter_form() {
+    $form = array(
+        'fields' => array(
+            'text' => array(
+                'name' => 'online_filter_text',
+                'id' => 'online_filter_text-' . md5(rand(0, 99999999999999) . microtime() . memory_get_usage(TRUE)),
+                'label' => 'Filter',
+                'type' => 'text_input',
+                'clearbutton' => TRUE,
+            ),
+        ),
+        'arangement' => array(
+            'text',
+        ),
+    );
+    return $form;
+}

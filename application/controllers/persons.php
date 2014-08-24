@@ -20,11 +20,11 @@ class Persons extends CI_Controller {
     }
 
     public function index() {
-        $this->inject_persons();
-        
+        $this->load->helper('filter');
+                
         $persons = new Person();
         $persons->include_related('group', 'title');
-        $persons->order_by('admin', 'asc')->order_by('name', 'asc');
+        $persons->order_by('admin', 'asc')->order_by_related('group', 'title', 'asc')->order_by('name', 'asc');
         $persons->get_iterated();
         
         $this->parser->parse('web/controllers/persons/index.tpl', array('title' => 'Administrácia / Ľudia', 'persons' => $persons, 'new_item_url' => site_url('persons/new_person')));
@@ -256,13 +256,6 @@ class Persons extends CI_Controller {
             add_error_flash_message('Súbor sa nepodarilo nahrať, vznikla nasledujúca chyba:' . $this->upload->display_errors('<br /><br />', ''));
             redirect(site_url('persons/edit_photo/' . (int)$person->id));
         }
-    }
-
-    protected function inject_persons() {
-        $persons = new Person();
-        $persons->order_by('admin', 'DESC')->order_by('name', 'ASC');
-        $persons->get_iterated();
-        $this->parser->assign('persons', $persons);
     }
     
     protected function get_form() {

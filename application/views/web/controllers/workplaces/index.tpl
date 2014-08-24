@@ -1,5 +1,10 @@
 {extends file='web/layouts/admin.tpl'}
 {block content_block}
+    {if $workplaces->exists()}
+    <form action="javascipt:void(0);" class="online_filter_form" method="post" data-search_table="table.admin_grid_table" data-search_data="gridtable-title">
+        {include file='web/partials/form.tpl' form=filter_get_online_filter_form() inline}
+    </form>
+    {/if}
     <div class="ui-body ui-body-c ui-corner-all">
         {if $workplaces->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"

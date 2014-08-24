@@ -20,6 +20,8 @@ class Operations extends CI_Controller {
     }
     
     public function index() {
+        $this->load->helper('filter');
+        
         $operations_addition = new Operation();
         $operations_addition->where('type', Operation::TYPE_ADDITION);
         $operations_addition->select_sum('time', 'time_sum');
@@ -61,6 +63,7 @@ class Operations extends CI_Controller {
         $persons->select_subquery($operations_subtraction_products, 'minus_time_products');
         $persons->select_subquery($operations_subtraction_services, 'minus_time_services');
         $persons->include_related('group', 'title');
+        $persons->order_by_related('group', 'title', 'asc')->order_by('surname', 'asc')->order_by('name', 'asc');
         $persons->get_iterated();
         
         $this->parser->parse('web/controllers/operations/index.tpl', array(
@@ -71,6 +74,8 @@ class Operations extends CI_Controller {
     }
     
     public function new_operation($type_override = NULL, $person_id_override = NULL) {
+        $this->load->helper('filter');
+        
         $operation_data = $this->input->post('operation');
         
         if (!is_null($type_override) && ($type_override == Operation::TYPE_ADDITION || $type_override == Operation::TYPE_SUBTRACTION)) {
@@ -91,6 +96,8 @@ class Operations extends CI_Controller {
             'title' => 'Administrácia / Strojový čas / Nový záznam',
             'back_url' => site_url('operations'),
             'form' => $this->get_form(@$operation_data['type'], @$operation_data['subtraction_type']),
+            'subtype' => @$operation_data['subtraction_type'],
+            'type' => @$operation_data['type'],
         ));
     }
     
@@ -353,6 +360,7 @@ class Operations extends CI_Controller {
     }
     
     public function batch_time_addition() {
+        $this->load->helper('filter');
         $this->parser->parse('web/controllers/operations/batch_time_addition.tpl', array(
             'title' => 'Administrácia / Strojový čas / Hromadné pridanie strojového času',
             'form' => $this->get_batch_time_addition_form(),
@@ -444,6 +452,9 @@ class Operations extends CI_Controller {
                     'id' => 'batch_time-comment',
                     'label' => 'Komentár',
                     'type' => 'text_input',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                     'placeholder' => 'Sem pridajte komentár, alebo nechajte prázdne.',
                     'hint' => 'Pozor, globálne nastavenie pre všetkých účastníkov.',
                 ),
@@ -452,6 +463,9 @@ class Operations extends CI_Controller {
                     'id' => 'batch_time-workplace_id',
                     'label' => 'Zamestnanie',
                     'type' => 'select',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                     'values' => $workplace_values,
                     'hint' => 'Pozor, globálne nastavenie pre všetkých účastníkov.',
                 ),
@@ -470,6 +484,9 @@ class Operations extends CI_Controller {
         if ($persons->exists()) {
             $form['fields']['persons_divider'] = array(
                 'type' => 'divider',
+                'data' => array(
+                    'stay-visible' => 'true',
+                ),
             );
             $form['arangement'][] = 'persons_divider';
         }
@@ -480,6 +497,9 @@ class Operations extends CI_Controller {
             if ($person->group_id !== $current_group) {
                 $form['fields']['divider_group_' . $person->group_id] = array(
                     'type' => 'divider',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                 );
                 if (trim($person->group_title) !== '') {
                     $form['fields']['divider_group_' . $person->group_id]['text'] = 'Skupina: "' . $person->group_title . '"';
@@ -507,6 +527,10 @@ class Operations extends CI_Controller {
                 'type' => 'slider',
                 'min' => 0,
                 'max' => 240,
+                'data' => array(
+                    'person-name' => $person->name . ' ' . $person->surname,
+                    'person-login' => $person->login,
+                ),
                 'default' => 0,
                 'validation' => array(
                     array(
@@ -590,6 +614,9 @@ class Operations extends CI_Controller {
                     'type' => 'select',
                     'id' => 'operation-type',
                     'label' => 'Typ operácie',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                     'values' => array(
                         '' => '',
                         Operation::TYPE_ADDITION => 'Pridanie strojového času',
@@ -602,6 +629,9 @@ class Operations extends CI_Controller {
                     'type' => 'select',
                     'id' => 'operation-subtraction_type',
                     'label' => 'Spôsob odobratia času',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                     'values' => array(
                         '' => '',
                         Operation::SUBTRACTION_TYPE_DIRECT => 'Priame odobratie času',
@@ -615,6 +645,9 @@ class Operations extends CI_Controller {
                     'type' => 'select',
                     'id' => 'operation-person_id',
                     'label' => 'Účastník',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                     'values' => $persons_select,
                     'validation' => 'required',
                 ),
@@ -622,6 +655,9 @@ class Operations extends CI_Controller {
                     'name' => 'operation[workplace_id]',
                     'type' => 'select',
                     'id' => 'operation-workplace_id',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                     'label' => 'Zamestnanie',
                     'values' => $workplaces_select,
                 ),
@@ -630,6 +666,9 @@ class Operations extends CI_Controller {
                     'type' => 'text_input',
                     'id' => 'comment-id',
                     'label' => 'Komentár',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                     'validation' => 'max_length[255]',
                 ),
                 'time' => array(
@@ -637,6 +676,9 @@ class Operations extends CI_Controller {
                     'type' => 'slider',
                     'id' => 'comment-time',
                     'label' => 'Čas',
+                    'data' => array(
+                        'stay-visible' => 'true',
+                    ),
                     'min' => 0,
                     'max' => 240,
                     'default' => 0,
@@ -671,6 +713,9 @@ class Operations extends CI_Controller {
                         'min' => 0,
                         'max' => 240,
                         'label' => $service->title . ' (čas)',
+                        'data' => array(
+                            'service-title' => $service->title,
+                        ),
                         'default' => 0,
                         'validation' => array(
                             array(
@@ -685,6 +730,9 @@ class Operations extends CI_Controller {
                         'id' => 'operation_service-' . $service->id . '-price',
                         'type' => 'text_input',
                         'label' => $service->title . ' (cena za minútu)',
+                        'data' => array(
+                            'service-title' => $service->title,
+                        ),
                         'default' => $service->price,
                         'validation' => array(
                             array(
@@ -728,6 +776,9 @@ class Operations extends CI_Controller {
                         'max' => intval($product->plus_quantity) - intval($product->minus_quantity),
                         'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . ' (počet kusov)</span></span>',
                         'default' => 0,
+                        'data' => array(
+                            'product-title' => $product->title,
+                        ),
                         'validation' => array(
                             array(
                                 'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
@@ -742,6 +793,9 @@ class Operations extends CI_Controller {
                         'type' => 'text_input',
                         'label' => $product->title . ' (cena za kus)',
                         'default' => $product->price,
+                        'data' => array(
+                            'product-title' => $product->title,
+                        ),
                         'validation' => array(
                             array(
                                 'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
@@ -755,6 +809,9 @@ class Operations extends CI_Controller {
                     if ($p < $products->result_count()) {
                         $form['fields']['product_' . $product->id . '_divider'] = array(
                             'type' => 'divider',
+                            'data' => array(
+                                'product-title' => $product->title,
+                            ),
                         );
                         $form['arangement'][] = 'product_' . $product->id . '_divider';
                     }

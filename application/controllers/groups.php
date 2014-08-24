@@ -20,6 +20,8 @@ class Groups extends CI_Controller {
     }
     
     public function index() {
+        $this->load->helper('filter');
+        
         $groups = new Group();
         $persons_count = $groups->person;
         $persons_count->select_func('COUNT', array('@id'), 'persons_count');

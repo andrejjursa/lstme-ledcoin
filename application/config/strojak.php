@@ -5,7 +5,7 @@
  | Application version
  |--------------------------------------------------------------------------
  */
-$config['app_version'] = '1.0.3';
+$config['app_version'] = '1.0.4';
 
 /* End of file strojak.php */
 /* Location: ./application/config/strojak.php */
