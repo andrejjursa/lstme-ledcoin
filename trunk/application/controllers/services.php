@@ -20,6 +20,8 @@ class Services extends CI_Controller {
     }
     
     public function index() {
+        $this->load->helper('filter');
+        
         $services = new Service();
         $services->order_by('title', 'asc');
         $services->get_iterated();

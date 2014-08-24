@@ -129,6 +129,11 @@ var make_gridtable_active = function(gridtable_selector) {
     });
 };
 
+var normalize = function(text) {
+    return text.replace(/á/gi, 'a').replace(/é/gi, 'e').replace(/í/gi, 'i').replace(/ó/gi, 'o').replace(/ú/gi, 'u').replace(/ä/gi, 'a')
+    .replace(/ô/gi, 'o').replace(/ý/gi, 'y').replace(/ď/gi, 'd').replace(/ť/gi, 't').replace(/ň/gi, 'n').replace(/ľ/gi, 'l').replace(/ĺ/gi, 'l')
+    .replace(/ž/gi, 'z').replace(/š/gi, 's').replace(/č/gi, 'c').replace(/ř/gi, 'r').replace(/ŕ/gi, 'r');
+};
 
 $(document).ready(function(){
     $('div.ui-field-contain.group_common_slider').each(function() {
@@ -147,6 +152,86 @@ $(document).ready(function(){
                 $('div.ui-field-contain.group_' + group_id + ' input[data-type=range]').val(current_value).blur();
             };
             $range.change(update).keyup(update);
+        }
+    });
+    
+    $('form.online_filter_form').each(function(){
+        var $form = $(this);
+        if (!$form.is('form')) {
+            console.log('Online filter: can\'t find form for "' + $form.attr('data-search_table') + '"!');
+        }
+        $form.submit(function(event) { event.preventDefault(); });
+        if ((typeof $form.attr('data-search_table') !== 'undefined' || typeof $form.attr('data-search_form') !== 'undefined') && typeof $form.attr('data-search_data') !== 'undefined') {
+            var search_in = $form.attr('data-search_data').split(',');
+            if (search_in.length === 0) {
+                console.log('Online filter: search data array is empty for "' + $form.attr('data-search_table') + '"!');
+                return;
+            }
+            var $search_box = $form.find('input[name=online_filter_text]');
+            if ($search_box.length !== 1 || !$search_box.is('input[type=text]')) {
+                console.log('Online filter: search box not found for "' + $form.attr('data-search_table') + '"!');
+                return;
+            }
+            var search_elements = '';
+            var $search_object;
+            if (typeof $form.attr('data-search_table') !== 'undefined') {
+                search_elements = 'tbody tr';
+                $search_object = $($form.attr('data-search_table'));
+                if ($search_object.length !== 1 || !$search_object.is('table')) {
+                    console.log('Online filter "' + $form.attr('data-search_table') + '": table not found or matching element is not a table.');
+                    return;
+                }
+            } else if (typeof $form.attr('data-search_form') !== 'undefined') {
+                search_elements = 'div.field_wrap';
+                $search_object = $($form.attr('data-search_form'));
+                if ($search_object.length !== 1 || !$search_object.is('form')) {
+                    console.log('Online filter "' + $form.attr('data-search_form') + '": form not found or matching element is not a form.');
+                    return;
+                }
+            }
+            
+            var keypressTimer;
+            var filteringFunction = function() {
+                var valueToSearch = $search_box.val();
+                if (valueToSearch === '') {
+                    $search_object.find(search_elements).show();
+                } else {
+                    $search_object.find(search_elements).each(function() {
+                        var $element = $(this);
+                        var element_value = normalize($search_box.val().toLowerCase());
+                        console.log(element_value);
+                        var show_element = false;
+                        if (typeof $element.attr('data-stay-visible') !== 'undefined' && $element.attr('data-stay-visible') === 'true') {
+                            show_element = true;
+                        }
+                        for (var i in search_in) {
+                            if (show_element) { break; }
+                            var findDataAttribute = 'data-' + search_in[i];
+                            var attributeValue = $element.attr(findDataAttribute);
+                            if (typeof attributeValue !== 'undefined') {
+                                attributeValue = normalize(attributeValue.toLowerCase());
+                                console.log(attributeValue);
+                                if (attributeValue.indexOf(element_value) !== -1) {
+                                    show_element = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (show_element) { $element.show() } else { $element.hide(); } 
+                    });
+                }
+            };
+            
+            $search_box.keydown(function() {
+                if (keypressTimer) { clearTimeout(keypressTimer); }
+                keypressTimer = setTimeout(filteringFunction, 250);
+            }).blur(function() {
+                if (keypressTimer) { clearTimeout(keypressTimer); }
+                filteringFunction();
+            }).change(function() {
+                if (keypressTimer) { clearTimeout(keypressTimer); }
+                filteringFunction();
+            });
         }
     });
 });

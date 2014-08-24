@@ -20,6 +20,8 @@ class Products extends CI_Controller {
     }
     
     public function index() {
+        $this->load->helper('filter');
+        
         $quantity_addition = new Product_quantity();
         $quantity_addition->select_sum('quantity', 'quantity_sum');
         $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
@@ -361,6 +363,7 @@ class Products extends CI_Controller {
     }
     
     public function batch_stock_addition() {
+        $this->load->helper('filter');
         $this->parser->parse('web/controllers/products/batch_stock_addition.tpl', array(
             'title' => 'Administrácia / Bufet / Hromadné pridanie zásob',
             'back_url' => site_url('products'),
@@ -606,6 +609,9 @@ class Products extends CI_Controller {
         foreach ($products as $product) {
             $form_fields['product_' . $product->id] = array(
                 'name' => 'product_quantity_addition[' . $product->id . '][quantity]',
+                'data' => array(
+                    'product-name' => $product->title,
+                ),
                 'id' => 'product_quantity_addition-' . $product->id,
                 'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . '</span></span>',
                 'placeholder' => 'Nechajte prázdne, ak nie je čo pridať.',

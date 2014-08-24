@@ -20,6 +20,7 @@ class Workplaces extends CI_Controller {
     }
     
     public function index() {
+        $this->load->helper('filter');
         $workplaces = new Workplace();
         $workplaces->order_by('title', 'asc');
         $workplaces->include_related_count('operation', 'operations_count');

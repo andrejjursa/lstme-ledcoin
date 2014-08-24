@@ -1,5 +1,10 @@
 {extends file='web/layouts/admin.tpl'}
 {block content_block}
+    {if $persons->exists()}
+    <form action="javascipt:void(0);" class="online_filter_form" method="post" data-search_table="table.admin_grid_table" data-search_data="gridtable-name,gridtable-login">
+        {include file='web/partials/form.tpl' form=filter_get_online_filter_form() inline}
+    </form>
+    {/if}
     <div class="ui-body ui-body-c ui-corner-all">
         {if $persons->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
@@ -22,7 +27,7 @@
             </thead>
             <tbody>
                 {foreach $persons as $person}
-                <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}">
+                <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}" data-gridtable-name="{$person->name|escape:'html'|addslashes} {$person->surname|escape:'html'|addslashes}" data-gridtable-login="{$person->login|escape:'html'|addslashes}">
                     <td>{$person->id|intval}</td>
                     <td><img src="{get_person_image_min($person->id)}" alt="" /></td>
                     <td>{$person->name} {$person->surname}</td>
