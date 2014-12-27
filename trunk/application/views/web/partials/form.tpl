@@ -20,7 +20,10 @@
             {include file='web/forms/upload.tpl' form_element=$form_element inline}
         {/if}
     {else}
-        <p>Chyba, nedá da nájsť index {$index}.</p>
+        <!--<p>Chyba, nedá da nájsť index {$index}.</p>-->
     {/if}
 {/foreach}
+
+{else}
+chyba
 {/if}

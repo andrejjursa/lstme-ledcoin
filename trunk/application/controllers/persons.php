@@ -117,7 +117,7 @@ class Persons extends CI_Controller {
             if ($person_data['password'] != '') {
                 $person->password = sha1($person_data['password']);
             }
-            $person->from_array($person_data, array('name', 'surname', 'login', 'organisation', 'admin', 'enabled'));
+            $person->from_array($person_data, array('name', 'surname', 'login', 'organisation', 'admin', 'enabled', 'number', 'email')); //edit
             
             $group = new Group();
             if ($person_data['group_id'] != '') {
@@ -347,9 +347,23 @@ class Persons extends CI_Controller {
                     'object_property' => 'admin',
                     'hint' => 'Administrátor spravuje všetok obsah a udeluje strojový čas, nedávajte tieto práva účastníkom!',
                 ),
+				'number' => array(  //edit
+                    'name' => 'person[number]',
+                    'type' => 'text_input',
+                    'label' => 'Telefónne čislo',
+                    'id' => 'person-number',
+                    'object_property' => 'number',
+                ),
+				'email' => array(
+                    'name' => 'person[email]',
+                    'type' => 'text_input',
+                    'label' => 'Email',
+                    'id' => 'person-email',
+                    'object_property' => 'email',
+                ),
             ),
             'arangement' => array(
-                'name', 'surname', 'login', 'password', 'password_check', 'organisation', 'group_id', 'admin'
+                'name', 'surname', 'login', 'password', 'password_check', 'organisation', 'group_id', 'admin', 'number', 'email'
             ),
         );
         return $form;
