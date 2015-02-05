@@ -6,6 +6,7 @@
     <ul data-role="listview" data-inset="true">
         <li><a href="{'/'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Účastníci</a></li>
         <li><a href="{'strojak/bufet'|site_url}" class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Bufet</a></li>
+		<li><a href="{'notes_view/view'|site_url}" class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Denný program</a></li>
         {if auth_is_authentificated()}
             {if !auth_is_admin()}
             <li><a href="{'strojak/my_time'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Môj strojový čas</a></li>
@@ -38,6 +39,9 @@
         <li><a href="{'products'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bufet</a></li>
         <li><a href="{'services'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Služby</a></li>
         <li><a href="{'operations'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Strojový čas</a></li>
+		<li><a href="{'apartments'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Izby</a></li>
+		<li><a href="{'notes'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Denný program</a></li>
+		<li><a href="{'points'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bodovanie izieb</a></li>
     </ul>
 {/if}
 </div>

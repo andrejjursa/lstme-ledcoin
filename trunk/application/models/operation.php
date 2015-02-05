@@ -24,6 +24,7 @@ class Operation extends DataMapper {
     public $has_one = array(
         'person',
         'workplace',
+		'apartment',
         'admin' => array(
             'class' => 'person',
         ),

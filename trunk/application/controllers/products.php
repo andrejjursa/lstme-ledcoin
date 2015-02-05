@@ -9,6 +9,7 @@
  * Description of products
  *
  * @author Andrej
+ * @edit: Ferdinand Križan
  */
 class Products extends CI_Controller {
     
@@ -653,6 +654,246 @@ class Products extends CI_Controller {
                 'current_photo', 'photo',
             ),
         );
+        return $form;
+    }
+	
+	public function new_operation($person_id_override = NULL) {
+        $this->load->helper('filter');
+		
+        $operation_data = $this->input->post('operation');
+        
+        
+        if (!is_null($person_id_override)) {
+            $person = new Person();
+            $person->where('admin', 0);
+            $person->get_by_id((int)$person_id_override);
+            if ($person->exists()) {
+                $_POST['operation']['person_id'] = $person->id;
+            }
+        }
+        
+        $this->parser->parse('web/controllers/products/admin_delete.tpl', array(
+            'title' => 'Administrácia / Bufet / Odobratie zásob',
+            'back_url' => site_url('products'),
+            'form' => $this->get_form(@$operation_data['type'], @$operation_data['subtraction_type']),
+            'subtype' => @$operation_data['subtraction_type'],
+            'type' => @$operation_data['type'],
+        ));
+    }
+	
+	public function create_operation() {
+        $operation_data_temp = $this->input->post('operation');
+        
+        $this->db->trans_begin();
+        $form = $this->get_form(@$operation_data_temp['type'], @$operation_data_temp['subtraction_type']);
+        build_validator_from_form($form);
+        if ($this->form_validation->run()) {
+            $operation_data = $this->input->post('operation');
+            $operation_service_data = $this->input->post('operation_service');
+            $operation_product_data = $this->input->post('operation_product');
+
+                $total_time = 0;
+                
+
+                    $total_time += (int)$operation_data['time'];
+
+                
+                $service_data = array();
+                if ($operation_data['subtraction_type'] == Operation::SUBTRACTION_TYPE_SERVICES) {
+                    $services = new Service();
+                    $services->order_by('title', 'asc');
+                    $services->get_iterated();
+
+                    foreach ($services as $service) {
+                        if (isset($operation_service_data[$service->id])) {
+                            if (isset($operation_service_data[$service->id]['quantity']) && (int)$operation_service_data[$service->id]['quantity'] > 0 &&
+                                isset($operation_service_data[$service->id]['price']) && (int)$operation_service_data[$service->id]['price'] > 0) {
+                                $service_data[$service->id] = $operation_service_data[$service->id];
+                                $total_time += (int)$operation_service_data[$service->id]['quantity'] * (int)$operation_service_data[$service->id]['price'];
+                            }
+                        }
+                    }
+                }
+                
+                $product_data = array();
+                    $quantity_addition = new Product_quantity();
+                    $quantity_addition->select_sum('quantity', 'quantity_sum');
+                    $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
+                    $quantity_addition->where_related('product', 'id', '${parent}.id');
+
+                    $quantity_subtraction = new Product_quantity();
+                    $quantity_subtraction->select_sum('quantity', 'quantity_sum');
+                    $quantity_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
+                    $quantity_subtraction->where_related('product', 'id', '${parent}.id');
+
+                    $products = new Product();
+                    $products->order_by('title', 'asc');
+                    $products->select('*');
+                    $products->select_subquery($quantity_addition, 'plus_quantity');
+                    $products->select_subquery($quantity_subtraction, 'minus_quantity');
+
+                    $products->get_iterated();
+                    
+                    foreach ($products as $product) {
+                        if (isset($operation_product_data[$product->id])) {
+                            if (isset($operation_product_data[$product->id]['quantity']) && (int)$operation_product_data[$product->id]['quantity'] > 0 &&
+                                isset($operation_product_data[$product->id]['price']) && (int)$operation_product_data[$product->id]['price'] > 0) {
+                                $product_data[$product->id] = $operation_product_data[$product->id];
+                                $total_time += (int)$operation_product_data[$product->id]['quantity'] * (int)$operation_product_data[$product->id]['price'];
+                            }
+                        }
+                    }
+                
+
+                $operation = new Operation();
+                //$operation->from_array($operation_data, array('comment', 'type', 'subtraction_type'));
+
+                    $operation->time = $operation_data['time'];
+
+                if ($operation->save() && $this->db->trans_status()) {
+				
+			
+			
+                    if (count($product_data) > 0) {
+                        foreach ($product_data as $product_id => $product_post) {
+                            $product_quantity = new Product_quantity();
+                            $product_quantity->type = Product_quantity::TYPE_SUBTRACTION;
+                            $product_quantity->from_array($product_post, array('quantity', 'price'));
+                            $product_quantity->product_id = (int)$product_id;
+							//print_r($product_post);
+			//die();
+                            if (!$product_quantity->save(array('operation' => $operation))) {
+                                $product = new Product();
+                                $product->get_by_id((int)$product_id);
+                                $this->db->trans_rollback();
+                                add_error_flash_message('Nepodarilo sa uložiť záznam o odobratí zásob <strong>' . $product->title . '</strong>.');
+                                redirect(site_url('products'));
+                                die();
+                            }
+                        }
+                    }
+                    $this->db->trans_commit();
+                    add_success_flash_message('Produktu <strong>' . $product->title . '</strong> sa úspešne podarilo odobrať <strong>' . $product_post['quantity']. '</strong> ' . get_inflection_by_numbers((int)$product_post['quantity'], 'kusov', 'kus', 'kusy', 'kusy', 'kusy', 'kusov') . ' zásob.');
+                    redirect(site_url('products'));
+                } else {
+                    $this->db->trans_rollback();
+                    add_error_flash_message('Produktu <strong>' . $product->title . '</strong> sa nepodarilo odobrať <strong>' . $product_post['quantity']. '</strong> ' . get_inflection_by_numbers((int)$product_post['quantity'], 'kusov', 'kus', 'kusy', 'kusy', 'kusy', 'kusov') . ' zásob.');
+                    redirect(site_url('products'));
+                }
+            
+        } else {
+            $this->db->trans_rollback();
+            $this->new_operation();
+        }
+    }
+	
+	public function get_form($type = '', $subtraction_type = '') {
+        $operations_addition = new Operation();
+        $operations_addition->where('type', Operation::TYPE_ADDITION);
+        $operations_addition->select_sum('time', 'time_sum');
+        $operations_addition->where_related_person('id', '${parent}.id');
+        
+        $operations_subtraction_direct = new Operation();
+        $operations_subtraction_direct->where('type', Operation::TYPE_SUBTRACTION);
+        $operations_subtraction_direct->where('subtraction_type', Operation::SUBTRACTION_TYPE_DIRECT);
+        $operations_subtraction_direct->select_sum('time', 'time_sum');
+        $operations_subtraction_direct->where_related_person('id', '${parent}.id');
+        
+        $operations_subtraction_products = new Operation();
+        $operations_subtraction_products->where('type', Operation::TYPE_SUBTRACTION);
+        $operations_subtraction_products->where('subtraction_type', Operation::SUBTRACTION_TYPE_PRODUCTS);
+        $operations_subtraction_products->where_related('product_quantity', 'price >', 0);
+        $operations_subtraction_products->group_start(' NOT', 'AND');
+        $operations_subtraction_products->where_related('product_quantity', 'product_id', NULL);
+        $operations_subtraction_products->group_end();
+        unset($operations_subtraction_products->db->ar_select[0]);
+        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'time_sum');
+        $operations_subtraction_products->where_related_person('id', '${parent}.id');
+        
+        $operations_subtraction_services = new Operation();
+        $operations_subtraction_services->where('type', Operation::TYPE_SUBTRACTION);
+        $operations_subtraction_services->where('subtraction_type', Operation::SUBTRACTION_TYPE_SERVICES);
+        $operations_subtraction_services->where_related('service_usage', 'price >', 0);
+        $operations_subtraction_services->group_start(' NOT', 'AND');
+        $operations_subtraction_services->where_related('service_usage', 'service_id', NULL);
+        $operations_subtraction_services->group_end();
+        unset($operations_subtraction_services->db->ar_select[0]);
+        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'time_sum');
+        $operations_subtraction_services->where_related_person('id', '${parent}.id');
+        
+       $form['arangement'] = array('subtraction_type', 'person', 'comment');
+                
+                $quantity_addition = new Product_quantity();
+                $quantity_addition->select_sum('quantity', 'quantity_sum');
+                $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
+                $quantity_addition->where_related('product', 'id', '${parent}.id');
+
+                $quantity_subtraction = new Product_quantity();
+                $quantity_subtraction->select_sum('quantity', 'quantity_sum');
+                $quantity_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
+                $quantity_subtraction->where_related('product', 'id', '${parent}.id');
+
+                $products = new Product();
+                $products->order_by('title', 'asc');
+                $products->select('*');
+                $products->select_subquery($quantity_addition, 'plus_quantity');
+                $products->select_subquery($quantity_subtraction, 'minus_quantity');
+                $products->get_iterated();
+
+                $p = 1;
+                foreach ($products as $product) {
+                    $form['fields']['product_' . $product->id . '_quantity'] = array(
+                        'name' => 'operation_product[' . $product->id . '][quantity]',
+                        'class' => 'controlls-products',
+                        'id' => 'operation_product-' . $product->id . '-quantity',
+                        'type' => 'slider',
+                        'min' => 0,
+                        'max' => intval($product->plus_quantity),
+						//'max' => 10,
+                        'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . ' (počet kusov)</span></span>',
+                        'default' => 0,
+                        'data' => array(
+                            'product-title' => $product->title,
+                        ),
+                        'validation' => array(
+                            array(
+                                'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
+                                'rules' => 'required|integer|greater_than[0]|less_than_equals[' . (intval($product->plus_quantity) - intval($product->minus_quantity)) . ']',
+                            ),
+                        ),
+                    );
+                    $form['fields']['product_' . $product->id . '_price'] = array(
+                        'name' => 'operation_product[' . $product->id . '][price]',
+                        'class' => 'controlls-products',
+                        'id' => 'operation_product-' . $product->id . '-price',
+                        'type' => 'text_input',
+                        'label' => $product->title . ' (cena za kus)',
+                        'default' => $product->price,
+                        'data' => array(
+                            'product-title' => $product->title,
+                        ),
+                        'validation' => array(
+                            array(
+                                'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
+                                'rules' => 'required|integer|greater_than[0]',
+                            ),
+                        ),
+                    );
+
+                    $form['arangement'][] = 'product_' . $product->id . '_quantity';
+                    $form['arangement'][] = 'product_' . $product->id . '_price';
+                    if ($p < $products->result_count()) {
+                        $form['fields']['product_' . $product->id . '_divider'] = array(
+                            'type' => 'divider',
+                            'data' => array(
+                                'product-title' => $product->title,
+                            ),
+                        );
+                        $form['arangement'][] = 'product_' . $product->id . '_divider';
+                    }
+                    $p++;
+                }
+        
         return $form;
     }
 }

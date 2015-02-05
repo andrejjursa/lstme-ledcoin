@@ -9,6 +9,7 @@
  * Description of persons
  *
  * @author Andrej
+ * @edit Ferdinand Križan
  */
 class Persons extends CI_Controller {
     
