@@ -9,6 +9,7 @@
  * Description of User
  *
  * @author Andrej
+ * @edit Ferdinand Križan
  */
 class User extends CI_Controller {
     
@@ -27,6 +28,13 @@ class User extends CI_Controller {
         } else {
             add_error_flash_message('Prihlásenie neúspešné. Chybné meno alebo heslo.');
         }
+        
+        redirect($redirect_url);
+    }
+	
+	public function register() {
+        $redirect_url = $this->input->post('return_url');
+        
         
         redirect($redirect_url);
     }

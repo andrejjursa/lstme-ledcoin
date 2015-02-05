@@ -1,7 +1,9 @@
 {extends file='web/layouts/admin.tpl'}
 {block content_block}
-    <form action="{'persons/create_person'|site_url}"  method="post" data-ajax="false">
+    <div class="ui-body ui-body-a ui-corner-all">
+    <form action="{'apartments/create_apartments'|site_url}" method="post" data-ajax="false">
     {include file='web/partials/form.tpl' form=$form inline}
     <button type="submit" class="ui-shadow ui-btn ui-corner-all">Vytvoriť</button>
-    </form>
+	</form>	
+    </div>
 {/block}

@@ -49,8 +49,8 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'lstme_strojak';
-$db['default']['password'] = 'lstme_strojak';
+$db['default']['username'] = 'root';
+$db['default']['password'] = 'usbw';
 $db['default']['database'] = 'lstme_strojak';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
