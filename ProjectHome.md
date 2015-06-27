@@ -1,0 +1,1 @@
+Aplikacia na ulahcenie manazovania strojoveho casu na sustredeni LSTME.
