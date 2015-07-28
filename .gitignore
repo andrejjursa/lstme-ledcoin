@@ -1,0 +1,5 @@
+application/config/development/
+application/config/test/
+application/config/production/
+application/datamapper/cache/*
+application/logs/*
