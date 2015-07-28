@@ -1,5 +1,7 @@
 application/config/development/
 application/config/test/
 application/config/production/
-application/datamapper/cache/*
-application/logs/*
+application/datamapper/cache/*.php
+application/logs/*.php
+application/cache/smarty/compiled/*.php
+application/cache/smarty/cached/*.php
