@@ -58,13 +58,6 @@ $cache = array (
       'rules' => 
       array (
       ),
-    ),    
-	'apartment_id' => 
-    array (
-      'field' => 'apartment_id',
-      'rules' => 
-      array (
-      ),
     ),
     'time' => 
     array (
@@ -107,8 +100,8 @@ $cache = array (
       'rules' => 
       array (
       ),
-    ),    
-	'apartment' => 
+    ),
+    'apartment' => 
     array (
       'field' => 'apartment',
       'rules' => 
@@ -160,17 +153,6 @@ $cache = array (
       'reciprocal' => false,
       'auto_populate' => NULL,
       'cascade_delete' => true,
-    ),    
-	'apartment' => 
-    array (
-      'class' => 'apartment',
-      'other_field' => 'operation',
-      'join_self_as' => 'operation',
-      'join_other_as' => 'apartment ',
-      'join_table' => '',
-      'reciprocal' => false,
-      'auto_populate' => NULL,
-      'cascade_delete' => true,
     ),
     'workplace' => 
     array (
@@ -178,6 +160,17 @@ $cache = array (
       'other_field' => 'operation',
       'join_self_as' => 'operation',
       'join_other_as' => 'workplace',
+      'join_table' => '',
+      'reciprocal' => false,
+      'auto_populate' => NULL,
+      'cascade_delete' => true,
+    ),
+    'apartment' => 
+    array (
+      'class' => 'apartment',
+      'other_field' => 'operation',
+      'join_self_as' => 'operation',
+      'join_other_as' => 'apartment',
       'join_table' => '',
       'reciprocal' => false,
       'auto_populate' => NULL,

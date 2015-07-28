@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f6823910-b0b6-4ea9-aa6a-1dcade04d047" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nbproject/autocomplete/__ci_auto_complete__.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nbproject/private/config.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nbproject/private/private.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nbproject/private/private.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nbproject/project.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/nbproject/project.xml" afterPath="" />
-    </list>
+    <list default="true" id="f6823910-b0b6-4ea9-aa6a-1dcade04d047" name="Default" comment="" />
     <ignored path="lstme-ledcoin.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

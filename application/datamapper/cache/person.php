@@ -14,8 +14,6 @@ $cache = array (
     8 => 'group_id',
     9 => 'admin',
     10 => 'organisation',
-	11 => 'number',
-	12 => 'email',
   ),
   'validation' => 
   array (
@@ -107,13 +105,6 @@ $cache = array (
     'operation' => 
     array (
       'field' => 'operation',
-      'rules' => 
-      array (
-      ),
-    ),
-    'email' => 
-    array (
-      'field' => 'email',
       'rules' => 
       array (
       ),
