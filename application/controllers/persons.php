@@ -348,23 +348,9 @@ class Persons extends CI_Controller {
                     'object_property' => 'admin',
                     'hint' => 'Administrátor spravuje všetok obsah a udeluje strojový čas, nedávajte tieto práva účastníkom!',
                 ),
-				'number' => array(  //edit
-                    'name' => 'person[number]',
-                    'type' => 'text_input',
-                    'label' => 'Telefónne čislo',
-                    'id' => 'person-number',
-                    'object_property' => 'number',
-                ),
-				'email' => array(
-                    'name' => 'person[email]',
-                    'type' => 'text_input',
-                    'label' => 'Email',
-                    'id' => 'person-email',
-                    'object_property' => 'email',
-                ),
             ),
             'arangement' => array(
-                'name', 'surname', 'login', 'password', 'password_check', 'organisation', 'group_id', 'admin', 'number', 'email'
+                'name', 'surname', 'login', 'password', 'password_check', 'organisation', 'group_id', 'admin'
             ),
         );
         return $form;

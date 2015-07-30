@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "strojak";
+$route['default_controller'] = "ledcoin";
 $route['404_override'] = 'error/page_not_found';
 
 

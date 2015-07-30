@@ -1,9 +1,9 @@
 <?php
 
-class Strojak extends CI_Controller {
+class Ledcoin extends CI_Controller {
     
-    const FILTER_PERSONS_TABLE = 'strojak_persons_table_filter';
-    const FILTER_MY_TIME_TABLE = 'strojak_my_time_table_filter';
+    const FILTER_PERSONS_TABLE = 'ledcoin_persons_table_filter';
+    const FILTER_MY_TIME_TABLE = 'ledcoin_my_time_table_filter';
     
     const MY_TIME_TABLE_ROWS_PER_PAGE = 30;
     
@@ -25,7 +25,7 @@ class Strojak extends CI_Controller {
                 }
                 filter_store_filter(self::FILTER_PERSONS_TABLE, $post_filter);
             }
-            redirect('strojak');
+            redirect('ledcoin');
         }
         
         $filter = filter_get_filter(self::FILTER_PERSONS_TABLE, array('orderby' => 'time_left', 'renderas' => 'table', 'graph_type' => 'column'));
@@ -85,7 +85,7 @@ class Strojak extends CI_Controller {
             $persons_non_admins->order_by('organisation', 'asc');
         }
         $persons_non_admins->get_iterated();
-        $this->parser->parse('web/controllers/strojak/index.tpl', array(
+        $this->parser->parse('web/controllers/ledcoin/index.tpl', array(
             'persons' => $persons_non_admins,
             'title' => 'Účastníci',
             'form' => $this->get_persons_filter_form($filter),
@@ -110,7 +110,7 @@ class Strojak extends CI_Controller {
         $products->select_subquery($quantity_addition, 'plus_quantity');
         $products->select_subquery($quantity_subtraction, 'minus_quantity');
         $products->get_iterated();
-        $this->parser->parse('web/controllers/strojak/bufet.tpl', array('products' => $products, 'title' => 'Bufet'));
+        $this->parser->parse('web/controllers/ledcoin/bufet.tpl', array('products' => $products, 'title' => 'Bufet'));
     }
     
     public function my_time() {
@@ -124,7 +124,7 @@ class Strojak extends CI_Controller {
             if ($post_filter !== FALSE) {
                 filter_store_filter(self::FILTER_MY_TIME_TABLE, $post_filter);
             }
-            redirect('strojak/my_time');
+            redirect('ledcoin/my_time');
         }
         
         $filter = filter_get_filter(self::FILTER_MY_TIME_TABLE, array('page' => 1));
@@ -174,7 +174,7 @@ class Strojak extends CI_Controller {
         
         if (!$person->exists()) {
             add_error_flash_message('Nenašla sa informácia o prihlásenom používateľovi. Nemôžete si pozrieť svoj strojový čas.');
-            redirect(site_url('strojak'));
+            redirect(site_url('ledcoin'));
         }
         
         $operations = new Operation();
@@ -185,7 +185,7 @@ class Strojak extends CI_Controller {
         $operations->order_by('created', 'asc');
         $operations->get_paged_iterated($filter['page'], self::MY_TIME_TABLE_ROWS_PER_PAGE);
         
-        $this->parser->parse('web/controllers/strojak/my_time.tpl', array(
+        $this->parser->parse('web/controllers/ledcoin/my_time.tpl', array(
             'title' => 'Môj strojový čas',
             'operations' => $operations,
             'person' => $person,
