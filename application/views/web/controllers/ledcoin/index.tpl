@@ -37,7 +37,7 @@
             <div id="graph_container" style="height: {if $filter.graph_type eq 'pie'}600{else}500{/if}px; min-width: {$min_width};"></div>
         </div>
         {/if}
-        <form action="{'strojak'|site_url}" method="post">
+        <form action="{'ledcoin'|site_url}" method="post">
             {include file='web/partials/form.tpl' form=$form inline}
             <button type="submit" class="ui-shadow ui-btn ui-corner-all">Aplikovať</button>
         </form>
@@ -45,10 +45,10 @@
 {/block}
 {block header_block}
 {if $filter.renderas eq 'graph'}
-<script type="text/javascript" src="{"assets/highcharts/highcharts.js?strojak_version={$app_version}"|base_url}"></script>
-<script type="text/javascript" src="{"assets/highcharts/modules/data.js?strojak_version={$app_version}"|base_url}"></script>
-<script type="text/javascript" src="{"assets/highcharts/modules/drilldown.js?strojak_version={$app_version}"|base_url}"></script>
-<script type="text/javascript" src="{"assets/highcharts/themes/grid-light.js?strojak_version={$app_version}"|base_url}"></script>
+<script type="text/javascript" src="{"assets/highcharts/highcharts.js?ledcoin_version={$app_version}"|base_url}"></script>
+<script type="text/javascript" src="{"assets/highcharts/modules/data.js?ledcoin_version={$app_version}"|base_url}"></script>
+<script type="text/javascript" src="{"assets/highcharts/modules/drilldown.js?ledcoin_version={$app_version}"|base_url}"></script>
+<script type="text/javascript" src="{"assets/highcharts/themes/grid-light.js?ledcoin_version={$app_version}"|base_url}"></script>
 <script type="text/javascript">{$graph_type = 'column'}{if $filter.graph_type eq 'pie'}{$graph_type = 'pie'}{/if}
 $(document).ready(function() {
     var graph_data = {$this->get_persons_graph_json($persons, $filter.orderby, $filter.graph_type)};

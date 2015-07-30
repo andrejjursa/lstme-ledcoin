@@ -1,4 +1,4 @@
-@import url('strojak_common.css');
+@import url('ledcoin_common.css');
 
 table.grid_table thead tr { border-bottom: thin solid black; }
 table.grid_table tbody tr:nth-child(odd) td { background-color: #b0e8ff; /*#99ff99;*/ }

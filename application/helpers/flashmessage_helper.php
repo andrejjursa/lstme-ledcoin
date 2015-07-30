@@ -1,24 +1,24 @@
 <?php
 
-define('STROJAK_FLASHDATA_FLASH_MESSAGE_KEY', '_strojak_flashdata_flash_message_key');
-define('STROJAK_FLASHDATA_FLASH_MESSAGE_TYPE_SUCCESS', 'success');
-define('STROJAK_FLASHDATA_FLASH_MESSAGE_TYPE_ERROR', 'error');
-define('STROJAK_FLASHDATA_FLASH_MESSAGE_TYPE_COMMON', 'common');
+define('LEDCOIN_FLASHDATA_FLASH_MESSAGE_KEY', '_ledcoin_flashdata_flash_message_key');
+define('LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_SUCCESS', 'success');
+define('LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_ERROR', 'error');
+define('LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_COMMON', 'common');
 
 /**
  * Add new flash message into list of flash messages.
  * @param string $message_text flash message text.
- * @param string $message_type type of flash message, one of STROJAK_FLASHDATA_FLASH_MESSAGE_TYPE_*.
+ * @param string $message_type type of flash message, one of LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_*.
  */
-function add_flash_message($message_text, $message_type = STROJAK_FLASHDATA_FLASH_MESSAGE_TYPE_COMMON) {
+function add_flash_message($message_text, $message_type = LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_COMMON) {
     $CI =& get_instance();
     $CI->load->library('session');
-    $current_messages = $CI->session->flashdata(STROJAK_FLASHDATA_FLASH_MESSAGE_KEY);
+    $current_messages = $CI->session->flashdata(LEDCOIN_FLASHDATA_FLASH_MESSAGE_KEY);
     $message = new stdClass();
     $message->text = $message_text;
     $message->type = $message_type;
     $current_messages[] = $message;
-    $CI->session->set_flashdata(STROJAK_FLASHDATA_FLASH_MESSAGE_KEY, $current_messages);
+    $CI->session->set_flashdata(LEDCOIN_FLASHDATA_FLASH_MESSAGE_KEY, $current_messages);
 }
 
 /**
@@ -28,7 +28,7 @@ function add_flash_message($message_text, $message_type = STROJAK_FLASHDATA_FLAS
 function get_flash_messages() {
     $CI =& get_instance();
     $CI->load->library('session');
-    return $CI->session->flashdata(STROJAK_FLASHDATA_FLASH_MESSAGE_KEY);
+    return $CI->session->flashdata(LEDCOIN_FLASHDATA_FLASH_MESSAGE_KEY);
 }
 
 /**
@@ -36,7 +36,7 @@ function get_flash_messages() {
  * @param string $message_text flash message text.
  */
 function add_success_flash_message($message_text) {
-    add_flash_message($message_text, STROJAK_FLASHDATA_FLASH_MESSAGE_TYPE_SUCCESS);
+    add_flash_message($message_text, LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_SUCCESS);
 }
 
 /**
@@ -44,7 +44,7 @@ function add_success_flash_message($message_text) {
  * @param string $message_text flash message text.
  */
 function add_error_flash_message($message_text) {
-    add_flash_message($message_text, STROJAK_FLASHDATA_FLASH_MESSAGE_TYPE_ERROR);
+    add_flash_message($message_text, LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_ERROR);
 }
 
 /**
@@ -52,5 +52,5 @@ function add_error_flash_message($message_text) {
  * @param string $message_text flash message text.
  */
 function add_common_flash_message($message_text) {
-    add_flash_message($message_text, STROJAK_FLASHDATA_FLASH_MESSAGE_TYPE_COMMON);
+    add_flash_message($message_text, LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_COMMON);
 }

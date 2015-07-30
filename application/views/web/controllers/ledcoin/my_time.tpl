@@ -88,7 +88,7 @@
                 </tbody>
             </table>
             {if $operations->paged->total_rows gt $operations->paged->page_size}
-            <form action="{'strojak/my_time'|site_url}" method="post">
+            <form action="{'ledcoin/my_time'|site_url}" method="post">
                 {include file='web/partials/form.tpl' form=$form inline}
                 <button type="submit">Ísť na stranu</button>
             </form>

@@ -7,5 +7,5 @@
  */
 $config['app_version'] = '1.0.4';
 
-/* End of file strojak.php */
-/* Location: ./application/config/strojak.php */
+/* End of file ledcoin.php */
+/* Location: ./application/config/ledcoin.php */

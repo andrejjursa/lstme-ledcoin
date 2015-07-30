@@ -24,9 +24,9 @@
         <input type="submit" value="Prihlásiť sa" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini" data-theme="a" />
         <input type="hidden" name="return_url" value="{if $this->router->class neq 'error'}{current_url()}{else}{'/'|site_url}{/if}" />
     </form>
-	<ul data-role="listview" data-inset="true"">
-		<a href="{'persons_registration/reg_person'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Registrácia</a>
-	</ul>
+	{*<ul data-role="listview" data-inset="true"">
+		<a href="{'persons/registration'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Registrácia</a>
+	</ul>*}
 {/if}    
         
 {if auth_is_admin()}

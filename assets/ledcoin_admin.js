@@ -108,13 +108,13 @@ var make_gridtable_active = function(gridtable_selector) {
                             dialogPopup += '<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-c" data-rel="back" data-transition="flip">' + operation_tmpl.cancel_button_text + '</a>';
                             dialogPopup += '</div></div>';
                             var dialogPopupElement = $(dialogPopup);
-                            $('#strojak-main-page').append( dialogPopupElement ).trigger( "create" );
+                            $('#ledcoin-main-page').append( dialogPopupElement ).trigger( "create" );
                             button.click(function() {
                                 $.mobile.switchPopup(popup_element, dialogPopupElement);
                             });
                         }
                     }
-                    $('#strojak-main-page').append( popup_element ).trigger( "create" );
+                    $('#ledcoin-main-page').append( popup_element ).trigger( "create" );
                     $tr.click(function(e) {
                         popup_element.popup('open', {
                             positionTo: $tr,
