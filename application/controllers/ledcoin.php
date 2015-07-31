@@ -173,7 +173,7 @@ class Ledcoin extends CI_Controller {
         $person->get_by_id(auth_get_id());
         
         if (!$person->exists()) {
-            add_error_flash_message('Nenašla sa informácia o prihlásenom používateľovi. Nemôžete si pozrieť svoj strojový čas.');
+            add_error_flash_message('Nenašla sa informácia o prihlásenom používateľovi. Nemôžete si pozrieť svoj LEDCOIN.');
             redirect(site_url('ledcoin'));
         }
         
@@ -186,7 +186,7 @@ class Ledcoin extends CI_Controller {
         $operations->get_paged_iterated($filter['page'], self::MY_TIME_TABLE_ROWS_PER_PAGE);
         
         $this->parser->parse('web/controllers/ledcoin/my_time.tpl', array(
-            'title' => 'Môj strojový čas',
+            'title' => 'Môj LEDCOIN',
             'operations' => $operations,
             'person' => $person,
             'form' => $this->get_my_time_filter_form($filter, $operations->paged),

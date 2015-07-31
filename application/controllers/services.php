@@ -136,7 +136,7 @@ class Services extends CI_Controller {
         
         if ((int)$service->service_usages_count > 0) {
             $this->db->trans_rollback();
-            add_error_flash_message('Nie je možné vymazať službu, ktorá bola už použitá v operáciách so strojovým časom.');
+            add_error_flash_message('Nie je možné vymazať službu, ktorá bola už použitá v operáciách s LEDCOIN-om.');
             redirect(site_url('services'));
         }
         

@@ -1,7 +1,7 @@
 {extends file='web/layouts/standard.tpl'}
 {block content_block}
     <div class="ui-body ui-body-a ui-corner-all">
-        <h3>Môj strojový čas</h3>
+        <h3>Môj LEDCOIN</h3>
         {if $operations->exists()}
             <table data-role="table" data-mode="reflow" class="ui-responsive grid_table" style="margin-bottom: 1em;">
                 <thead>
@@ -94,7 +94,7 @@
             </form>
             {/if}
         {else}
-            <p>{$person->name} {$person->surname} nemá zatiaľ žiadne záznamy o transakciách so strojovým časom.</p>
+            <p>{$person->name} {$person->surname} nemá zatiaľ žiadne záznamy o transakciách s LEDCOIN-om.</p>
         {/if}
     </div>
 {/block}

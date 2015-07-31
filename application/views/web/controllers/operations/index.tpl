@@ -44,7 +44,7 @@
             Momentálne v systéme neexistujú žiadne osoby.
         {/if}
     </div>
-    <a href="{'operations/batch_time_addition'|site_url}" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-plus" data-ajax="false">Hromadné pridanie strojového času</a>
+    <a href="{'operations/batch_time_addition'|site_url}" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-plus" data-ajax="false">Hromadné pridanie LEDCOIN-u</a>
 {/block}
 {block header_block}
 <script type="text/javascript">

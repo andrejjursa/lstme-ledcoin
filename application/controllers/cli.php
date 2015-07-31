@@ -25,7 +25,7 @@ class Cli extends CI_Controller {
     }
     
     public function index() {
-        echo "Vitajte v konfiguracii aplikacie Strojovy cas.\n\n";
+        echo "Vitajte v konfiguracii aplikacie LEDCOIN.\n\n";
         echo "Prosim vyberte si z nasledujucej ponuky:\n\n";
         echo "(1) - databazove migracie\n";
         echo "(2) - vytvorenie administratora\n";

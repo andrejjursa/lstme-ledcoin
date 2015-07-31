@@ -346,7 +346,7 @@ class Persons extends CI_Controller {
                     'id' => 'person-admin',
                     'default' => '0',
                     'object_property' => 'admin',
-                    'hint' => 'Administrátor spravuje všetok obsah a udeluje strojový čas, nedávajte tieto práva účastníkom!',
+                    'hint' => 'Administrátor spravuje všetok obsah a udeluje LEDCOIN, nedávajte tieto práva účastníkom!',
                 ),
             ),
             'arangement' => array(

@@ -70,7 +70,7 @@
         </form>
         {/if}
         {else}
-            <p>Momentálne nie sú k dispozícii žiadne transakcie strojového času pre účastníka <strong>{$person->name} {$person->surname}</strong>.</p>
+            <p>Momentálne nie sú k dispozícii žiadne transakcie LEDOIN-u pre účastníka <strong>{$person->name} {$person->surname}</strong>.</p>
         {/if}
     </div>
 {/block}

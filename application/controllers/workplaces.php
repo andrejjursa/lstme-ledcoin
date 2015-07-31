@@ -134,7 +134,7 @@ class Workplaces extends CI_Controller {
         
         if ((int)$workplace->operations_count > 0) {
             $this->db->trans_rollback();
-            add_error_flash_message('Nie je možné vymazať zamestnanie ak bolo použité v operácii so strojovým časom.');
+            add_error_flash_message('Nie je možné vymazať zamestnanie ak bolo použité v operácii s LEDCOIN-om.');
             redirect(site_url('workplaces'));
         }
         

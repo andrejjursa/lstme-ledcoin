@@ -29,7 +29,7 @@
                 <tr data-gridtable-unique="workplace_{$workplace->id|intval}" data-gridtable-id="{$workplace->id|intval}" data-gridtable-title="{$workplace->title|escape:'html'|addslashes}">
                     <td>{$workplace->id|intval}</td>
                     <td>{$workplace->title}</td>
-                    <td>v <em>{$workplace->operations_count|intval}</em> {get_inflection_by_numbers($workplace->operations_count|intval, 'operáciách', 'operácii', 'operáciách', 'operáciách', 'operáciách', 'operáciách')} so strojovým časom</td>
+                    <td>v <em>{$workplace->operations_count|intval}</em> {get_inflection_by_numbers($workplace->operations_count|intval, 'operáciách', 'operácii', 'operáciách', 'operáciách', 'operáciách', 'operáciách')} s LEDCOIN-om</td>
                 </tr>
                 {/foreach}
             </tbody>

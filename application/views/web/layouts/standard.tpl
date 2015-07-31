@@ -1,7 +1,7 @@
 <!DOCTYPE html>{$this->load->config('ledcoin')}{$app_version = $this->config->item('app_version')}
 <html lang="sk">
     <head>
-        <title>Strojový čas{if $title}: {$title}{/if}</title>
+        <title>LEDCOIN{if $title}: {$title}{/if}</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" type="text/css" href="{"assets/themes/lstme.min.css?ledcoin_version={$app_version}"|base_url}" />
@@ -21,7 +21,7 @@
             </div>
             
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
-                <h1>Strojový čas{if $title} / {$title}{/if}</h1>
+                <h1>LEDCOIN{if $title} / {$title}{/if}</h1>
                 <a href="#navpanel" class="ledcoin-navigation-link ui-btn ui-btn-icon-notext ui-corner-all ui-icon-bars ui-nodisc-icon ui-alt-icon ui-btn-right">Navigácia</a>
 				{if $back_url}
 					<a href="{$back_url}" data-ajax="false" class="ui-btn ui-btn-icon-notext ui-corner-all ui-icon-back ui-nodisc-icon ui-alt-icon ui-btn-left">Nazad</a>

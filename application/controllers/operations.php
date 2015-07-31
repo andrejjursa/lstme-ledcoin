@@ -67,7 +67,7 @@ class Operations extends CI_Controller {
         $persons->get_iterated();
         
         $this->parser->parse('web/controllers/operations/index.tpl', array(
-            'title' => 'Administrácia / Strojový čas',
+            'title' => 'Administrácia / LEDCOIN',
             'new_item_url' => site_url('operations/new_operation'),
             'persons' => $persons,
         ));
@@ -93,7 +93,7 @@ class Operations extends CI_Controller {
         }
         
         $this->parser->parse('web/controllers/operations/new_operation.tpl', array(
-            'title' => 'Administrácia / Strojový čas / Nový záznam',
+            'title' => 'Administrácia / LEDCOIN / Nový záznam',
             'back_url' => site_url('operations'),
             'form' => $this->get_form(@$operation_data['type'], @$operation_data['subtraction_type']),
             'subtype' => @$operation_data['subtraction_type'],
@@ -187,11 +187,11 @@ class Operations extends CI_Controller {
                 $operation->subtraction_type = Operation::SUBTRACTION_TYPE_DIRECT;
                 if ($operation->save(array('person' => $person, 'admin' => $admin, 'workplace' => $workplace)) && $this->db->trans_status()) {
                     $this->db->trans_commit();
-                    add_success_flash_message('Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . $operation->time . '</strong> ' . get_inflection_by_numbers((int)$operation->time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' strojového času úspešne.');
+                    add_success_flash_message('Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . $operation->time . '</strong> ' . get_inflection_by_numbers((int)$operation->time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' LEDCOIN-u úspešne.');
                     redirect(site_url('operations'));
                 } else {
                     $this->db->trans_rollback();
-                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo prideliť <strong>' . $operation->time . '</strong> ' . get_inflection_by_numbers((int)$operation->time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' strojového času.');
+                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo prideliť <strong>' . $operation->time . '</strong> ' . get_inflection_by_numbers((int)$operation->time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' LEDCOIN-u.');
                     redirect(site_url('operations/new_operation'));
                 }
             } else {
@@ -251,13 +251,13 @@ class Operations extends CI_Controller {
                 
                 if ($total_time > $time_at_disposal) {
                     $this->db->trans_rollback();
-                    add_error_flash_message('Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> nemá dostatok strojového času. Potrebuje <strong>' . $total_time . '</strong> ' . get_inflection_by_numbers((int)$total_time, 'minút', 'minútu', 'minúty', 'minútu', 'minúty', 'minút') . ' ale má iba <strong>' . $time_at_disposal . '</strong> ' . get_inflection_by_numbers((int)$time_at_disposal, 'minút', 'minútu', 'minúty', 'minútu', 'minúty', 'minút') . '.');
+                    add_error_flash_message('Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> nemá dostatok LEDCOIN-u. Potrebuje <strong>' . $total_time . '</strong> ' . get_inflection_by_numbers((int)$total_time, 'minút', 'minútu', 'minúty', 'minútu', 'minúty', 'minút') . ' ale má iba <strong>' . $time_at_disposal . '</strong> ' . get_inflection_by_numbers((int)$time_at_disposal, 'minút', 'minútu', 'minúty', 'minútu', 'minúty', 'minút') . '.');
                     redirect(site_url('operations/new_operation'));
                 }
                 
                 if ($total_time == 0) {
                     $this->db->trans_rollback();
-                    add_error_flash_message('Celková suma strojového času na odobratie je nulová, preto nie je možné pokračovať.');
+                    add_error_flash_message('Celková suma LEDCOIN-u na odobratie je nulová, preto nie je možné pokračovať.');
                     redirect(site_url('operations/new_operation'));
                 }
                 
@@ -278,7 +278,7 @@ class Operations extends CI_Controller {
                                 $service = new Service();
                                 $service->get_by_id((int)$service_id);
                                 $this->db->trans_rollback();
-                                add_error_flash_message('Nepodarilo sa uložiť záznam o odobratí strojového času za službu <strong>' . $service->title . '</strong>.');
+                                add_error_flash_message('Nepodarilo sa uložiť záznam o odobratí LEDCOIN-u za službu <strong>' . $service->title . '</strong>.');
                                 redirect(site_url('operations/new_operation'));
                                 die();
                             }
@@ -294,18 +294,18 @@ class Operations extends CI_Controller {
                                 $product = new Product();
                                 $product->get_by_id((int)$product_id);
                                 $this->db->trans_rollback();
-                                add_error_flash_message('Nepodarilo sa uložiť záznam o odobratí strojového času za produkt <strong>' . $product->title . '</strong>.');
+                                add_error_flash_message('Nepodarilo sa uložiť záznam o odobratí LEDCOIN-u za produkt <strong>' . $product->title . '</strong>.');
                                 redirect(site_url('operations/new_operation'));
                                 die();
                             }
                         }
                     }
                     $this->db->trans_commit();
-                    add_success_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa úspešne podarilo odobrať <strong>' . $total_time . '</strong> ' . get_inflection_by_numbers((int)$total_time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' strojového času.');
+                    add_success_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa úspešne podarilo odobrať <strong>' . $total_time . '</strong> ' . get_inflection_by_numbers((int)$total_time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' LEDCOIN-u.');
                     redirect(site_url('operations'));
                 } else {
                     $this->db->trans_rollback();
-                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo odobrať <strong>' . $total_time . '</strong> ' . get_inflection_by_numbers((int)$total_time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' strojového času.');
+                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo odobrať <strong>' . $total_time . '</strong> ' . get_inflection_by_numbers((int)$total_time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' LEDCOIN-u.');
                     redirect(site_url('operations/new_operation'));
                 }
             }
@@ -340,7 +340,7 @@ class Operations extends CI_Controller {
         $this->parser->parse('web/controllers/operations/transactions.tpl', array(
             'person' => $person,
             'operations' => $operations,
-            'title' => 'Administrácia / Strojový čas / Prehľad transakcií / ' . $person->name . ' ' . $person->surname,
+            'title' => 'Administrácia / LEDCOIN / Prehľad transakcií / ' . $person->name . ' ' . $person->surname,
             'back_url' => site_url('operations'),
             'form' => $this->get_transaction_pagination_form($operations->paged),
         ));
@@ -362,7 +362,7 @@ class Operations extends CI_Controller {
     public function batch_time_addition() {
         $this->load->helper('filter');
         $this->parser->parse('web/controllers/operations/batch_time_addition.tpl', array(
-            'title' => 'Administrácia / Strojový čas / Hromadné pridanie strojového času',
+            'title' => 'Administrácia / LEDCOIN / Hromadné pridanie LEDCOIN-u',
             'form' => $this->get_batch_time_addition_form(),
             'back_url' => site_url('operations'),
         ));
@@ -403,29 +403,29 @@ class Operations extends CI_Controller {
                     $operation->subtraction_type = Operation::SUBTRACTION_TYPE_DIRECT;
                     $operation->comment = @$batch_time_data['comment'];
                     if ($operation->save(array('person' => $person, 'workplace' => $workplace))) {
-                        $successful_messages[] = 'Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . (int)$operation->time . '</strong> ' . get_inflection_by_numbers((int)$operation->time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' strojového času.';
+                        $successful_messages[] = 'Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . (int)$operation->time . '</strong> ' . get_inflection_by_numbers((int)$operation->time, 'minút', 'minútu', 'minúty', 'minúty', 'minúty', 'minút') . ' LEDCOIN-u.';
                         $successful_count++;
                     } else {
                         $error_count++;
-                        $error_messages[] = 'Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo prideliť strojový čas.';
+                        $error_messages[] = 'Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo prideliť LEDCOIN.';
                     }
                 }
             }
             
             if ($successful_count == 0 && $error_count == 0) {
                 $this->db->trans_rollback();
-                add_error_flash_message('Nikomu nebol pridelený strojový čas, nakoľko bol odoslaný prázdny formulár.');
+                add_error_flash_message('Nikomu nebol pridelený LEDCOIN, nakoľko bol odoslaný prázdny formulár.');
                 redirect(site_url('operations'));
             } elseif ($successful_count == 0 && $error_count > 0) {
                 $this->db->trans_rollback();
-                add_error_flash_message('Nepodarilo sa nikomu pridať strojový čas:<br /><br />' . implode('<br />', $error_messages));
+                add_error_flash_message('Nepodarilo sa nikomu pridať LEDCOIN:<br /><br />' . implode('<br />', $error_messages));
             } else {
                 $this->db->trans_commit();
                 if ($successful_count > 0) {
-                    add_success_flash_message('Strojový čas bol pridelený <strong>' . $successful_count . '</strong> ' . get_inflection_by_numbers($successful_count, 'účastníkom', 'účastníkovi', 'účastníkom', 'účastníkom', 'účastníkom', 'účastníkom') . ':<br /><br />' . implode('<br />', $successful_messages));
+                    add_success_flash_message('LEDCOIN bol pridelený <strong>' . $successful_count . '</strong> ' . get_inflection_by_numbers($successful_count, 'účastníkom', 'účastníkovi', 'účastníkom', 'účastníkom', 'účastníkom', 'účastníkom') . ':<br /><br />' . implode('<br />', $successful_messages));
                 }
                 if ($error_count > 0) {
-                    add_error_flash_message('Strojový čas sa nepodarilo udeliť <strong>' . $error_count . '</strong> ' . get_inflection_by_numbers($error_count, 'účastníkom', 'účastníkovi', 'účastníkom', 'účastníkom', 'účastníkom', 'účastníkom') . ':<br /><br />' . implode('<br />', $error_messages));
+                    add_error_flash_message('LEDCOIN sa nepodarilo udeliť <strong>' . $error_count . '</strong> ' . get_inflection_by_numbers($error_count, 'účastníkom', 'účastníkovi', 'účastníkom', 'účastníkom', 'účastníkom', 'účastníkom') . ':<br /><br />' . implode('<br />', $error_messages));
                 }
                 redirect(site_url('operations'));
             }
@@ -619,8 +619,8 @@ class Operations extends CI_Controller {
                     ),
                     'values' => array(
                         '' => '',
-                        Operation::TYPE_ADDITION => 'Pridanie strojového času',
-                        Operation::TYPE_SUBTRACTION => 'Odobratie strojového času',
+                        Operation::TYPE_ADDITION => 'Pridanie LEDCOIN-u',
+                        Operation::TYPE_SUBTRACTION => 'Odobratie LEDCOIN-u',
                     ),
                     'validation' => 'required',
                 ),
