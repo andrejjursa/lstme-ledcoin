@@ -26,7 +26,7 @@
                     {else}
                         <td>{$quantity->operation_person_name} {$quantity->operation_person_surname}</td>
                         <td>{$quantity->operation_admin_name} {$quantity->operation_admin_surname}</td>
-                        <td>{include file='web/partials/minutes_inflection.tpl' minutes=$quantity->price|intval inline}</td>
+                        <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$quantity->price|intval inline}</td>
                     {/if}
                 </tr>
                 {/foreach}

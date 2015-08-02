@@ -8,7 +8,7 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $persons->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-               data-gridtable-operations="add:Pridať čas,subtract:Odobrať čas,transactions:Transakcie"
+               data-gridtable-operations="add:Pridať LEDCOIN,subtract:Odobrať LEDCOIN,transactions:Transakcie"
                data-gridtable-operation-transactions-url="{'operations/transactions/--ID--'|site_url}"
                data-gridtable-operation-add-url="{'operations/new_operation/addition/--ID--'|site_url}"
                data-gridtable-operation-subtract-url="{'operations/new_operation/subtraction/--ID--'|site_url}"
@@ -20,9 +20,9 @@
                     <th>Meno</th>
                     <th>Login</th>
                     <th>Skupina</th>
-                    <th>Zostávajúci čas</th>
-                    <th>Získaný čas</th>
-                    <th>Použitý čas</th>
+                    <th>Zostávajúci LEDCOIN</th>
+                    <th>Získaný LEDCOIN</th>
+                    <th>Použitý LEDCOIN</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,9 +33,9 @@
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->login}</td>
                     <td>{$person->group_title|default:'<strong>---</strong>'}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->plus_time|intval - $person->minus_time_direct|intval - $person->minus_time_products|intval - $person->minus_time_services|intval} inline}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes=$person->plus_time|intval inline}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->minus_time_direct|intval + $person->minus_time_products|intval + $person->minus_time_services|intval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_amount|intval - $person->minus_amount_direct|intval - $person->minus_amount_products|intval - $person->minus_amount_services|intval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$person->plus_amount|intval inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->minus_amount_direct|intval + $person->minus_amount_products|intval + $person->minus_amount_services|intval} inline}</td>
                 </tr>
                 {/foreach}
             </tbody>
@@ -44,7 +44,7 @@
             Momentálne v systéme neexistujú žiadne osoby.
         {/if}
     </div>
-    <a href="{'operations/batch_time_addition'|site_url}" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-plus" data-ajax="false">Hromadné pridanie LEDCOIN-u</a>
+    <a href="{'operations/batch_ledcoin_addition'|site_url}" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-plus" data-ajax="false">Hromadné pridanie LEDCOIN-u</a>
 {/block}
 {block header_block}
 <script type="text/javascript">

@@ -30,7 +30,7 @@
                 <tr data-gridtable-unique="service_{$service->id|intval}" data-gridtable-id="{$service->id|intval}" data-gridtable-title="{$service->title|escape:'html'|addslashes}">
                     <td>{$service->id|intval}</td>
                     <td>{$service->title}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes=$service->price inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$service->price inline}</td>
                 </tr>
                 {/foreach}
             </tbody>

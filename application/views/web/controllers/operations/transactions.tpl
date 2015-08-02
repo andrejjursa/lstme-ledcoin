@@ -9,7 +9,7 @@
                     <th>ID</th>
                     <th>Dátum</th>
                     <th>Obsah operácie</th>
-                    <th>Čas za operáciu</th>
+                    <th>LEDCOIN za operáciu</th>
                     <th>Zamestnanie</th>
                     <th>Vedúci</th>
                     <th>Komentár</th>
@@ -20,20 +20,20 @@
                 <tr>
                     <td>{$operation->id}</td>
                     <td>{$operation->created|date_format:'%d. %m. %H:%M'|default:'neznámy'}</td>
-                    {$additional_time_subtract = 0}
+                    {$additional_amount_subtract = 0}
                     {if $operation->type eq Operation::TYPE_ADDITION}
-                    <td>Pridanie {include file='web/partials/minutes_inflection.tpl' minutes=$operation->time|intval inline}.</td>
+                    <td>Pridanie {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$operation->amount|intval inline}.</td>
                     {else}
                         {if $operation->subtraction_type eq Operation::SUBTRACTION_TYPE_DIRECT}
-                        <td>Odobratie {include file='web/partials/minutes_inflection.tpl' minutes=$operation->time|intval inline}.</td>
+                        <td>Odobratie {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$operation->amount|intval inline}.</td>
                         {elseif $operation->subtraction_type eq Operation::SUBTRACTION_TYPE_PRODUCTS}
                         <td>Nákup z bufetu:
                             {$product_quantities = $operation->product_quantity->order_by_related('product', 'title', 'asc')->include_related('product')}
                             {if $product_quantities->get_iterated()->exists()}
                                 <ul class="transaction_items_list">
                                 {foreach $product_quantities as $product_quantity}
-                                    <li>{$product_quantity->product_title} ({$product_quantity->quantity|intval} x {include file='web/partials/minutes_inflection.tpl' minutes=$product_quantity->price|intval inline})</li>
-                                    {$additional_time_subtract = $additional_time_subtract + $product_quantity->quantity|intval * $product_quantity->price|intval}
+                                    <li>{$product_quantity->product_title} ({$product_quantity->quantity|intval} x {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$product_quantity->price|intval inline})</li>
+                                    {$additional_amount_subtract = $additional_amount_subtract + $product_quantity->quantity|intval * $product_quantity->price|intval}
                                 {/foreach}
                                 </ul>
                             {else}
@@ -46,8 +46,8 @@
                             {if $service_usages->get_iterated()->exists()}
                                 <ul class="transaction_items_list">
                                 {foreach $service_usages as $service_usage}
-                                    <li>{$service_usage->service_title} ({$service_usage->quantity|intval} x {include file='web/partials/minutes_inflection.tpl' minutes=$service_usage->price|intval inline})</li>
-                                    {$additional_time_subtract = $additional_time_subtract + $service_usage->quantity|intval * $service_usage->price|intval}
+                                    <li>{$service_usage->service_title} ({$service_usage->quantity|intval} x {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$service_usage->price|intval inline})</li>
+                                    {$additional_amount_subtract = $additional_amount_subtract + $service_usage->quantity|intval * $service_usage->price|intval}
                                 {/foreach}
                                 </ul>
                             {else}
@@ -56,7 +56,7 @@
                         </td>
                         {/if}
                     {/if}
-                    <td>{if $operation->type eq Operation::TYPE_ADDITION}<span class="operation_type_addition_highlight">+{else}<span class="operation_type_subtraction_highlight">-{/if} {include file='web/partials/minutes_inflection.tpl' minutes={$operation->time|intval + $additional_time_subtract|intval} inline}</span></td>
+                    <td>{if $operation->type eq Operation::TYPE_ADDITION}<span class="operation_type_addition_highlight">+{else}<span class="operation_type_subtraction_highlight">-{/if} {include file='web/partials/ledcoin_inflection.tpl' ledcoins={$operation->amount|intval + $additional_amount_subtract|intval} inline}</span></td>
                     <td>{$operation->workplace_title|default:'---'}</td>
                     <td>{$operation->admin_name} {$operation->admin_surname}</td>
                     <td>{$operation->comment|default:'---'}</td>

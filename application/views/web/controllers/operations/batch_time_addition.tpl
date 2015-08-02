@@ -6,7 +6,7 @@
     </form>
     <hr class="form_divider_simple" />
     {/if}
-    <form action="{'operations/do_batch_time_addition'|site_url}" method="post" data-ajax="false" class="persons_form">
+    <form action="{'operations/do_batch_ledcoin_addition'|site_url}" method="post" data-ajax="false" class="persons_form">
     {include file='web/partials/form.tpl' form=$form inline}
     <button type="submit" class="ui-shadow ui-btn ui-corner-all">Pridať</button>
     </form>

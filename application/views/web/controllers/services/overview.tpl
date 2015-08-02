@@ -7,7 +7,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Dátum</th>
-                    <th>Počet minút</th>
+                    <th>Počet LEDCOIN-ov</th>
                     <th>Účastník</th>
                     <th>Vedúci</th>
                     <th>Cena za minútu</th>
@@ -18,10 +18,10 @@
                 <tr>
                     <td>{$usage->id}</td>
                     <td>{$usage->created|date_format:'%d. %m. %H:%M'|default:'neznámy'}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes=$usage->quantity|intval inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$usage->quantity|intval inline}</td>
                     <td>{$usage->operation_person_name} {$usage->operation_person_surname}</td>
                     <td>{$usage->operation_admin_name} {$usage->operation_admin_surname}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes=$usage->price|intval inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$usage->price|intval inline}</td>
                 </tr>
                 {/foreach}
             </tbody>

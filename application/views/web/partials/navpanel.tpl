@@ -8,7 +8,7 @@
         <li><a href="{'ledcoin/bufet'|site_url}" class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Bufet</a></li>
         {if auth_is_authentificated()}
             {if !auth_is_admin()}
-            <li><a href="{'ledcoin/my_time'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Môj LEDCOIN</a></li>
+            <li><a href="{'ledcoin/my_ledcoin'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Môj LEDCOIN</a></li>
             {/if}
             <li><a href="#logoutDialog" class="ui-btn ui-btn-b ui-shadow" data-rel="popup" data-position-to="window" data-transition="pop">Odhlásiť sa</a></li>
         {/if}

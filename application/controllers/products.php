@@ -11,53 +11,58 @@
  * @author Andrej
  * @edit: Ferdinand Križan
  */
-class Products extends CI_Controller {
-    
-    public function __construct() {
+class Products extends CI_Controller
+{
+
+    public function __construct()
+    {
         parent::__construct();
         $this->load->library('session');
-        
+
         auth_redirect_if_not_admin('error/no_admin');
     }
-    
-    public function index() {
+
+    public function index()
+    {
         $this->load->helper('filter');
-        
+
         $quantity_addition = new Product_quantity();
         $quantity_addition->select_sum('quantity', 'quantity_sum');
         $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
         $quantity_addition->where_related('product', 'id', '${parent}.id');
-        
+
         $quantity_subtraction = new Product_quantity();
         $quantity_subtraction->select_sum('quantity', 'quantity_sum');
         $quantity_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
         $quantity_subtraction->where_related('operation', 'type', Operation::TYPE_SUBTRACTION);
         $quantity_subtraction->where_related('operation', 'subtraction_type', Operation::SUBTRACTION_TYPE_PRODUCTS);
         $quantity_subtraction->where_related('product', 'id', '${parent}.id');
-        
+
         $products = new Product();
         $products->order_by('title', 'asc');
         $products->select('*');
         $products->select_subquery($quantity_addition, 'plus_quantity');
         $products->select_subquery($quantity_subtraction, 'minus_quantity');
         $products->get_iterated();
-        
+
         $this->parser->parse('web/controllers/products/index.tpl', array(
             'title' => 'Administrácia / Bufet',
             'new_item_url' => site_url('products/new_product'),
             'products' => $products,
         ));
     }
-    
-    public function new_product() {
+
+    public function new_product()
+    {
         $this->parser->parse('web/controllers/products/new_product.tpl', array(
             'title' => 'Administrácia / Bufet / Nový produkt',
             'back_url' => site_url('products'),
             'form' => $this->get_product_form(),
         ));
     }
-    
-    public function create_product() {
+
+    public function create_product()
+    {
         build_validator_from_form($this->get_product_form());
         if ($this->form_validation->run()) {
             $product_data = $this->input->post('product');
@@ -74,21 +79,22 @@ class Products extends CI_Controller {
             $this->new_product();
         }
     }
-    
-    public function edit_product($product_id = NULL) {
+
+    public function edit_product($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $this->parser->parse('web/controllers/products/edit_product.tpl', array(
             'product' => $product,
             'title' => 'Administrácia / Bufet / Úprava produktu',
@@ -96,23 +102,24 @@ class Products extends CI_Controller {
             'back_url' => site_url('products'),
         ));
     }
-    
-    public function update_product($product_id = NULL) {
+
+    public function update_product($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $this->db->trans_begin();
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             $this->db->trans_rollback();
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         build_validator_from_form($this->get_product_form());
         if ($this->form_validation->run()) {
             $product_data = $this->input->post('product');
@@ -131,33 +138,34 @@ class Products extends CI_Controller {
             $this->edit_product($product_id);
         }
     }
-    
-    public function delete_product($product_id = NULL) {
+
+    public function delete_product($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $this->db->trans_begin();
         $product = new Product();
         $product->include_related_count('product_quantity', 'product_quantity_count');
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             $this->db->trans_rollback();
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         if ((int)$product->product_quantity_count > 0) {
             $this->db->trans_rollback();
             add_error_flash_message('Produkt nie je možné vymazať, keď už obsahuje záznamy o množstve.');
             redirect(site_url('products'));
         }
-        
+
         $success_message = 'Produkt <strong>' . $product->title . '</strong> s ID <strong>' . $product->id . '</strong> bol úspešne vymazaný.';
         $error_message = 'Produkt <strong>' . $product->title . '</strong> s ID <strong>' . $product->id . '</strong> sa nepodarilo vymazať.';
-        
+
         if ($product->delete() && $this->db->trans_status()) {
             $this->db->trans_commit();
             add_success_flash_message($success_message);
@@ -168,27 +176,28 @@ class Products extends CI_Controller {
             redirect(site_url('products'));
         }
     }
-    
-    public function stock($product_id = NULL) {
+
+    public function stock($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product_quantities = new Product_quantity();
         $product_quantities->where_related_product($product);
         $product_quantities->where('type', Product_quantity::TYPE_ADDITION);
         $product_quantities->order_by('created', 'desc');
         $product_quantities->get_iterated();
-        
+
         $this->parser->parse('web/controllers/products/stock.tpl', array(
             'title' => 'Administrácia / Bufet / Sklad produktu / ' . $product->title,
             'product_quantities' => $product_quantities,
@@ -196,21 +205,22 @@ class Products extends CI_Controller {
             'new_item_url' => site_url('products/new_product_quantity/' . $product->id),
         ));
     }
-    
-    public function new_product_quantity($product_id = NULL) {
+
+    public function new_product_quantity($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $this->parser->parse('web/controllers/products/new_product_quantity.tpl', array(
             'product' => $product,
             'title' => 'Administrácia / Bufet / Sklad produktu / ' . $product->title . ' / Pridať množstvo',
@@ -218,23 +228,24 @@ class Products extends CI_Controller {
             'form' => $this->get_product_quantity_form(),
         ));
     }
-    
-    public function create_product_quantity($product_id = NULL) {
+
+    public function create_product_quantity($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $this->db->trans_begin();
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             $this->db->trans_rollback();
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         build_validator_from_form($this->get_product_quantity_form());
         if ($this->form_validation->run()) {
             $product_quantity_data = $this->input->post('product_quantity');
@@ -257,36 +268,37 @@ class Products extends CI_Controller {
             $this->new_product_quantity($product->id);
         }
     }
-    
-    public function edit_product_quantity($product_id = NULL, $product_quantity_id = NULL) {
+
+    public function edit_product_quantity($product_id = NULL, $product_quantity_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         if (is_null($product_quantity_id)) {
             add_error_flash_message('Záznam o množstve tovaru sa nenašiel.');
             redirect(site_url('products/stock/' . (int)$product->id));
         }
-        
+
         $product_quantity = new Product_quantity();
         $product_quantity->where_related_product($product);
         $product_quantity->where('type', Product_quantity::TYPE_ADDITION);
         $product_quantity->get_by_id((int)$product_quantity_id);
-        
+
         if (!$product_quantity->exists()) {
             add_error_flash_message('Záznam o množstve tovaru sa nenašiel.');
             redirect(site_url('products/stock/' . (int)$product->id));
         }
-        
+
         $this->parser->parse('web/controllers/products/edit_product_quantity.tpl', array(
             'product' => $product,
             'product_quantity' => $product_quantity,
@@ -295,37 +307,38 @@ class Products extends CI_Controller {
             'form' => $this->get_product_quantity_form(),
         ));
     }
-    
-    public function update_product_quantity($product_id = NULL, $product_quantity_id = NULL) {
+
+    public function update_product_quantity($product_id = NULL, $product_quantity_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $this->db->trans_begin();
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         if (is_null($product_quantity_id)) {
             add_error_flash_message('Záznam o množstve tovaru sa nenašiel.');
             redirect(site_url('products/stock/' . (int)$product->id));
         }
-        
+
         $product_quantity = new Product_quantity();
         $product_quantity->where_related_product($product);
         $product_quantity->where('type', Product_quantity::TYPE_ADDITION);
         $product_quantity->get_by_id((int)$product_quantity_id);
-        
+
         if (!$product_quantity->exists()) {
             add_error_flash_message('Záznam o množstve tovaru sa nenašiel.');
             redirect(site_url('products/stock/' . (int)$product->id));
         }
-        
+
         build_validator_from_form($this->get_product_quantity_form());
         if ($this->form_validation->run()) {
             $product_quantity_data = $this->input->post('product_quantity');
@@ -336,13 +349,13 @@ class Products extends CI_Controller {
                 $product_quantities_addition->where_related_product($product);
                 $product_quantities_addition->select_func('SUM', array('@quantity'), 'quantity_sum');
                 $product_quantities_addition->get();
-                
+
                 $product_quantities_subtraction = new Product_quantity();
                 $product_quantities_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
                 $product_quantities_subtraction->where_related_product($product);
                 $product_quantities_subtraction->select_func('SUM', array('@quantity'), 'quantity_sum');
                 $product_quantities_subtraction->get();
-                
+
                 if ((int)$product_quantities_addition->quantity_sum >= (int)$product_quantities_subtraction->quantity_sum) {
                     $this->db->trans_commit();
                     add_success_flash_message('Množstvo úspešne aktualizované na <strong>' . $product_quantity->quantity . '</strong> ' . get_inflection_by_numbers((int)$product_quantity->quantity, 'kusov', 'kus', 'kusy', 'kusy', 'kusy', 'kusov') . ' v záznamoch o produkte <strong>' . $product->title . '</strong>.');
@@ -362,8 +375,9 @@ class Products extends CI_Controller {
             $this->edit_product_quantity($product_id, $product_quantity_id);
         }
     }
-    
-    public function batch_stock_addition() {
+
+    public function batch_stock_addition()
+    {
         $this->load->helper('filter');
         $this->parser->parse('web/controllers/products/batch_stock_addition.tpl', array(
             'title' => 'Administrácia / Bufet / Hromadné pridanie zásob',
@@ -371,21 +385,22 @@ class Products extends CI_Controller {
             'form' => $this->get_batch_stock_addition_form(),
         ));
     }
-    
-    public function do_batch_stock_addition() {
+
+    public function do_batch_stock_addition()
+    {
         $this->db->trans_begin();
         build_validator_from_form($this->get_batch_stock_addition_form());
         if ($this->form_validation->run()) {
             $products = new Product();
             $products->get_iterated();
-            
+
             $product_quantity_data = $this->input->post('product_quantity_addition');
-            
+
             $success_messages = array();
             $error_messages = array();
             $added = 0;
             $failed = 0;
-            
+
             foreach ($products as $product) {
                 if (isset($product_quantity_data[$product->id]['quantity']) && (int)$product_quantity_data[$product->id]['quantity'] > 0) {
                     $product_quantity = new Product_quantity();
@@ -425,21 +440,22 @@ class Products extends CI_Controller {
             $this->batch_stock_addition();
         }
     }
-    
-    public function overview($product_id = NULL) {
+
+    public function overview($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product_quantities = new Product_quantity();
         $product_quantities->where_related_product($product);
         $product_quantities->include_related('operation', array('id', 'type', 'created'));
@@ -451,7 +467,7 @@ class Products extends CI_Controller {
         $product_quantities->get_iterated();
         //$product_quantities->check_last_query();
         //die();
-        
+
         $this->parser->parse('web/controllers/products/overview.tpl', array(
             'title' => 'Administrácia / Bufet / Prehľad o produkte / ' . $product->title,
             'product' => $product,
@@ -459,30 +475,32 @@ class Products extends CI_Controller {
             'back_url' => site_url('products'),
         ));
     }
-    
-    public function _ok($str) {
+
+    public function _ok($str)
+    {
         return TRUE;
     }
-    
-    public function edit_photo($product_id = NULL) {
+
+    public function edit_photo($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $current_photo = base_url('user/products/data/' . (int)$product->id . '/product.png');
         if (!file_exists('user/products/data/' . (int)$product->id . '/product.png')) {
             $current_photo = base_url('user/products/default/product.png');
         }
-        
+
         $this->parser->parse('web/controllers/products/edit_photo.tpl', array(
             'title' => 'Administrácia / Bufet / Fotografia',
             'back_url' => site_url('products'),
@@ -490,22 +508,23 @@ class Products extends CI_Controller {
             'product' => $product,
         ));
     }
-    
-    public function upload_photo($product_id = NULL) {
+
+    public function upload_photo($product_id = NULL)
+    {
         if (is_null($product_id)) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
+
         $product = new Product();
         $product->get_by_id((int)$product_id);
-        
+
         if (!$product->exists()) {
             add_error_flash_message('Produkt sa nenašiel.');
             redirect(site_url('products'));
         }
-        
-        
+
+
         $upload_config = array(
             'upload_path' => 'user/products/data/' . (int)$product->id . '/',
             'allowed_types' => 'jpg|png',
@@ -517,7 +536,7 @@ class Products extends CI_Controller {
         );
         $this->load->library('upload', $upload_config);
         @mkdir($upload_config['upload_path'], DIR_WRITE_MODE, TRUE);
-        
+
         if ($this->upload->do_upload('photo')) {
             $resize_config = array(
                 'image_library' => 'gd2',
@@ -532,7 +551,7 @@ class Products extends CI_Controller {
             $this->load->library('image_lib', $resize_config);
             if ($this->image_lib->resize()) {
                 $resize_config['width'] = 64;
-                $resize_config['height'] = 64;        
+                $resize_config['height'] = 64;
                 $resize_config['new_image'] = $upload_config['upload_path'] . 'product_min.png';
                 @unlink($upload_config['new_image']);
                 $this->image_lib->initialize($resize_config);
@@ -551,7 +570,8 @@ class Products extends CI_Controller {
         }
     }
 
-    protected function get_product_form() {
+    protected function get_product_form()
+    {
         $form = array(
             'fields' => array(
                 'title' => array(
@@ -578,8 +598,9 @@ class Products extends CI_Controller {
         );
         return $form;
     }
-    
-    protected function get_product_quantity_form() {
+
+    protected function get_product_quantity_form()
+    {
         $form = array(
             'fields' => array(
                 'quantity' => array(
@@ -598,15 +619,16 @@ class Products extends CI_Controller {
         );
         return $form;
     }
-    
-    protected function get_batch_stock_addition_form() {
+
+    protected function get_batch_stock_addition_form()
+    {
         $products = new Product();
         $products->order_by('title', 'asc');
         $products->get_iterated();
-        
+
         $form_fields = array();
         $form_arangement = array();
-        
+
         foreach ($products as $product) {
             $form_fields['product_' . $product->id] = array(
                 'name' => 'product_quantity_addition[' . $product->id . '][quantity]',
@@ -627,14 +649,15 @@ class Products extends CI_Controller {
                         'rules' => 'callback__ok',
                     ),
                 ),
-            ); 
+            );
             $form_arangement[] = 'product_' . $product->id;
         }
-        
+
         return array('fields' => $form_fields, 'arangement' => $form_arangement);
     }
-    
-    protected function get_photo_edit_form($current_photo) {
+
+    protected function get_photo_edit_form($current_photo)
+    {
         $form = array(
             'fields' => array(
                 'current_photo' => array(
@@ -656,13 +679,14 @@ class Products extends CI_Controller {
         );
         return $form;
     }
-	
-	public function new_operation($person_id_override = NULL) {
+
+    public function new_operation($person_id_override = NULL)
+    {
         $this->load->helper('filter');
-		
+
         $operation_data = $this->input->post('operation');
-        
-        
+
+
         if (!is_null($person_id_override)) {
             $person = new Person();
             $person->where('admin', 0);
@@ -671,7 +695,7 @@ class Products extends CI_Controller {
                 $_POST['operation']['person_id'] = $person->id;
             }
         }
-        
+
         $this->parser->parse('web/controllers/products/admin_delete.tpl', array(
             'title' => 'Administrácia / Bufet / Odobratie zásob',
             'back_url' => site_url('products'),
@@ -680,10 +704,11 @@ class Products extends CI_Controller {
             'type' => @$operation_data['type'],
         ));
     }
-	
-	public function create_operation() {
+
+    public function create_operation()
+    {
         $operation_data_temp = $this->input->post('operation');
-        
+
         $this->db->trans_begin();
         $form = $this->get_form(@$operation_data_temp['type'], @$operation_data_temp['subtraction_type']);
         build_validator_from_form($form);
@@ -692,113 +717,115 @@ class Products extends CI_Controller {
             $operation_service_data = $this->input->post('operation_service');
             $operation_product_data = $this->input->post('operation_product');
 
-                $total_time = 0;
-                
+            $total_amount = 0;
 
-                    $total_time += (int)$operation_data['time'];
 
-                
-                $service_data = array();
-                if ($operation_data['subtraction_type'] == Operation::SUBTRACTION_TYPE_SERVICES) {
-                    $services = new Service();
-                    $services->order_by('title', 'asc');
-                    $services->get_iterated();
+            $total_amount += (int)$operation_data['amount'];
 
-                    foreach ($services as $service) {
-                        if (isset($operation_service_data[$service->id])) {
-                            if (isset($operation_service_data[$service->id]['quantity']) && (int)$operation_service_data[$service->id]['quantity'] > 0 &&
-                                isset($operation_service_data[$service->id]['price']) && (int)$operation_service_data[$service->id]['price'] > 0) {
-                                $service_data[$service->id] = $operation_service_data[$service->id];
-                                $total_time += (int)$operation_service_data[$service->id]['quantity'] * (int)$operation_service_data[$service->id]['price'];
-                            }
+
+            $service_data = array();
+            if ($operation_data['subtraction_type'] == Operation::SUBTRACTION_TYPE_SERVICES) {
+                $services = new Service();
+                $services->order_by('title', 'asc');
+                $services->get_iterated();
+
+                foreach ($services as $service) {
+                    if (isset($operation_service_data[$service->id])) {
+                        if (isset($operation_service_data[$service->id]['quantity']) && (int)$operation_service_data[$service->id]['quantity'] > 0 &&
+                            isset($operation_service_data[$service->id]['price']) && (int)$operation_service_data[$service->id]['price'] > 0
+                        ) {
+                            $service_data[$service->id] = $operation_service_data[$service->id];
+                            $total_amount += (int)$operation_service_data[$service->id]['quantity'] * (int)$operation_service_data[$service->id]['price'];
                         }
                     }
                 }
-                
-                $product_data = array();
-                    $quantity_addition = new Product_quantity();
-                    $quantity_addition->select_sum('quantity', 'quantity_sum');
-                    $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
-                    $quantity_addition->where_related('product', 'id', '${parent}.id');
+            }
 
-                    $quantity_subtraction = new Product_quantity();
-                    $quantity_subtraction->select_sum('quantity', 'quantity_sum');
-                    $quantity_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
-                    $quantity_subtraction->where_related('product', 'id', '${parent}.id');
+            $product_data = array();
+            $quantity_addition = new Product_quantity();
+            $quantity_addition->select_sum('quantity', 'quantity_sum');
+            $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
+            $quantity_addition->where_related('product', 'id', '${parent}.id');
 
-                    $products = new Product();
-                    $products->order_by('title', 'asc');
-                    $products->select('*');
-                    $products->select_subquery($quantity_addition, 'plus_quantity');
-                    $products->select_subquery($quantity_subtraction, 'minus_quantity');
+            $quantity_subtraction = new Product_quantity();
+            $quantity_subtraction->select_sum('quantity', 'quantity_sum');
+            $quantity_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
+            $quantity_subtraction->where_related('product', 'id', '${parent}.id');
 
-                    $products->get_iterated();
-                    
-                    foreach ($products as $product) {
-                        if (isset($operation_product_data[$product->id])) {
-                            if (isset($operation_product_data[$product->id]['quantity']) && (int)$operation_product_data[$product->id]['quantity'] > 0 &&
-                                isset($operation_product_data[$product->id]['price']) && (int)$operation_product_data[$product->id]['price'] > 0) {
-                                $product_data[$product->id] = $operation_product_data[$product->id];
-                                $total_time += (int)$operation_product_data[$product->id]['quantity'] * (int)$operation_product_data[$product->id]['price'];
-                            }
-                        }
+            $products = new Product();
+            $products->order_by('title', 'asc');
+            $products->select('*');
+            $products->select_subquery($quantity_addition, 'plus_quantity');
+            $products->select_subquery($quantity_subtraction, 'minus_quantity');
+
+            $products->get_iterated();
+
+            foreach ($products as $product) {
+                if (isset($operation_product_data[$product->id])) {
+                    if (isset($operation_product_data[$product->id]['quantity']) && (int)$operation_product_data[$product->id]['quantity'] > 0 &&
+                        isset($operation_product_data[$product->id]['price']) && (int)$operation_product_data[$product->id]['price'] > 0
+                    ) {
+                        $product_data[$product->id] = $operation_product_data[$product->id];
+                        $total_amount += (int)$operation_product_data[$product->id]['quantity'] * (int)$operation_product_data[$product->id]['price'];
                     }
-                
-
-                $operation = new Operation();
-                //$operation->from_array($operation_data, array('comment', 'type', 'subtraction_type'));
-
-                    $operation->time = $operation_data['time'];
-
-                if ($operation->save() && $this->db->trans_status()) {
-				
-			
-			
-                    if (count($product_data) > 0) {
-                        foreach ($product_data as $product_id => $product_post) {
-                            $product_quantity = new Product_quantity();
-                            $product_quantity->type = Product_quantity::TYPE_SUBTRACTION;
-                            $product_quantity->from_array($product_post, array('quantity', 'price'));
-                            $product_quantity->product_id = (int)$product_id;
-							//print_r($product_post);
-			//die();
-                            if (!$product_quantity->save(array('operation' => $operation))) {
-                                $product = new Product();
-                                $product->get_by_id((int)$product_id);
-                                $this->db->trans_rollback();
-                                add_error_flash_message('Nepodarilo sa uložiť záznam o odobratí zásob <strong>' . $product->title . '</strong>.');
-                                redirect(site_url('products'));
-                                die();
-                            }
-                        }
-                    }
-                    $this->db->trans_commit();
-                    add_success_flash_message('Produktu <strong>' . $product->title . '</strong> sa úspešne podarilo odobrať <strong>' . $product_post['quantity']. '</strong> ' . get_inflection_by_numbers((int)$product_post['quantity'], 'kusov', 'kus', 'kusy', 'kusy', 'kusy', 'kusov') . ' zásob.');
-                    redirect(site_url('products'));
-                } else {
-                    $this->db->trans_rollback();
-                    add_error_flash_message('Produktu <strong>' . $product->title . '</strong> sa nepodarilo odobrať <strong>' . $product_post['quantity']. '</strong> ' . get_inflection_by_numbers((int)$product_post['quantity'], 'kusov', 'kus', 'kusy', 'kusy', 'kusy', 'kusov') . ' zásob.');
-                    redirect(site_url('products'));
                 }
-            
+            }
+
+
+            $operation = new Operation();
+            //$operation->from_array($operation_data, array('comment', 'type', 'subtraction_type'));
+
+            $operation->amount = $operation_data['amount'];
+
+            if ($operation->save() && $this->db->trans_status()) {
+
+
+                if (count($product_data) > 0) {
+                    foreach ($product_data as $product_id => $product_post) {
+                        $product_quantity = new Product_quantity();
+                        $product_quantity->type = Product_quantity::TYPE_SUBTRACTION;
+                        $product_quantity->from_array($product_post, array('quantity', 'price'));
+                        $product_quantity->product_id = (int)$product_id;
+                        //print_r($product_post);
+                        //die();
+                        if (!$product_quantity->save(array('operation' => $operation))) {
+                            $product = new Product();
+                            $product->get_by_id((int)$product_id);
+                            $this->db->trans_rollback();
+                            add_error_flash_message('Nepodarilo sa uložiť záznam o odobratí zásob <strong>' . $product->title . '</strong>.');
+                            redirect(site_url('products'));
+                            die();
+                        }
+                    }
+                }
+                $this->db->trans_commit();
+                add_success_flash_message('Produktu <strong>' . $product->title . '</strong> sa úspešne podarilo odobrať <strong>' . $product_post['quantity'] . '</strong> ' . get_inflection_by_numbers((int)$product_post['quantity'], 'kusov', 'kus', 'kusy', 'kusy', 'kusy', 'kusov') . ' zásob.');
+                redirect(site_url('products'));
+            } else {
+                $this->db->trans_rollback();
+                add_error_flash_message('Produktu <strong>' . $product->title . '</strong> sa nepodarilo odobrať <strong>' . $product_post['quantity'] . '</strong> ' . get_inflection_by_numbers((int)$product_post['quantity'], 'kusov', 'kus', 'kusy', 'kusy', 'kusy', 'kusov') . ' zásob.');
+                redirect(site_url('products'));
+            }
+
         } else {
             $this->db->trans_rollback();
             $this->new_operation();
         }
     }
-	
-	public function get_form($type = '', $subtraction_type = '') {
+
+    public function get_form($type = '', $subtraction_type = '')
+    {
         $operations_addition = new Operation();
         $operations_addition->where('type', Operation::TYPE_ADDITION);
-        $operations_addition->select_sum('time', 'time_sum');
+        $operations_addition->select_sum('amount', 'amount_sum');
         $operations_addition->where_related_person('id', '${parent}.id');
-        
+
         $operations_subtraction_direct = new Operation();
         $operations_subtraction_direct->where('type', Operation::TYPE_SUBTRACTION);
         $operations_subtraction_direct->where('subtraction_type', Operation::SUBTRACTION_TYPE_DIRECT);
-        $operations_subtraction_direct->select_sum('time', 'time_sum');
+        $operations_subtraction_direct->select_sum('amount', 'amount_sum');
         $operations_subtraction_direct->where_related_person('id', '${parent}.id');
-        
+
         $operations_subtraction_products = new Operation();
         $operations_subtraction_products->where('type', Operation::TYPE_SUBTRACTION);
         $operations_subtraction_products->where('subtraction_type', Operation::SUBTRACTION_TYPE_PRODUCTS);
@@ -807,9 +834,9 @@ class Products extends CI_Controller {
         $operations_subtraction_products->where_related('product_quantity', 'product_id', NULL);
         $operations_subtraction_products->group_end();
         unset($operations_subtraction_products->db->ar_select[0]);
-        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'time_sum');
+        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'amount_sum');
         $operations_subtraction_products->where_related_person('id', '${parent}.id');
-        
+
         $operations_subtraction_services = new Operation();
         $operations_subtraction_services->where('type', Operation::TYPE_SUBTRACTION);
         $operations_subtraction_services->where('subtraction_type', Operation::SUBTRACTION_TYPE_SERVICES);
@@ -818,82 +845,82 @@ class Products extends CI_Controller {
         $operations_subtraction_services->where_related('service_usage', 'service_id', NULL);
         $operations_subtraction_services->group_end();
         unset($operations_subtraction_services->db->ar_select[0]);
-        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'time_sum');
+        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'amount_sum');
         $operations_subtraction_services->where_related_person('id', '${parent}.id');
-        
-       $form['arangement'] = array('subtraction_type', 'person', 'comment');
-                
-                $quantity_addition = new Product_quantity();
-                $quantity_addition->select_sum('quantity', 'quantity_sum');
-                $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
-                $quantity_addition->where_related('product', 'id', '${parent}.id');
 
-                $quantity_subtraction = new Product_quantity();
-                $quantity_subtraction->select_sum('quantity', 'quantity_sum');
-                $quantity_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
-                $quantity_subtraction->where_related('product', 'id', '${parent}.id');
+        $form['arangement'] = array('subtraction_type', 'person', 'comment');
 
-                $products = new Product();
-                $products->order_by('title', 'asc');
-                $products->select('*');
-                $products->select_subquery($quantity_addition, 'plus_quantity');
-                $products->select_subquery($quantity_subtraction, 'minus_quantity');
-                $products->get_iterated();
+        $quantity_addition = new Product_quantity();
+        $quantity_addition->select_sum('quantity', 'quantity_sum');
+        $quantity_addition->where('type', Product_quantity::TYPE_ADDITION);
+        $quantity_addition->where_related('product', 'id', '${parent}.id');
 
-                $p = 1;
-                foreach ($products as $product) {
-                    $form['fields']['product_' . $product->id . '_quantity'] = array(
-                        'name' => 'operation_product[' . $product->id . '][quantity]',
-                        'class' => 'controlls-products',
-                        'id' => 'operation_product-' . $product->id . '-quantity',
-                        'type' => 'slider',
-                        'min' => 0,
-                        'max' => intval($product->plus_quantity),
-						//'max' => 10,
-                        'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . ' (počet kusov)</span></span>',
-                        'default' => 0,
-                        'data' => array(
-                            'product-title' => $product->title,
-                        ),
-                        'validation' => array(
-                            array(
-                                'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
-                                'rules' => 'required|integer|greater_than[0]|less_than_equals[' . (intval($product->plus_quantity) - intval($product->minus_quantity)) . ']',
-                            ),
-                        ),
-                    );
-                    $form['fields']['product_' . $product->id . '_price'] = array(
-                        'name' => 'operation_product[' . $product->id . '][price]',
-                        'class' => 'controlls-products',
-                        'id' => 'operation_product-' . $product->id . '-price',
-                        'type' => 'text_input',
-                        'label' => $product->title . ' (cena za kus)',
-                        'default' => $product->price,
-                        'data' => array(
-                            'product-title' => $product->title,
-                        ),
-                        'validation' => array(
-                            array(
-                                'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
-                                'rules' => 'required|integer|greater_than[0]',
-                            ),
-                        ),
-                    );
+        $quantity_subtraction = new Product_quantity();
+        $quantity_subtraction->select_sum('quantity', 'quantity_sum');
+        $quantity_subtraction->where('type', Product_quantity::TYPE_SUBTRACTION);
+        $quantity_subtraction->where_related('product', 'id', '${parent}.id');
 
-                    $form['arangement'][] = 'product_' . $product->id . '_quantity';
-                    $form['arangement'][] = 'product_' . $product->id . '_price';
-                    if ($p < $products->result_count()) {
-                        $form['fields']['product_' . $product->id . '_divider'] = array(
-                            'type' => 'divider',
-                            'data' => array(
-                                'product-title' => $product->title,
-                            ),
-                        );
-                        $form['arangement'][] = 'product_' . $product->id . '_divider';
-                    }
-                    $p++;
-                }
-        
+        $products = new Product();
+        $products->order_by('title', 'asc');
+        $products->select('*');
+        $products->select_subquery($quantity_addition, 'plus_quantity');
+        $products->select_subquery($quantity_subtraction, 'minus_quantity');
+        $products->get_iterated();
+
+        $p = 1;
+        foreach ($products as $product) {
+            $form['fields']['product_' . $product->id . '_quantity'] = array(
+                'name' => 'operation_product[' . $product->id . '][quantity]',
+                'class' => 'controlls-products',
+                'id' => 'operation_product-' . $product->id . '-quantity',
+                'type' => 'slider',
+                'min' => 0,
+                'max' => intval($product->plus_quantity),
+                //'max' => 10,
+                'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . ' (počet kusov)</span></span>',
+                'default' => 0,
+                'data' => array(
+                    'product-title' => $product->title,
+                ),
+                'validation' => array(
+                    array(
+                        'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
+                        'rules' => 'required|integer|greater_than[0]|less_than_equals[' . (intval($product->plus_quantity) - intval($product->minus_quantity)) . ']',
+                    ),
+                ),
+            );
+            $form['fields']['product_' . $product->id . '_price'] = array(
+                'name' => 'operation_product[' . $product->id . '][price]',
+                'class' => 'controlls-products',
+                'id' => 'operation_product-' . $product->id . '-price',
+                'type' => 'text_input',
+                'label' => $product->title . ' (cena za kus)',
+                'default' => $product->price,
+                'data' => array(
+                    'product-title' => $product->title,
+                ),
+                'validation' => array(
+                    array(
+                        'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
+                        'rules' => 'required|integer|greater_than[0]',
+                    ),
+                ),
+            );
+
+            $form['arangement'][] = 'product_' . $product->id . '_quantity';
+            $form['arangement'][] = 'product_' . $product->id . '_price';
+            if ($p < $products->result_count()) {
+                $form['fields']['product_' . $product->id . '_divider'] = array(
+                    'type' => 'divider',
+                    'data' => array(
+                        'product-title' => $product->title,
+                    ),
+                );
+                $form['arangement'][] = 'product_' . $product->id . '_divider';
+            }
+            $p++;
+        }
+
         return $form;
     }
 }

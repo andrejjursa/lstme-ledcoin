@@ -36,7 +36,7 @@
                     <td>{$product->id|intval}</td>
                     <td><img src="{get_product_image_min($product->id)}" alt="" /></td>
                     <td>{$product->title}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes=$product->price inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$product->price inline}</td>
                     <td>{include file='web/partials/pieces_inflection.tpl' pieces={$product->plus_quantity - $product->minus_quantity}|intval inline}</td>
                 </tr>
                 {/foreach}

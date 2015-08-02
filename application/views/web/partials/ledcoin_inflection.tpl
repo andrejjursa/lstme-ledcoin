@@ -1,0 +1,1 @@
+{$ledcoins} {get_inflection_by_numbers($ledcoins, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov')}

@@ -10,9 +10,9 @@
                     <th data-priority="persist">Meno</th>
                     <th data-priority="persist">Skupina</th>
                     <th data-priority="persist">Škola</th>
-                    <th data-priority="1">Zostávajúci čas</th>
-                    <th data-priority="2">Získaný čas</th>
-                    <th data-priority="3">Použitý čas</th>
+                    <th data-priority="1">Zostávajúci LEDCOIN</th>
+                    <th data-priority="2">Získaný LEDCOIN</th>
+                    <th data-priority="3">Použitý LEDCOIN</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,9 +22,9 @@
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->group_title}</td>
                     <td>{$person->organisation}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={{$person->plus_time - $person->minus_time_direct - $person->minus_time_products - $person->minus_time_services}|intval} inline}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={$person->plus_time|intval} inline}</td>
-                    <td>{include file='web/partials/minutes_inflection.tpl' minutes={{$person->minus_time_direct + $person->minus_time_products + $person->minus_time_services}|intval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->plus_amount - $person->minus_amount_direct - $person->minus_amount_products - $person->minus_amount_services}|intval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_amount|intval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->minus_amount_direct + $person->minus_amount_products + $person->minus_amount_services}|intval} inline}</td>
                 </tr>
                 {/foreach}
             </tbody>
