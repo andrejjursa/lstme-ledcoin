@@ -79,8 +79,8 @@ class Cli extends CI_Controller {
         $name = $this->_get_cli_user_input('Meno');
         $surname = $this->_get_cli_user_input('Priezvisko');
         $login = $this->_get_cli_user_input('Prihlasovacie meno');
-        $password = $this->_get_cli_user_input('Heslo');
-        $password_check = $this->_get_cli_user_input('Heslo (kontrola)');
+        $password = $this->_get_cli_user_input_silently('Heslo');
+        $password_check = $this->_get_cli_user_input_silently('Heslo (kontrola)');
         $organisation = $this->_get_cli_user_input('Organizacia');
         
         if (trim($name) == '') {
@@ -142,6 +142,32 @@ class Cli extends CI_Controller {
         fwrite(STDOUT, "$msg: ");
         $varin = trim(fgets(STDIN));
         return $varin;
+    }
+
+    private function _get_cli_user_input_silently($prompt) {
+        if (preg_match('/^win/i', PHP_OS)) {
+            $vbscript = sys_get_temp_dir() . 'prompt_password.vbs';
+            file_put_contents(
+                $vbscript, 'wscript.echo(InputBox("'
+                . addslashes("$prompt: ")
+                . '", "", "password here"))');
+            $command = "cscript //nologo " . escapeshellarg($vbscript);
+            $password = rtrim(shell_exec($command));
+            unlink($vbscript);
+            return $password;
+        } else {
+            $command = "/usr/bin/env bash -c 'echo OK'";
+            if (rtrim(shell_exec($command)) !== 'OK') {
+                trigger_error("Can't invoke bash");
+                return;
+            }
+            $command = "/usr/bin/env bash -c 'read -s -p \""
+                . addslashes("$prompt: ")
+                . "\" mypassword && echo \$mypassword'";
+            $password = rtrim(shell_exec($command));
+            echo "\n";
+            return $password;
+        }
     }
     
     /**

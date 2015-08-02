@@ -2,26 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6823910-b0b6-4ea9-aa6a-1dcade04d047" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/migrations/003_alter_operations_2.php" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/application/views/web/partials/ledcoin_inflection.tpl" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/application/models/notes_model.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/application/models/notes_view.php" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/application/views/web/partials/minutes_inflection.tpl" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/application/views/web/controllers/ledcoin/my_time.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/ledcoin/my_ledcoin.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/operations/batch_time_addition.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/operations/batch_time_addition.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/ledcoin/bufet.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/ledcoin/bufet.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/ledcoin/index.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/ledcoin/index.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/operations/index.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/operations/index.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/products/index.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/products/index.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/services/index.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/services/index.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/ledcoin.php" afterPath="$PROJECT_DIR$/application/controllers/ledcoin.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/partials/navpanel.tpl" afterPath="$PROJECT_DIR$/application/views/web/partials/navpanel.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/operations.php" afterPath="$PROJECT_DIR$/application/controllers/operations.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/products/overview.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/products/overview.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/services/overview.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/services/overview.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/products.php" afterPath="$PROJECT_DIR$/application/controllers/products.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/operations/transactions.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/operations/transactions.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/cli.php" afterPath="$PROJECT_DIR$/application/controllers/cli.php" />
     </list>
     <ignored path="lstme-ledcoin.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -53,14 +34,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ledcoin_admin.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ledcoin_admin.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/ledcoin_admin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.618442">
+            <state vertical-scroll-proportion="0.0">
               <caret line="226" column="24" selection-start-line="226" selection-start-column="24" selection-end-line="226" selection-end-column="24" />
               <folding>
                 <marker date="1438256132578" expanded="true" signature="4231:4248" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cli.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/controllers/cli.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.66092575">
+              <caret line="155" column="30" selection-start-line="155" selection-start-column="30" selection-end-line="155" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -80,16 +71,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-15.833333">
               <caret line="90" column="46" selection-start-line="90" selection-start-column="46" selection-end-line="90" selection-end-column="46" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ledcoin.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/controllers/ledcoin.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.083333">
-              <caret line="399" column="65" selection-start-line="399" selection-start-column="65" selection-end-line="399" selection-end-column="65" />
               <folding />
             </state>
           </provider>
@@ -165,7 +146,6 @@
         <option value="$PROJECT_DIR$/application/views/web/layouts/admin.tpl" />
         <option value="$PROJECT_DIR$/application/views/web/layouts/error.tpl" />
         <option value="$PROJECT_DIR$/application/views/web/layouts/standard.tpl" />
-        <option value="$PROJECT_DIR$/application/controllers/cli.php" />
         <option value="$PROJECT_DIR$/application/controllers/persons.php" />
         <option value="$PROJECT_DIR$/application/controllers/services.php" />
         <option value="$PROJECT_DIR$/application/controllers/workplaces.php" />
@@ -184,6 +164,7 @@
         <option value="$PROJECT_DIR$/application/views/web/controllers/operations/transactions.tpl" />
         <option value="$PROJECT_DIR$/application/views/web/controllers/ledcoin/my_ledcoin.tpl" />
         <option value="$PROJECT_DIR$/application/views/web/partials/navpanel.tpl" />
+        <option value="$PROJECT_DIR$/application/controllers/cli.php" />
       </list>
     </option>
   </component>
@@ -292,6 +273,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lstme-ledcoin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lstme-ledcoin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -345,15 +344,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="24" width="1871" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32960325" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960325" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21004811" sideWeight="0.52200305" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21004811" sideWeight="0.51983726" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21004811" sideWeight="0.47799698" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21004811" sideWeight="0.48016277" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -388,6 +387,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="27" column="54" selection-start-line="27" selection-start-column="54" selection-end-line="27" selection-end-column="54" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -579,13 +579,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/cli.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="27" column="54" selection-start-line="27" selection-start-column="54" selection-end-line="27" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/persons.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -764,11 +757,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/ledcoin_admin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.618442">
+        <state vertical-scroll-proportion="0.0">
           <caret line="226" column="24" selection-start-line="226" selection-start-column="24" selection-end-line="226" selection-end-column="24" />
           <folding>
             <marker date="1438256132578" expanded="true" signature="4231:4248" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/cli.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.66092575">
+          <caret line="155" column="30" selection-start-line="155" selection-start-column="30" selection-end-line="155" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
