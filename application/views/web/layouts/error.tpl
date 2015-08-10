@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" type="text/css" href="{"assets/themes/lstme.min.css?ledcoin_version={$app_version}"|base_url}" />
         <link rel="stylesheet" type="text/css" href="{"assets/themes/jquery.mobile.icons.min.css?ledcoin_version={$app_version}"|base_url}" />
-        <link rel="stylesheet" type="text/css" href="{"assets/jquery.mobile.structure-1.4.3.min.css?ledcoin_version={$app_version}"|base_url}}" />
+        <link rel="stylesheet" type="text/css" href="{"assets/jquery.mobile.structure-1.4.5.min.css?ledcoin_version={$app_version}"|base_url}}" />
         <link rel="stylesheet" type="text/css" href="{"assets/ledcoin_error.css?ledcoin_version={$app_version}"|base_url}}" />
         <script type="text/javascript" src="{"assets/jquery-1.11.1.min.js?ledcoin_version={$app_version}"|base_url}"></script>
-        <script type="text/javascript" src="{"assets/jquery.mobile-1.4.3.min.js?ledcoin_version={$app_version}"|base_url}"></script>
+        <script type="text/javascript" src="{"assets/jquery.mobile-1.4.5.min.js?ledcoin_version={$app_version}"|base_url}"></script>
         <script type="text/javascript"> jQuery.mobile.ajaxEnabled = false; </script>
     </head>
     <body>
