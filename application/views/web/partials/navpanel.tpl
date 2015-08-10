@@ -38,7 +38,7 @@
         <li><a href="{'products'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Bufet</a></li>
         <li><a href="{'services'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Služby</a></li>
         <li><a href="{'operations'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">LEDCOIN</a></li>
-        <li><a href="{'limits_mng'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Denné limity</a></li>
+        <li><a href="{'limits'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Denné limity</a></li>
     </ul>
 {/if}
 </div>

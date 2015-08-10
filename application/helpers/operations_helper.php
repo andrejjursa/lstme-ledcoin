@@ -32,7 +32,7 @@ function operations_ledcoin_daily_limit($date = NULL) {
 		}
 	}
 
-	$limit = new Limits();
+	$limit = new Limit();
 	$limit->get_where(array('date' => $date));
 
 	if ($limit->exists()) {

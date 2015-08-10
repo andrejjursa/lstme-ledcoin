@@ -3,13 +3,15 @@
 function build_validator_from_form($form) {
     $rules = array();
     $CI =& get_instance();
+
+    $CI->load->library('form_validation');
     
     if (is_array($form) && isset($form['fields']) && isset($form['arangement']) && is_array($form['fields']) && is_array($form['arangement']) 
             && count($form['fields']) > 0 && count($form['arangement']) > 0) {
         foreach ($form['arangement'] as $index) {
             $form_element = isset($form['fields'][$index]) ? $form['fields'][$index] : NULL;
             if (!is_null($form_element) && is_array($form_element)) {
-                if (array_key_exists('validation', $form_element) && isset($form_element['name']) && trim($form_element['name']) != '') {
+                if (array_key_exists('validation', $form_element) && isset($form_element['name']) && trim($form_element['name']) != '' && (!isset($form_element['disabled']) || $form_element['disabled'] === FALSE)) {
                     if (is_string($form_element['validation'])) {
                         $rules[] = array(
                             'field' => $form_element['name'],
@@ -27,11 +29,17 @@ function build_validator_from_form($form) {
                         }
                     }
                 }
+                if (array_key_exists('validation_messages', $form_element) && isset($form_element['name']) && trim($form_element['name']) != '') {
+                    if (is_array($form_element['validation_messages']) && count($form_element['validation_messages'])) {
+                        foreach ($form_element['validation_messages'] as $rule => $message) {
+                            $CI->form_validation->set_message($rule, $message);
+                        }
+                    }
+                }
             }
         }
     }
-    
-    $CI->load->library('form_validation');
+
     if (count($rules) > 0) {
         $CI->form_validation->set_rules($rules);
     }

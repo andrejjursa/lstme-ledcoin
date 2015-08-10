@@ -4,13 +4,13 @@
         {if $limits->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
                data-gridtable-operations="edit:Upraviť,delete:Vymazať"
-               data-gridtable-operation-edit-url="{'limits_mng/edit_limit/--ID--'|site_url}"
+               data-gridtable-operation-edit-url="{'limits/edit_limit/--ID--'|site_url}"
                data-gridtable-operation-delete-prompt="true"
                data-gridtable-operation-delete-prompt-title="Vymazať limit?"
                data-gridtable-operation-delete-prompt-text="Naozaj chcete vymazať limit na deň --DATE-- s hodnotou --DAILY_LIMIT--?"
                data-gridtable-operation-delete-prompt-cancel="Nie, nechcem"
                data-gridtable-operation-delete-prompt-ok="Áno, chcem"
-               data-gridtable-operation-delete-prompt-ok-url="{'limits_mng/delete_limit/--ID--'|site_url}"
+               data-gridtable-operation-delete-prompt-ok-url="{'limits/delete_limit/--ID--'|site_url}"
         >
             <thead>
                 <tr>
