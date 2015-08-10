@@ -102,6 +102,7 @@ class Operations extends CI_Controller {
     }
     
     public function create_operation() {
+        $this->load->helper('operations');
         $operation_data_temp = $this->input->post('operation');
         
         $this->db->trans_begin();
@@ -182,6 +183,10 @@ class Operations extends CI_Controller {
             }
             
             if ($operation_data['type'] == Operation::TYPE_ADDITION) {
+                $amount_to_add = (double)$operation_data['amount'];
+                if (!operations_ledcoin_limit_check($amount_to_add)) {
+                    add_common_flash_message('Pozor, pridanie ' . $amount_to_add . ' LEDCOIN-ov presahuje denný limit. Pred pridaním bolo už použitých ' . operations_ledcoin_added_in_day() . ' z ' . operations_ledcoin_daily_limit() . ' LEDCOIN-ov!');
+                }
                 $operation = new Operation();
                 $operation->from_array($operation_data, array('comment', 'amount', 'type'));
                 $operation->subtraction_type = Operation::SUBTRACTION_TYPE_DIRECT;
@@ -369,6 +374,7 @@ class Operations extends CI_Controller {
     }
     
     public function do_batch_ledcoin_addition() {
+        $this->load->helper('operations');
         $this->db->trans_begin();
         build_validator_from_form($this->get_batch_ledcoin_addition_form());
         if ($this->form_validation->run()) {
@@ -393,6 +399,7 @@ class Operations extends CI_Controller {
             $error_count = 0;
             $successful_messages = array();
             $error_messages = array();
+            $total_added = 0;
             
             foreach ($persons as $person) {
                 if (array_key_exists($person->id, $person_amount_data) && (int)$person_amount_data[$person->id] > 0) {
@@ -403,6 +410,7 @@ class Operations extends CI_Controller {
                     $operation->subtraction_type = Operation::SUBTRACTION_TYPE_DIRECT;
                     $operation->comment = @$batch_amount_data['comment'];
                     if ($operation->save(array('person' => $person, 'workplace' => $workplace))) {
+                        $total_added += (double)$operation->amount;
                         $successful_messages[] = 'Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . (int)$operation->amount . '</strong> ' . get_inflection_by_numbers((int)$operation->amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.';
                         $successful_count++;
                     } else {
@@ -410,6 +418,10 @@ class Operations extends CI_Controller {
                         $error_messages[] = 'Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo prideliť LEDCOIN.';
                     }
                 }
+            }
+
+            if ($total_added > 0 && !operations_ledcoin_limit_check($total_added)) {
+                add_common_flash_message('Pozor, celkovým pridaním ' . $total_added . ' LEDCOIN-ov bol prekročený denný limit. Pred pridaním už bolo pridaných ' . operations_ledcoin_added_in_day() . ' z ' . operations_ledcoin_daily_limit() . ' LEDCOIN-ov!');
             }
             
             if ($successful_count == 0 && $error_count == 0) {
@@ -507,13 +519,14 @@ class Operations extends CI_Controller {
                 $form['arangement'][] = 'divider_group_' . $person->group_id;
                 $current_group = $person->group_id;
                 $form['fields']['group_' . $current_group . '_slider'] = array(
-                    'name' => 'person_amount[' . $person->id . ']',
-                    'id' => 'person_amount-' . $person->id,
+                    'name' => 'group[' . $current_group . ']',
+                    'id' => 'group-' . $current_group,
                     'class' => 'group_common_slider',
                     'data' => array('group_id' => $current_group),
                     'label' => 'Spoločné nastavenie času',
                     'min' => 0,
                     'max' => 240,
+                    //'step' => 0.1,
                     'default' => 0,
                     'type' => 'slider',
                 );
@@ -527,6 +540,7 @@ class Operations extends CI_Controller {
                 'type' => 'slider',
                 'min' => 0,
                 'max' => 240,
+                //'step' => 0.1,
                 'data' => array(
                     'person-name' => $person->name . ' ' . $person->surname,
                     'person-login' => $person->login,

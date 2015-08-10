@@ -13,7 +13,8 @@ define('LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_COMMON', 'common');
 function add_flash_message($message_text, $message_type = LEDCOIN_FLASHDATA_FLASH_MESSAGE_TYPE_COMMON) {
     $CI =& get_instance();
     $CI->load->library('session');
-    $current_messages = $CI->session->flashdata(LEDCOIN_FLASHDATA_FLASH_MESSAGE_KEY);
+    $current_messages = $CI->session->userdata('flash:new:' . LEDCOIN_FLASHDATA_FLASH_MESSAGE_KEY);
+    if (!is_array($current_messages)) { $current_messages = array(); }
     $message = new stdClass();
     $message->text = $message_text;
     $message->type = $message_type;
