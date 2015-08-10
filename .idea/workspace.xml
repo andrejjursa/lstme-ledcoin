@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6823910-b0b6-4ea9-aa6a-1dcade04d047" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/application/controllers/limits_mng.php" afterPath="$PROJECT_DIR$/application/controllers/limits.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/application/models/limits.php" afterPath="$PROJECT_DIR$/application/models/limit.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/application/views/web/controllers/limits_mng/index.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/limits/index.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/layouts/admin.tpl" afterPath="$PROJECT_DIR$/application/views/web/layouts/admin.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/forms/input.tpl" afterPath="$PROJECT_DIR$/application/views/web/forms/input.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/partials/navpanel.tpl" afterPath="$PROJECT_DIR$/application/views/web/partials/navpanel.tpl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/helpers/operations_helper.php" afterPath="$PROJECT_DIR$/application/helpers/operations_helper.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/helpers/validation_helper.php" afterPath="$PROJECT_DIR$/application/helpers/validation_helper.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/layouts/standard.tpl" afterPath="$PROJECT_DIR$/application/views/web/layouts/standard.tpl" />
     </list>
     <ignored path="lstme-ledcoin.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,71 +24,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="operations_helper.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/helpers/operations_helper.php">
+      <file leaf-file-name="standard.tpl" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/application/views/web/layouts/standard.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-24.375">
-              <caret line="39" column="5" selection-start-line="39" selection-start-column="5" selection-end-line="39" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="limits.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/controllers/limits.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.46824542">
-              <caret line="107" column="21" selection-start-line="107" selection-start-column="21" selection-end-line="107" selection-end-column="21" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="edit_limit.tpl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/web/controllers/limits/edit_limit.tpl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.5">
-              <caret line="4" column="85" selection-start-line="4" selection-start-column="85" selection-end-line="4" selection-end-column="85" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="limit.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/models/limit.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.25">
-              <caret line="2" column="11" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="groups.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/controllers/groups.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.444445">
-              <caret line="85" column="5" selection-start-line="85" selection-start-column="5" selection-end-line="85" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="products.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/controllers/products.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.25">
-              <caret line="711" column="8" selection-start-line="711" selection-start-column="8" selection-end-line="711" selection-end-column="33" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="validation_helper.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/helpers/validation_helper.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.8888888">
-              <caret line="14" column="65" selection-start-line="14" selection-start-column="65" selection-end-line="14" selection-end-column="65" />
+            <state vertical-scroll-proportion="0.2421959">
+              <caret line="15" column="133" selection-start-line="15" selection-start-column="133" selection-end-line="15" selection-end-column="133" />
               <folding />
             </state>
           </provider>
@@ -105,28 +37,8 @@
       <file leaf-file-name="admin.tpl" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/views/web/layouts/admin.tpl">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.25">
-              <caret line="10" column="92" selection-start-line="10" selection-start-column="92" selection-end-line="10" selection-end-column="92" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="navpanel.tpl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/web/partials/navpanel.tpl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.0833333">
-              <caret line="13" column="9" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="input.tpl" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/web/forms/input.tpl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.125">
-              <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+            <state vertical-scroll-proportion="-8.75">
+              <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="15" selection-end-column="133" />
               <folding />
             </state>
           </provider>
@@ -156,7 +68,6 @@
         <option value="$PROJECT_DIR$/application/helpers/auth_helper.php" />
         <option value="$PROJECT_DIR$/application/views/web/controllers/workplaces/index.tpl" />
         <option value="$PROJECT_DIR$/application/views/web/layouts/error.tpl" />
-        <option value="$PROJECT_DIR$/application/views/web/layouts/standard.tpl" />
         <option value="$PROJECT_DIR$/application/controllers/persons.php" />
         <option value="$PROJECT_DIR$/application/controllers/services.php" />
         <option value="$PROJECT_DIR$/application/controllers/workplaces.php" />
@@ -198,6 +109,7 @@
         <option value="$PROJECT_DIR$/application/controllers/groups.php" />
         <option value="$PROJECT_DIR$/application/helpers/validation_helper.php" />
         <option value="$PROJECT_DIR$/application/controllers/limits.php" />
+        <option value="$PROJECT_DIR$/application/views/web/layouts/standard.tpl" />
       </list>
     </option>
   </component>
@@ -887,14 +799,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/web/layouts/admin.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.25">
-          <caret line="10" column="92" selection-start-line="10" selection-start-column="92" selection-end-line="10" selection-end-column="92" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/jquery.ui.datepicker.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.9055614">
@@ -999,8 +903,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/limits.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46824542">
+        <state vertical-scroll-proportion="-18.125">
           <caret line="107" column="21" selection-start-line="107" selection-start-column="21" selection-end-line="107" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/web/layouts/admin.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.75">
+          <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="15" selection-end-column="133" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/web/layouts/standard.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2421959">
+          <caret line="15" column="133" selection-start-line="15" selection-start-column="133" selection-end-line="15" selection-end-column="133" />
           <folding />
         </state>
       </provider>
