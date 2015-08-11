@@ -33,9 +33,9 @@
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->login}</td>
                     <td>{$person->group_title|default:'<strong>---</strong>'}</td>
-                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_amount|intval - $person->minus_amount_direct|intval - $person->minus_amount_products|intval - $person->minus_amount_services|intval} inline}</td>
-                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$person->plus_amount|intval inline}</td>
-                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->minus_amount_direct|intval + $person->minus_amount_products|intval + $person->minus_amount_services|intval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_amount|doubleval - $person->minus_amount_direct|doubleval - $person->minus_amount_products|doubleval - $person->minus_amount_services|doubleval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$person->plus_amount|doubleval inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->minus_amount_direct|doubleval + $person->minus_amount_products|doubleval + $person->minus_amount_services|doubleval} inline}</td>
                 </tr>
                 {/foreach}
             </tbody>

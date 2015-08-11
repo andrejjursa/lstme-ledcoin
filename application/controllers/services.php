@@ -202,7 +202,7 @@ class Services extends CI_Controller {
                     'label' => 'Cena za minútu',
                     'id' => 'service-price',
                     'object_property' => 'price',
-                    'validation' => 'required|integer|greater_than[0]',
+                    'validation' => 'required|number|greater_than[0]',
                 ),
             ),
             'arangement' => array(

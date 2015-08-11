@@ -24,7 +24,7 @@
                 <tr data-gridtable-unique="limit_{$limit->id|intval}" data-gridtable-id="{$limit->id|intval}" data-gridtable-date="{$limit->date|date_format:'d. m. Y'}" data-gridtable-daily_limit="{$limit->daily_limit|doubleval}">
                     <td>{$limit->id|intval}</td>
                     <td>{$limit->date|date_format:'d. m. Y'}</td>
-                    <td>{$limit->daily_limit|doubleval}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$limit->daily_limit|doubleval inline}</td>
                 </tr>
                 {/foreach}
             </tbody>

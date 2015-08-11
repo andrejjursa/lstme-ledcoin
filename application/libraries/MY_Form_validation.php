@@ -100,13 +100,26 @@ class MY_Form_validation extends CI_Form_validation {
      */
     public function floatpoint($str) {
         if ($str == '') { return TRUE; }
-        $pattern = '/^-{0,1}(0|[1-9]{1}[0-9]*)(\.[0-9]+){0,1}$/';
+        $pattern = '/^-{0,1}(0|[1-9]{1}[0-9]*)([\.,][0-9]+){0,1}$/';
         if (preg_match($pattern, $str)) {
             return TRUE;
         }
         return FALSE;
     }
-    
+
+    /**
+     * Convert floatpoint number with comma as decimal separator to number with dot as decimal separator.
+     * @param string $str possible floatpoint number.
+     *
+     * @return string converted value.
+     */
+    public function convert_floatpoint($str) {
+        if ($this->floatpoint($str)) {
+            return str_replace(',', '.', $str);
+        }
+        return $str;
+    }
+
     /**
      * Test if string is number and is greater or equal to given minimum.
      * @param string $str string to evaluate.

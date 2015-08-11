@@ -41,7 +41,7 @@ class Operations extends CI_Controller {
         $operations_subtraction_products->where_related('product_quantity', 'product_id', NULL);
         $operations_subtraction_products->group_end();
         unset($operations_subtraction_products->db->ar_select[0]);
-        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'amount_sum');
+        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price', '*', '@product_quantities.multiplier'), 'amount_sum');
         $operations_subtraction_products->where_related_person('id', '${parent}.id');
 
         $operations_subtraction_services = new Operation();
@@ -52,7 +52,7 @@ class Operations extends CI_Controller {
         $operations_subtraction_services->where_related('service_usage', 'service_id', NULL);
         $operations_subtraction_services->group_end();
         unset($operations_subtraction_services->db->ar_select[0]);
-        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'amount_sum');
+        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price', '*', '@service_usages.multiplier'), 'amount_sum');
         $operations_subtraction_services->where_related_person('id', '${parent}.id');
 
         $persons = new Person();
@@ -132,7 +132,7 @@ class Operations extends CI_Controller {
             $operations_subtraction_products->where_related('product_quantity', 'product_id', NULL);
             $operations_subtraction_products->group_end();
             unset($operations_subtraction_products->db->ar_select[0]);
-            $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'amount_sum');
+            $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price', '*', '@product_quantities.multiplier'), 'amount_sum');
             $operations_subtraction_products->where_related_person('id', '${parent}.id');
 
             $operations_subtraction_services = new Operation();
@@ -143,7 +143,7 @@ class Operations extends CI_Controller {
             $operations_subtraction_services->where_related('service_usage', 'service_id', NULL);
             $operations_subtraction_services->group_end();
             unset($operations_subtraction_services->db->ar_select[0]);
-            $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'amount_sum');
+            $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price', '*', '@service_usages.multiplier'), 'amount_sum');
             $operations_subtraction_services->where_related_person('id', '${parent}.id');
             
             $person = new Person();
@@ -200,11 +200,11 @@ class Operations extends CI_Controller {
                     redirect(site_url('operations/new_operation'));
                 }
             } else {
-                $amount_at_disposal = intval($person->plus_amount) - intval($person->minus_amount_direct) - intval($person->minus_amount_products) - intval($person->minus_amount_services);
+                $amount_at_disposal = doubleval($person->plus_amount) - doubleval($person->minus_amount_direct) - doubleval($person->minus_amount_products) - doubleval($person->minus_amount_services);
                 $total_amount = 0;
                 
                 if ($operation_data['subtraction_type'] == Operation::SUBTRACTION_TYPE_DIRECT) {
-                    $total_amount += (int)$operation_data['amount'];
+                    $total_amount += (double)$operation_data['amount'];
                 }
                 
                 $service_data = array();
@@ -216,9 +216,9 @@ class Operations extends CI_Controller {
                     foreach ($services as $service) {
                         if (isset($operation_service_data[$service->id])) {
                             if (isset($operation_service_data[$service->id]['quantity']) && (int)$operation_service_data[$service->id]['quantity'] > 0 &&
-                                isset($operation_service_data[$service->id]['price']) && (int)$operation_service_data[$service->id]['price'] > 0) {
+                                isset($operation_service_data[$service->id]['price']) && (double)$operation_service_data[$service->id]['price'] > 0) {
                                 $service_data[$service->id] = $operation_service_data[$service->id];
-                                $total_amount += (int)$operation_service_data[$service->id]['quantity'] * (int)$operation_service_data[$service->id]['price'];
+                                $total_amount += (int)$operation_service_data[$service->id]['quantity'] * (double)$operation_service_data[$service->id]['price'] * (double)$operation_data['multiplier'];
                             }
                         }
                     }
@@ -246,9 +246,9 @@ class Operations extends CI_Controller {
                     foreach ($products as $product) {
                         if (isset($operation_product_data[$product->id])) {
                             if (isset($operation_product_data[$product->id]['quantity']) && (int)$operation_product_data[$product->id]['quantity'] > 0 &&
-                                isset($operation_product_data[$product->id]['price']) && (int)$operation_product_data[$product->id]['price'] > 0) {
+                                isset($operation_product_data[$product->id]['price']) && (double)$operation_product_data[$product->id]['price'] > 0) {
                                 $product_data[$product->id] = $operation_product_data[$product->id];
-                                $total_amount += (int)$operation_product_data[$product->id]['quantity'] * (int)$operation_product_data[$product->id]['price'];
+                                $total_amount += (int)$operation_product_data[$product->id]['quantity'] * (double)$operation_product_data[$product->id]['price'] * (double)$operation_data['multiplier'];
                             }
                         }
                     }
@@ -269,15 +269,16 @@ class Operations extends CI_Controller {
                 $operation = new Operation();
                 $operation->from_array($operation_data, array('comment', 'type', 'subtraction_type'));
                 if ($operation_data['subtraction_type'] == Operation::SUBTRACTION_TYPE_DIRECT) {
-                    $operation->amount = $operation_data['amount'];
+                    $operation->amount = (double)$operation_data['amount'];
                 } else {
-                    $operation->amount = 0;
+                    $operation->amount = 0.0;
                 }
                 if ($operation->save(array('person' => $person, 'admin' => $admin, 'workplace' => $workplace)) && $this->db->trans_status()) {
                     if (count($service_data) > 0) {
                         foreach ($service_data as $service_id => $service_post) {
                             $service_usage = new Service_usage();
                             $service_usage->from_array($service_post, array('quantity', 'price'));
+                            $service_usage->multiplier = (double)$operation_data['multiplier'];
                             $service_usage->service_id = (int)$service_id;
                             if (!$service_usage->save(array('operation' => $operation))) {
                                 $service = new Service();
@@ -294,6 +295,7 @@ class Operations extends CI_Controller {
                             $product_quantity = new Product_quantity();
                             $product_quantity->type = Product_quantity::TYPE_SUBTRACTION;
                             $product_quantity->from_array($product_post, array('quantity', 'price'));
+                            $product_quantity->multiplier = (double)$operation_data['multiplier'];
                             $product_quantity->product_id = (int)$product_id;
                             if (!$product_quantity->save(array('operation' => $operation))) {
                                 $product = new Product();
@@ -306,11 +308,11 @@ class Operations extends CI_Controller {
                         }
                     }
                     $this->db->trans_commit();
-                    add_success_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa úspešne podarilo odobrať <strong>' . $total_amount . '</strong> ' . get_inflection_by_numbers((int)$total_amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.');
+                    add_success_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa úspešne podarilo odobrať <strong>' . $total_amount . '</strong> ' . get_inflection_by_numbers((double)$total_amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.');
                     redirect(site_url('operations'));
                 } else {
                     $this->db->trans_rollback();
-                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo odobrať <strong>' . $total_amount . '</strong> ' . get_inflection_by_numbers((int)$total_amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.');
+                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo odobrať <strong>' . $total_amount . '</strong> ' . get_inflection_by_numbers((double)$total_amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.');
                     redirect(site_url('operations/new_operation'));
                 }
             }
@@ -405,13 +407,13 @@ class Operations extends CI_Controller {
                 if (array_key_exists($person->id, $person_amount_data) && (int)$person_amount_data[$person->id] > 0) {
                     $operation = new Operation();
                     $operation->admin_id = auth_get_id();
-                    $operation->amount = (int)$person_amount_data[$person->id];
+                    $operation->amount = (double)$person_amount_data[$person->id];
                     $operation->type = Operation::TYPE_ADDITION;
                     $operation->subtraction_type = Operation::SUBTRACTION_TYPE_DIRECT;
                     $operation->comment = @$batch_amount_data['comment'];
                     if ($operation->save(array('person' => $person, 'workplace' => $workplace))) {
                         $total_added += (double)$operation->amount;
-                        $successful_messages[] = 'Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . (int)$operation->amount . '</strong> ' . get_inflection_by_numbers((int)$operation->amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.';
+                        $successful_messages[] = 'Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . (double)$operation->amount . '</strong> ' . get_inflection_by_numbers((double)$operation->amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.';
                         $successful_count++;
                     } else {
                         $error_count++;
@@ -525,8 +527,8 @@ class Operations extends CI_Controller {
                     'data' => array('group_id' => $current_group),
                     'label' => 'Spoločné nastavenie času',
                     'min' => 0,
-                    'max' => 240,
-                    //'step' => 0.1,
+                    'max' => 100,
+                    'step' => 0.1,
                     'default' => 0,
                     'type' => 'slider',
                 );
@@ -539,8 +541,8 @@ class Operations extends CI_Controller {
                 'label' => '<span class="person_name_label"><img src="' . get_person_image_min($person->id) . '" alt="" /><span class="person_name">' . $person->name . ' ' . $person->surname . '</span></span>',
                 'type' => 'slider',
                 'min' => 0,
-                'max' => 240,
-                //'step' => 0.1,
+                'max' => 100,
+                'step' => 0.1,
                 'data' => array(
                     'person-name' => $person->name . ' ' . $person->surname,
                     'person-login' => $person->login,
@@ -549,7 +551,7 @@ class Operations extends CI_Controller {
                 'validation' => array(
                     array(
                         'if-field-not-equals' => array('field' => 'person_amount[' . $person->id . ']', 'value' => 0),
-                        'rules' => 'required|integer|greater_than[0]',
+                        'rules' => 'required|floatpoint|convert_floatpoint|greater_than[0]',
                     ),
                 ),
             );
@@ -560,6 +562,7 @@ class Operations extends CI_Controller {
     }
 
     public function get_form($type = '', $subtraction_type = '') {
+        $this->load->helper('operations');
         $operations_addition = new Operation();
         $operations_addition->where('type', Operation::TYPE_ADDITION);
         $operations_addition->select_sum('amount', 'amount_sum');
@@ -579,7 +582,7 @@ class Operations extends CI_Controller {
         $operations_subtraction_products->where_related('product_quantity', 'product_id', NULL);
         $operations_subtraction_products->group_end();
         unset($operations_subtraction_products->db->ar_select[0]);
-        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'amount_sum');
+        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price', '*', '@product_quantities.multiplier'), 'amount_sum');
         $operations_subtraction_products->where_related_person('id', '${parent}.id');
         
         $operations_subtraction_services = new Operation();
@@ -590,7 +593,7 @@ class Operations extends CI_Controller {
         $operations_subtraction_services->where_related('service_usage', 'service_id', NULL);
         $operations_subtraction_services->group_end();
         unset($operations_subtraction_services->db->ar_select[0]);
-        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'amount_sum');
+        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price', '*', '@service_usages.multiplier'), 'amount_sum');
         $operations_subtraction_services->where_related_person('id', '${parent}.id');
         
         $persons = new Person();
@@ -608,7 +611,7 @@ class Operations extends CI_Controller {
         
         foreach ($persons as $person) {
             $amount = (intval($person->plus_amount) - intval($person->minus_amount_direct) - intval($person->minus_amount_products) - intval($person->minus_amount_services));
-            $persons_select[$person->id] = $person->name . ' ' . $person->surname . ' (' . $person->group_title . ' | LEDCOIN: ' . $amount . ' ' . get_inflection_by_numbers($amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-v') . ')';
+            $persons_select[$person->id] = $person->name . ' ' . $person->surname . ' (' . $person->group_title . ' | LEDCOIN: ' . $amount . ' ' . get_inflection_ledcoin($amount) /*get_inflection_by_numbers($amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-v') */ . ')';
         }
         
         $workplaces = new Workplace();
@@ -648,7 +651,7 @@ class Operations extends CI_Controller {
                     ),
                     'values' => array(
                         '' => '',
-                        Operation::SUBTRACTION_TYPE_DIRECT => 'Priame odobratie času',
+                        Operation::SUBTRACTION_TYPE_DIRECT => 'Priame odobratie LEDCOIN-u',
                         Operation::SUBTRACTION_TYPE_PRODUCTS => 'Nákup v bufete',
                         Operation::SUBTRACTION_TYPE_SERVICES => 'Využitie služieb',
                     ),
@@ -694,14 +697,28 @@ class Operations extends CI_Controller {
                         'stay-visible' => 'true',
                     ),
                     'min' => 0,
-                    'max' => 240,
+                    'max' => 100,
+                    'step' => 0.1,
                     'default' => 0,
                     'validation' => array(
                         array(
                             'if-field-not-equals' => array('field' => 'operation[amount]', 'value' => 0),
-                            'rules' => 'required|integer|greater_than[0]',
+                            'rules' => 'required|floatpoint|convert_floatpoint|greater_than[0]',
                         ),
                     ),
+                ),
+                'multiplier-fake' => array(
+                    'name' => 'operation[multiplier-fake]',
+                    'type' => 'text_input',
+                    'disabled' => true,
+                    'id' => 'operation-multiplier-fake',
+                    'default' => operations_ledcoin_multiplier(),
+                    'label' => 'Multiplikátor LEDCOIN-u',
+                ),
+                'multiplier' => array(
+                    'name' => 'operation[multiplier]',
+                    'type' => 'hidden',
+                    'default' => operations_ledcoin_multiplier(),
                 ),
             ),
             'arangement' => array(
@@ -713,7 +730,7 @@ class Operations extends CI_Controller {
             if ($subtraction_type == Operation::SUBTRACTION_TYPE_DIRECT) {
                 $form['arangement'] = array('type', 'subtraction_type', 'person', 'workplace', 'comment', 'amount');
             } elseif ($subtraction_type == Operation::SUBTRACTION_TYPE_SERVICES) {
-                $form['arangement'] = array('type', 'subtraction_type', 'person', 'comment');
+                $form['arangement'] = array('type', 'subtraction_type', 'person', 'comment', 'multiplier', 'multiplier-fake');
                 $services = new Service();
                 $services->order_by('title', 'asc');
                 $services->get_iterated();
@@ -751,7 +768,7 @@ class Operations extends CI_Controller {
                         'validation' => array(
                             array(
                                 'if-field-not-equals' => array('field' => 'operation_service[' . $service->id . '][quantity]', 'value' => 0),
-                                'rules' => 'required|integer|greater_than[0]',
+                                'rules' => 'required|floatpoint|convert_floatpoint|greater_than[0]',
                             ),
                         ),
                     );
@@ -760,7 +777,7 @@ class Operations extends CI_Controller {
                     $form['arangement'][] = 'service_' . $service->id . '_price';
                 }
             } elseif ($subtraction_type == Operation::SUBTRACTION_TYPE_PRODUCTS) {
-                $form['arangement'] = array('type', 'subtraction_type', 'person', 'comment');
+                $form['arangement'] = array('type', 'subtraction_type', 'person', 'comment', 'multiplier', 'multiplier-fake');
                 
                 $quantity_addition = new Product_quantity();
                 $quantity_addition->select_sum('quantity', 'quantity_sum');
@@ -790,6 +807,7 @@ class Operations extends CI_Controller {
                         'max' => intval($product->plus_quantity) - intval($product->minus_quantity),
                         'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . ' (počet kusov)</span></span>',
                         'default' => 0,
+                        'disabled' => intval($product->plus_quantity) - intval($product->minus_quantity) <= 0 ? true : false,
                         'data' => array(
                             'product-title' => $product->title,
                         ),
@@ -807,13 +825,14 @@ class Operations extends CI_Controller {
                         'type' => 'text_input',
                         'label' => $product->title . ' (cena za kus)',
                         'default' => $product->price,
+                        'disabled' => intval($product->plus_quantity) - intval($product->minus_quantity) <= 0 ? true : false,
                         'data' => array(
                             'product-title' => $product->title,
                         ),
                         'validation' => array(
                             array(
                                 'if-field-not-equals' => array('field' => 'operation_product[' . $product->id . '][quantity]', 'value' => 0),
-                                'rules' => 'required|integer|greater_than[0]',
+                                'rules' => 'required|floatpoint|convert_floatpoint|greater_than[0]',
                             ),
                         ),
                     );
@@ -839,7 +858,7 @@ class Operations extends CI_Controller {
         }
         
         if ($type == Operation::TYPE_ADDITION) {
-            $form['fields']['amount']['validation'] = 'required|integer|greater_than[0]';
+            $form['fields']['amount']['validation'] = 'required|floatpoint|convert_floatpoint|greater_than[0]';
         } elseif ($type == Operation::TYPE_SUBTRACTION) {
             
         } else {

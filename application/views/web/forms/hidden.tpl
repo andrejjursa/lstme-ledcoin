@@ -1,0 +1,1 @@
+<input type="hidden" name="{$form_element.name|default:'unknown_name'}" value="{form_value|escape:'html' default=$form_element.default|default:'' source=$form_source|default:'' name=$form_element.name|default:'' property=$form_element.object_property|default:''}" />

@@ -1,3 +1,14 @@
 <?php
 
-$config['ledcoin_cap'] = 10000;
+/*
+----------------------------------------
+ LEDCOIN multiplie minimum value
+----------------------------------------
+*/
+$config['ledcoin_multiplier_min'] = 0.5;
+/*
+----------------------------------------
+ LEDCOIN multiplie maximum value
+----------------------------------------
+*/
+$config['ledcoin_multiplier_max'] = 5.0;

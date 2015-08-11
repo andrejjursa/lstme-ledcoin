@@ -49,7 +49,7 @@ class Ledcoin extends CI_Controller {
         $operations_subtraction_products->where_related('product_quantity', 'product_id', NULL);
         $operations_subtraction_products->group_end();
         unset($operations_subtraction_products->db->ar_select[0]);
-        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'amount_sum');
+        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price', '*', '@product_quantities.multiplier'), 'amount_sum');
         $operations_subtraction_products->where_related_person('id', '${parent}.id');
         
         $operations_subtraction_services = new Operation();
@@ -60,7 +60,7 @@ class Ledcoin extends CI_Controller {
         $operations_subtraction_services->where_related('service_usage', 'service_id', NULL);
         $operations_subtraction_services->group_end();
         unset($operations_subtraction_services->db->ar_select[0]);
-        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'amount_sum');
+        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price', '*', '@service_usages.multiplier'), 'amount_sum');
         $operations_subtraction_services->where_related_person('id', '${parent}.id');
         
         $persons_non_admins = new Person();
@@ -148,7 +148,7 @@ class Ledcoin extends CI_Controller {
         $operations_subtraction_products->where_related('product_quantity', 'product_id', NULL);
         $operations_subtraction_products->group_end();
         unset($operations_subtraction_products->db->ar_select[0]);
-        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price'), 'amount_sum');
+        $operations_subtraction_products->select_func('SUM', array('@product_quantities.quantity', '*', '@product_quantities.price', '*', '@product_quantities.multiplier'), 'amount_sum');
         $operations_subtraction_products->where_related_person('id', '${parent}.id');
         
         $operations_subtraction_services = new Operation();
@@ -159,7 +159,7 @@ class Ledcoin extends CI_Controller {
         $operations_subtraction_services->where_related('service_usage', 'service_id', NULL);
         $operations_subtraction_services->group_end();
         unset($operations_subtraction_services->db->ar_select[0]);
-        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price'), 'amount_sum');
+        $operations_subtraction_services->select_func('SUM', array('@service_usages.quantity', '*', '@service_usages.price', '*', '@service_usages.multiplier'), 'amount_sum');
         $operations_subtraction_services->where_related_person('id', '${parent}.id');
         
         $person = new Person();
