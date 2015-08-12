@@ -22,7 +22,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Názov</th>
-                    <th>Cena za minútu</th>
+                    <th>Cena</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
                 <tr data-gridtable-unique="service_{$service->id|intval}" data-gridtable-id="{$service->id|intval}" data-gridtable-title="{$service->title|escape:'html'|addslashes}">
                     <td>{$service->id|intval}</td>
                     <td>{$service->title}</td>
-                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$service->price inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$service->price inline} za Horalku</td>
                 </tr>
                 {/foreach}
             </tbody>

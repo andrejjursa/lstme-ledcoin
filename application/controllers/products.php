@@ -42,11 +42,19 @@
 			$products->select_subquery($quantity_subtraction, 'minus_quantity');
 			$products->get_iterated();
 
-			$this->parser->parse('web/controllers/products/index.tpl', array('title' => 'Administrácia / Bufet', 'new_item_url' => site_url('products/new_product'), 'products' => $products,));
+			$this->parser->parse('web/controllers/products/index.tpl', array(
+				'title'        => 'Administrácia / Bufet',
+				'new_item_url' => site_url('products/new_product'),
+				'products'     => $products,
+			));
 		}
 
 		public function new_product() {
-			$this->parser->parse('web/controllers/products/new_product.tpl', array('title' => 'Administrácia / Bufet / Nový produkt', 'back_url' => site_url('products'), 'form' => $this->get_product_form(),));
+			$this->parser->parse('web/controllers/products/new_product.tpl', array(
+				'title'    => 'Administrácia / Bufet / Nový produkt',
+				'back_url' => site_url('products'),
+				'form'     => $this->get_product_form(),
+			));
 		}
 
 		public function create_product() {
@@ -81,7 +89,12 @@
 				redirect(site_url('products'));
 			}
 
-			$this->parser->parse('web/controllers/products/edit_product.tpl', array('product' => $product, 'title' => 'Administrácia / Bufet / Úprava produktu', 'form' => $this->get_product_form(), 'back_url' => site_url('products'),));
+			$this->parser->parse('web/controllers/products/edit_product.tpl', array(
+				'product'  => $product,
+				'title'    => 'Administrácia / Bufet / Úprava produktu',
+				'form'     => $this->get_product_form(),
+				'back_url' => site_url('products'),
+			));
 		}
 
 		public function update_product($product_id = NULL) {
@@ -176,7 +189,12 @@
 			$product_quantities->order_by('created', 'desc');
 			$product_quantities->get_iterated();
 
-			$this->parser->parse('web/controllers/products/stock.tpl', array('title' => 'Administrácia / Bufet / Sklad produktu / ' . $product->title, 'product_quantities' => $product_quantities, 'product' => $product, 'new_item_url' => site_url('products/new_product_quantity/' . $product->id),));
+			$this->parser->parse('web/controllers/products/stock.tpl', array(
+				'title'              => 'Administrácia / Bufet / Sklad produktu / ' . $product->title,
+				'product_quantities' => $product_quantities,
+				'product'            => $product,
+				'new_item_url'       => site_url('products/new_product_quantity/' . $product->id),
+			));
 		}
 
 		public function new_product_quantity($product_id = NULL) {
@@ -193,7 +211,12 @@
 				redirect(site_url('products'));
 			}
 
-			$this->parser->parse('web/controllers/products/new_product_quantity.tpl', array('product' => $product, 'title' => 'Administrácia / Bufet / Sklad produktu / ' . $product->title . ' / Pridať množstvo', 'back_url' => site_url('products/stock/' . (int)$product->id), 'form' => $this->get_product_quantity_form(),));
+			$this->parser->parse('web/controllers/products/new_product_quantity.tpl', array(
+				'product'  => $product,
+				'title'    => 'Administrácia / Bufet / Sklad produktu / ' . $product->title . ' / Pridať množstvo',
+				'back_url' => site_url('products/stock/' . (int)$product->id),
+				'form'     => $this->get_product_quantity_form(),
+			));
 		}
 
 		public function create_product_quantity($product_id = NULL) {
@@ -264,7 +287,13 @@
 				redirect(site_url('products/stock/' . (int)$product->id));
 			}
 
-			$this->parser->parse('web/controllers/products/edit_product_quantity.tpl', array('product' => $product, 'product_quantity' => $product_quantity, 'title' => 'Administrácia / Bufet / Sklad produktu / ' . $product->title . ' / Upraviť množstvo', 'back_url' => site_url('products/stock/' . (int)$product->id), 'form' => $this->get_product_quantity_form(),));
+			$this->parser->parse('web/controllers/products/edit_product_quantity.tpl', array(
+				'product'          => $product,
+				'product_quantity' => $product_quantity,
+				'title'            => 'Administrácia / Bufet / Sklad produktu / ' . $product->title . ' / Upraviť množstvo',
+				'back_url'         => site_url('products/stock/' . (int)$product->id),
+				'form'             => $this->get_product_quantity_form(),
+			));
 		}
 
 		public function update_product_quantity($product_id = NULL, $product_quantity_id = NULL) {
@@ -336,7 +365,11 @@
 
 		public function batch_stock_addition() {
 			$this->load->helper('filter');
-			$this->parser->parse('web/controllers/products/batch_stock_addition.tpl', array('title' => 'Administrácia / Bufet / Hromadné pridanie zásob', 'back_url' => site_url('products'), 'form' => $this->get_batch_stock_addition_form(),));
+			$this->parser->parse('web/controllers/products/batch_stock_addition.tpl', array(
+				'title'    => 'Administrácia / Bufet / Hromadné pridanie zásob',
+				'back_url' => site_url('products'),
+				'form'     => $this->get_batch_stock_addition_form(),
+			));
 		}
 
 		public function do_batch_stock_addition() {
@@ -417,7 +450,12 @@
 			$product_quantities->order_by_related('operation', 'created', 'desc');
 			$product_quantities->get_iterated();
 
-			$this->parser->parse('web/controllers/products/overview.tpl', array('title' => 'Administrácia / Bufet / Prehľad o produkte / ' . $product->title, 'product' => $product, 'product_quantities' => $product_quantities, 'back_url' => site_url('products'),));
+			$this->parser->parse('web/controllers/products/overview.tpl', array(
+				'title'              => 'Administrácia / Bufet / Prehľad o produkte / ' . $product->title,
+				'product'            => $product,
+				'product_quantities' => $product_quantities,
+				'back_url'           => site_url('products'),
+			));
 		}
 
 		public function _ok($str) {
@@ -443,7 +481,12 @@
 				$current_photo = base_url('user/products/default/product.png');
 			}
 
-			$this->parser->parse('web/controllers/products/edit_photo.tpl', array('title' => 'Administrácia / Bufet / Fotografia', 'back_url' => site_url('products'), 'form' => $this->get_photo_edit_form($current_photo), 'product' => $product,));
+			$this->parser->parse('web/controllers/products/edit_photo.tpl', array(
+				'title'    => 'Administrácia / Bufet / Fotografia',
+				'back_url' => site_url('products'),
+				'form'     => $this->get_photo_edit_form($current_photo),
+				'product'  => $product,
+			));
 		}
 
 		public function upload_photo($product_id = NULL) {
@@ -461,12 +504,29 @@
 			}
 
 
-			$upload_config = array('upload_path' => 'user/products/data/' . (int)$product->id . '/', 'allowed_types' => 'jpg|png', 'max_size' => '1024', 'max_width' => '1024', 'max_height' => '1024', 'file_name' => 'temp_product.png', 'overwrite' => TRUE,);
+			$upload_config = array(
+				'upload_path'   => 'user/products/data/' . (int)$product->id . '/',
+				'allowed_types' => 'jpg|png',
+				'max_size'      => '1024',
+				'max_width'     => '1024',
+				'max_height'    => '1024',
+				'file_name'     => 'temp_product.png',
+				'overwrite'     => TRUE,
+			);
 			$this->load->library('upload', $upload_config);
 			@mkdir($upload_config['upload_path'], DIR_WRITE_MODE, TRUE);
 
 			if ($this->upload->do_upload('photo')) {
-				$resize_config = array('image_library' => 'gd2', 'source_image' => $upload_config['upload_path'] . $upload_config['file_name'], 'create_thumb' => FALSE, 'maintain_ratio' => TRUE, 'width' => 256, 'height' => 256, 'quality' => '90%', 'new_image' => $upload_config['upload_path'] . 'product.png',);
+				$resize_config = array(
+					'image_library'  => 'gd2',
+					'source_image'   => $upload_config['upload_path'] . $upload_config['file_name'],
+					'create_thumb'   => FALSE,
+					'maintain_ratio' => TRUE,
+					'width'          => 256,
+					'height'         => 256,
+					'quality'        => '90%',
+					'new_image'      => $upload_config['upload_path'] . 'product.png',
+				);
 				$this->load->library('image_lib', $resize_config);
 				if ($this->image_lib->resize()) {
 					$resize_config['width']     = 64;
@@ -490,13 +550,47 @@
 		}
 
 		protected function get_product_form() {
-			$form = array('fields' => array('title' => array('name' => 'product[title]', 'id' => 'product-title', 'type' => 'text_input', 'label' => 'Názov', 'object_property' => 'title', 'validation' => 'required',), 'price' => array('name' => 'product[price]', 'id' => 'product-price', 'type' => 'text_input', 'label' => 'Cena', 'object_property' => 'price', 'hint' => 'Cena musí byť číslo vačšie ako nula.', 'validation' => 'required|number|greater_than[0]',),), 'arangement' => array('title', 'price',),);
+			$form = array(
+				'fields'     => array(
+					'title' => array(
+						'name'            => 'product[title]',
+						'id'              => 'product-title',
+						'type'            => 'text_input',
+						'label'           => 'Názov',
+						'object_property' => 'title',
+						'validation'      => 'required',
+					),
+					'price' => array(
+						'name'            => 'product[price]',
+						'id'              => 'product-price',
+						'type'            => 'text_input',
+						'label'           => 'Cena',
+						'object_property' => 'price',
+						'hint'            => 'Cena musí byť číslo vačšie ako nula. Cena je násobená kurzom, ktorý vyjadruje počet LEDCOIN-ov za Horalku.',
+						'validation'      => 'required|number|greater_than[0]',
+					),
+				),
+				'arangement' => array('title', 'price',),
+			);
 
 			return $form;
 		}
 
 		protected function get_product_quantity_form() {
-			$form = array('fields' => array('quantity' => array('name' => 'product_quantity[quantity]', 'id' => 'product_quantity-quantity', 'label' => 'Množstvo', 'hint' => 'Množstvo musí byť vačšie ako 0.', 'type' => 'text_input', 'validation' => 'required|integer|greater_than[0]', 'object_property' => 'quantity',),), 'arangement' => array('quantity',),);
+			$form = array(
+				'fields'     => array(
+					'quantity' => array(
+						'name'            => 'product_quantity[quantity]',
+						'id'              => 'product_quantity-quantity',
+						'label'           => 'Množstvo',
+						'hint'            => 'Množstvo musí byť vačšie ako 0.',
+						'type'            => 'text_input',
+						'validation'      => 'required|integer|greater_than[0]',
+						'object_property' => 'quantity',
+					),
+				),
+				'arangement' => array('quantity',),
+			);
 
 			return $form;
 		}
@@ -510,7 +604,30 @@
 			$form_arangement = array();
 
 			foreach ($products as $product) {
-				$form_fields['product_' . $product->id] = array('name' => 'product_quantity_addition[' . $product->id . '][quantity]', 'data' => array('product-name' => $product->title,), 'id' => 'product_quantity_addition-' . $product->id, 'label' => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . '</span></span>', 'placeholder' => 'Nechajte prázdne, ak nie je čo pridať.', 'type' => 'text_input', 'validation' => array(array('if-field-not-equals' => array('field' => 'product_quantity_addition[' . $product->id . '][quantity]', 'value' => ''), 'rules' => 'required|integer|greater_than[0]',), array('if-field-equals' => array('field' => 'product_quantity_addition[' . $product->id . '][quantity]', 'value' => ''), 'rules' => 'callback__ok',),),);
+				$form_fields['product_' . $product->id] = array(
+					'name'        => 'product_quantity_addition[' . $product->id . '][quantity]',
+					'data'        => array('product-name' => $product->title,),
+					'id'          => 'product_quantity_addition-' . $product->id,
+					'label'       => '<span class="product_title_label"><img src="' . get_product_image_min($product->id) . '" alt="" /><span class="product_title">' . $product->title . '</span></span>',
+					'placeholder' => 'Nechajte prázdne, ak nie je čo pridať.',
+					'type'        => 'text_input',
+					'validation'  => array(
+						array(
+							'if-field-not-equals' => array(
+								'field' => 'product_quantity_addition[' . $product->id . '][quantity]',
+								'value' => '',
+							),
+							'rules'               => 'required|integer|greater_than[0]',
+						),
+						array(
+							'if-field-equals' => array(
+								'field' => 'product_quantity_addition[' . $product->id . '][quantity]',
+								'value' => '',
+							),
+							'rules'           => 'callback__ok',
+						),
+					),
+				);
 				$form_arangement[]                      = 'product_' . $product->id;
 			}
 
@@ -518,7 +635,23 @@
 		}
 
 		protected function get_photo_edit_form($current_photo) {
-			$form = array('fields' => array('current_photo' => array('type' => 'imagepreview', 'label' => 'Súčasná fotografia', 'path' => $current_photo,), 'photo' => array('type' => 'upload', 'label' => 'Nová fotografia', 'name' => 'photo', 'id' => 'photo', 'hint' => 'Fotografia vo formáte jpg alebo png.',),), 'arangement' => array('current_photo', 'photo',),);
+			$form = array(
+				'fields'     => array(
+					'current_photo' => array(
+						'type'  => 'imagepreview',
+						'label' => 'Súčasná fotografia',
+						'path'  => $current_photo,
+					),
+					'photo'         => array(
+						'type'  => 'upload',
+						'label' => 'Nová fotografia',
+						'name'  => 'photo',
+						'id'    => 'photo',
+						'hint'  => 'Fotografia vo formáte jpg alebo png.',
+					),
+				),
+				'arangement' => array('current_photo', 'photo',),
+			);
 
 			return $form;
 		}
