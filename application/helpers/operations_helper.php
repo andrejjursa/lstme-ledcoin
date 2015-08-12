@@ -59,13 +59,23 @@
 	/**
 	 * Get amount of added LEDCOIN in specified date.
 	 *
-	 * @param null|string $date date from which amount of added LEDCOIN will be obtained, leave null for current day.
+	 * @param null|string $date           date from which amount of added LEDCOIN will be obtained, leave null for
+	 *                                    current day or ALL for all days.
+	 * @param string      $operation_type type of addition operation.
 	 *
 	 * @return double LEDCOIN added in day.
 	 */
-	function operations_ledcoin_added_in_day($date = NULL) {
+	function operations_ledcoin_added_in_day($date = NULL, $operation_type = Operation::ADDITION_TYPE_TRANSFER) {
 		if ($date === NULL) {
 			$date = date('Y-m-d');
+
+			$date_from = $date . ' 00:00:00';
+			$date_to   = $date . ' 23:59:59';
+		} elseif ($date == 'ALL') {
+			$date = date('Y-m-d');
+
+			$date_from = '1970-01-01 00:00:00';
+			$date_to   = $date . ' 23:59:59';
 		} else {
 			if (!preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $date)) {
 				return 0.0;
@@ -76,16 +86,18 @@
 			if (!checkdate($month, $day, $year)) {
 				return 0.0;
 			}
+
+			$date_from = $date . ' 00:00:00';
+			$date_to   = $date . ' 23:59:59';
 		}
 
-		$date_from = $date . ' 00:00:00';
-		$date_to   = $date . ' 23:59:59';
 
 		$operations_addition = new Operation();
 		$operations_addition->where('type', Operation::TYPE_ADDITION);
 		$operations_addition->select_sum('amount', 'amount_sum');
 		$operations_addition->where('created >=', $date_from);
 		$operations_addition->where('created <=', $date_to);
+		$operations_addition->where('addition_type', $operation_type);
 		$operations_addition->get();
 
 		return (double)$operations_addition->amount_sum;
@@ -99,19 +111,20 @@
 	 *
 	 * @return double value of multiplier.
 	 */
-	function operations_ledcoin_multiplier($date = NULL) {
-		$limit = operations_ledcoin_daily_limit($date);
-		$added = operations_ledcoin_added_in_day($date);
-		if ($added == 0) {
-			$multiplier = INF;
-		} else {
-			$multiplier = $limit / $added;
-		}
+	function operations_ledcoin_multiplier() {
+		$added = operations_ledcoin_added_in_day('ALL', Operation::ADDITION_TYPE_MINING);
 
 		$CI =& get_instance();
 		$CI->config->load('application');
 		$min = (double)$CI->config->item('ledcoin_multiplier_min');
 		$max = (double)$CI->config->item('ledcoin_multiplier_max');
+		$total = (double)$CI->config->item('ledcoin_maximum');
+
+		if ($total == 0) {
+			$total = 0.0001;
+		}
+
+		$multiplier = ($added + $total) / $total;
 
 		if ($multiplier < $min) {
 			$multiplier = $min;

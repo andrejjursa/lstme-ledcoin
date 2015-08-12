@@ -17,6 +17,9 @@ class Operation extends DataMapper {
     const SUBTRACTION_TYPE_DIRECT = 'direct';
     const SUBTRACTION_TYPE_SERVICES = 'services';
     const SUBTRACTION_TYPE_PRODUCTS = 'products';
+
+    const ADDITION_TYPE_TRANSFER = 'transfer';
+    const ADDITION_TYPE_MINING = 'mining';
     
     public $table_name = 'operations';
     

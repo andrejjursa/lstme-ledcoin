@@ -22,7 +22,7 @@
                     <td>{$operation->created|date_format:'%d. %m. %H:%M'|default:'neznámy'}</td>
                     {$additional_amount_subtract = 0}
                     {if $operation->type eq Operation::TYPE_ADDITION}
-                    <td>Pridanie {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$operation->amount|doubleval inline}.</td>
+                    <td>Pridanie {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$operation->amount|doubleval inline}. ({if $operation->addition_type eq Operation::ADDITION_TYPE_TRANSFER}Prevod.{else}Dolovanie.{/if})</td>
                     {else}
                         {if $operation->subtraction_type eq Operation::SUBTRACTION_TYPE_DIRECT}
                         <td>Odobratie {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$operation->amount|doubleval inline}.</td>

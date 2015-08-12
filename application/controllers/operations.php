@@ -184,11 +184,11 @@ class Operations extends CI_Controller {
             
             if ($operation_data['type'] == Operation::TYPE_ADDITION) {
                 $amount_to_add = (double)$operation_data['amount'];
-                if (!operations_ledcoin_limit_check($amount_to_add)) {
+                if ($operation_data['addition_type'] == Operation::ADDITION_TYPE_TRANSFER && !operations_ledcoin_limit_check($amount_to_add)) {
                     add_common_flash_message('Pozor, pridanie ' . $amount_to_add . ' LEDCOIN-ov presahuje denný limit. Pred pridaním bolo už použitých ' . operations_ledcoin_added_in_day() . ' z ' . operations_ledcoin_daily_limit() . ' LEDCOIN-ov!');
                 }
                 $operation = new Operation();
-                $operation->from_array($operation_data, array('comment', 'amount', 'type'));
+                $operation->from_array($operation_data, array('comment', 'amount', 'type', 'addition_type'));
                 $operation->subtraction_type = Operation::SUBTRACTION_TYPE_DIRECT;
                 if ($operation->save(array('person' => $person, 'admin' => $admin, 'workplace' => $workplace)) && $this->db->trans_status()) {
                     $this->db->trans_commit();
@@ -410,6 +410,7 @@ class Operations extends CI_Controller {
                     $operation->amount = (double)$person_amount_data[$person->id];
                     $operation->type = Operation::TYPE_ADDITION;
                     $operation->subtraction_type = Operation::SUBTRACTION_TYPE_DIRECT;
+                    $operation->addition_type = $batch_amount_data['addition_type'];
                     $operation->comment = @$batch_amount_data['comment'];
                     if ($operation->save(array('person' => $person, 'workplace' => $workplace))) {
                         $total_added += (double)$operation->amount;
@@ -422,7 +423,7 @@ class Operations extends CI_Controller {
                 }
             }
 
-            if ($total_added > 0 && !operations_ledcoin_limit_check($total_added)) {
+            if ($total_added > 0 && $batch_amount_data['addition_type'] == Operation::ADDITION_TYPE_TRANSFER && !operations_ledcoin_limit_check($total_added)) {
                 add_common_flash_message('Pozor, celkovým pridaním ' . $total_added . ' LEDCOIN-ov bol prekročený denný limit. Pred pridaním už bolo pridaných ' . operations_ledcoin_added_in_day() . ' z ' . operations_ledcoin_daily_limit() . ' LEDCOIN-ov!');
             }
             
@@ -483,9 +484,24 @@ class Operations extends CI_Controller {
                     'values' => $workplace_values,
                     'hint' => 'Pozor, globálne nastavenie pre všetkých účastníkov.',
                 ),
+                'addition_type' => array(
+                    'name' => 'batch_amount[addition_type]',
+                    'type' => 'select',
+                    'id' => 'batch_amount-addition_type',
+                    'data' => array(
+                        'stay-visivle' => 'true',
+                    ),
+                    'label' => 'Spôsob pridania LEDCOIN-u',
+                    'values' => array(
+                        '' => '',
+                        Operation::ADDITION_TYPE_TRANSFER => 'Prevod z účtu vedúcich',
+                        Operation::ADDITION_TYPE_MINING => 'Vydolovanie LEDCOIN-u',
+                    ),
+                    'validation' => 'required',
+                ),
             ),
             'arangement' => array(
-                'workplace', 'comment',
+                'workplace', 'comment', 'addition_type'
             ),
         );
         
@@ -645,7 +661,7 @@ class Operations extends CI_Controller {
                     'name' => 'operation[subtraction_type]',
                     'type' => 'select',
                     'id' => 'operation-subtraction_type',
-                    'label' => 'Spôsob odobratia času',
+                    'label' => 'Spôsob odobratia LEDCOIN-u',
                     'data' => array(
                         'stay-visible' => 'true',
                     ),
@@ -654,6 +670,21 @@ class Operations extends CI_Controller {
                         Operation::SUBTRACTION_TYPE_DIRECT => 'Priame odobratie LEDCOIN-u',
                         Operation::SUBTRACTION_TYPE_PRODUCTS => 'Nákup v bufete',
                         Operation::SUBTRACTION_TYPE_SERVICES => 'Využitie služieb',
+                    ),
+                    'validation' => 'required',
+                ),
+                'addition_type' => array(
+                    'name' => 'operation[addition_type]',
+                    'type' => 'select',
+                    'id' => 'operation-addition_type',
+                    'data' => array(
+                        'stay-visivle' => 'true',
+                    ),
+                    'label' => 'Spôsob pridania LEDCOIN-u',
+                    'values' => array(
+                        '' => '',
+                        Operation::ADDITION_TYPE_TRANSFER => 'Prevod z účtu vedúcich',
+                        Operation::ADDITION_TYPE_MINING => 'Vydolovanie LEDCOIN-u',
                     ),
                     'validation' => 'required',
                 ),
@@ -854,6 +885,7 @@ class Operations extends CI_Controller {
                 $form['arangement'] = array('type', 'subtraction_type', 'person');
             }
         } else {
+            $form['arangement'][] = 'addition_type';
             $form['arangement'][] = 'amount';
         }
         

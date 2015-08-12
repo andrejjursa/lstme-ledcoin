@@ -2,13 +2,19 @@
 
 /*
 ----------------------------------------
- LEDCOIN multiplie minimum value
+ LEDCOIN multiplier minimum value
 ----------------------------------------
 */
-$config['ledcoin_multiplier_min'] = 0.5;
+$config['ledcoin_multiplier_min'] = 1.0;
 /*
 ----------------------------------------
- LEDCOIN multiplie maximum value
+ LEDCOIN multiplier maximum value
 ----------------------------------------
 */
 $config['ledcoin_multiplier_max'] = 5.0;
+/*
+----------------------------------------
+ LEDCOIN maximum value
+----------------------------------------
+*/
+$config['ledcoin_maximum'] = 1000.0;
