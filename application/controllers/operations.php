@@ -27,6 +27,12 @@ class Operations extends CI_Controller {
         $operations_addition->select_sum('amount', 'amount_sum');
         $operations_addition->where_related_person('id', '${parent}.id');
 
+        $operations_mined = new Operation();
+        $operations_mined->where('type', Operation::TYPE_ADDITION);
+        $operations_mined->where('addition_type', Operation::ADDITION_TYPE_MINING);
+        $operations_mined->select_sum('amount', 'amount_sum');
+        $operations_mined->where_related_person('id', '${parent}.id');
+
         $operations_subtraction_direct = new Operation();
         $operations_subtraction_direct->where('type', Operation::TYPE_SUBTRACTION);
         $operations_subtraction_direct->where('subtraction_type', Operation::SUBTRACTION_TYPE_DIRECT);
@@ -58,6 +64,7 @@ class Operations extends CI_Controller {
         $persons = new Person();
         $persons->where('admin', 0);
         $persons->select('*');
+        $persons->select_subquery($operations_mined, 'mined_amount');
         $persons->select_subquery($operations_addition, 'plus_amount');
         $persons->select_subquery($operations_subtraction_direct, 'minus_amount_direct');
         $persons->select_subquery($operations_subtraction_products, 'minus_amount_products');
@@ -184,6 +191,13 @@ class Operations extends CI_Controller {
             
             if ($operation_data['type'] == Operation::TYPE_ADDITION) {
                 $amount_to_add = (double)$operation_data['amount'];
+                $remaining = 0;
+                if ($operation_data['addition_type'] == Operation::ADDITION_TYPE_TRANSFER && !operations_ledcoin_addition_possible($amount_to_add, $remaining)) {
+                    $this->db->trans_rollback();
+                    add_error_flash_message('Nedá sa prideliť <strong>' . $amount_to_add . '</strong> ' . get_inflection_ledcoin($amount_to_add) . ', na účte vedúcich zostáva iba <strong>' . $remaining . '</strong> ' . get_inflection_ledcoin($remaining) . '.');
+                    redirect('operations');
+                    return;
+                }
                 if ($operation_data['addition_type'] == Operation::ADDITION_TYPE_TRANSFER && !operations_ledcoin_limit_check($amount_to_add)) {
                     add_common_flash_message('Pozor, pridanie ' . $amount_to_add . ' LEDCOIN-ov presahuje denný limit. Pred pridaním bolo už použitých ' . operations_ledcoin_added_in_day() . ' z ' . operations_ledcoin_daily_limit() . ' LEDCOIN-ov!');
                 }
@@ -392,7 +406,27 @@ class Operations extends CI_Controller {
                     redirect(site_url('operations/batch_ledcoin_addition'));
                 }
             }
-            
+
+            $persons = new Person();
+            $persons->where('admin', 0);
+            $persons->get_iterated();
+
+            $total_added = 0;
+
+            foreach ($persons as $person) {
+                if (array_key_exists($person->id, $person_amount_data) && (double)$person_amount_data[$person->id] > 0) {
+                    $total_added += (double)$person_amount_data[$person->id];
+                }
+            }
+
+            $remaining = 0;
+            if ($total_added > 0 && $batch_amount_data['addition_type'] == Operation::ADDITION_TYPE_TRANSFER && !operations_ledcoin_addition_possible($total_added, $remaining)) {
+                $this->db->trans_rollback();
+                add_error_flash_message('Nedá sa prideliť <strong>' . $total_added . '</strong> ' . get_inflection_ledcoin($total_added) . ', na účte vedúcich zostáva iba <strong>' . $remaining . '</strong> ' . get_inflection_ledcoin($remaining) . '.');
+                redirect('operations');
+                return;
+            }
+
             $persons = new Person();
             $persons->where('admin', 0);
             $persons->get_iterated();
@@ -402,9 +436,9 @@ class Operations extends CI_Controller {
             $successful_messages = array();
             $error_messages = array();
             $total_added = 0;
-            
+
             foreach ($persons as $person) {
-                if (array_key_exists($person->id, $person_amount_data) && (int)$person_amount_data[$person->id] > 0) {
+                if (array_key_exists($person->id, $person_amount_data) && (double)$person_amount_data[$person->id] > 0) {
                     $operation = new Operation();
                     $operation->admin_id = auth_get_id();
                     $operation->amount = (double)$person_amount_data[$person->id];
