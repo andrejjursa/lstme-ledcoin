@@ -206,11 +206,11 @@ class Operations extends CI_Controller {
                 $operation->subtraction_type = Operation::SUBTRACTION_TYPE_DIRECT;
                 if ($operation->save(array('person' => $person, 'admin' => $admin, 'workplace' => $workplace)) && $this->db->trans_status()) {
                     $this->db->trans_commit();
-                    add_success_flash_message('Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . $operation->amount . '</strong> ' . get_inflection_by_numbers((int)$operation->amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . ' úspešne.');
+                    add_success_flash_message('Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . $operation->amount . '</strong> ' . get_inflection_ledcoin((double)$operation->amount) . ' úspešne.');
                     redirect(site_url('operations'));
                 } else {
                     $this->db->trans_rollback();
-                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo prideliť <strong>' . $operation->amount . '</strong> ' . get_inflection_by_numbers((int)$operation->amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.');
+                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo prideliť <strong>' . $operation->amount . '</strong> ' . get_inflection_ledcoin((double)$operation->amount) . '.');
                     redirect(site_url('operations/new_operation'));
                 }
             } else {
@@ -270,7 +270,7 @@ class Operations extends CI_Controller {
                 
                 if ($total_amount > $amount_at_disposal) {
                     $this->db->trans_rollback();
-                    add_error_flash_message('Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> nemá dostatok LEDCOIN-u. Potrebuje <strong>' . $total_amount . '</strong> ' . get_inflection_by_numbers((int)$total_amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . ' ale má iba <strong>' . $amount_at_disposal . '</strong> ' . get_inflection_by_numbers((int)$amount_at_disposal, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.');
+                    add_error_flash_message('Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> nemá dostatok LEDCOIN-u. Potrebuje <strong>' . $total_amount . '</strong> ' . get_inflection_ledcoin((double)$total_amount) . ' ale má iba <strong>' . $amount_at_disposal . '</strong> ' . get_inflection_ledcoin((double)$amount_at_disposal) . '.');
                     redirect(site_url('operations/new_operation'));
                 }
                 
@@ -322,11 +322,11 @@ class Operations extends CI_Controller {
                         }
                     }
                     $this->db->trans_commit();
-                    add_success_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa úspešne podarilo odobrať <strong>' . $total_amount . '</strong> ' . get_inflection_by_numbers((double)$total_amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.');
+                    add_success_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa úspešne podarilo odobrať <strong>' . $total_amount . '</strong> ' . get_inflection_ledcoin((double)$total_amount) . '.');
                     redirect(site_url('operations'));
                 } else {
                     $this->db->trans_rollback();
-                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo odobrať <strong>' . $total_amount . '</strong> ' . get_inflection_by_numbers((double)$total_amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.');
+                    add_error_flash_message('Účastníkovi <strong>' . $person->name . ' ' . $person->surname . '</strong> sa nepodarilo odobrať <strong>' . $total_amount . '</strong> ' . get_inflection_ledcoin((double)$total_amount) . '.');
                     redirect(site_url('operations/new_operation'));
                 }
             }
@@ -448,7 +448,7 @@ class Operations extends CI_Controller {
                     $operation->comment = @$batch_amount_data['comment'];
                     if ($operation->save(array('person' => $person, 'workplace' => $workplace))) {
                         $total_added += (double)$operation->amount;
-                        $successful_messages[] = 'Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . (double)$operation->amount . '</strong> ' . get_inflection_by_numbers((double)$operation->amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-ov') . '.';
+                        $successful_messages[] = 'Účastník <strong>' . $person->name . ' ' . $person->surname . '</strong> dostal <strong>' . (double)$operation->amount . '</strong> ' . get_inflection_ledcoin((double)$operation->amount) . '.';
                         $successful_count++;
                     } else {
                         $error_count++;
@@ -661,7 +661,7 @@ class Operations extends CI_Controller {
         
         foreach ($persons as $person) {
             $amount = (intval($person->plus_amount) - intval($person->minus_amount_direct) - intval($person->minus_amount_products) - intval($person->minus_amount_services));
-            $persons_select[$person->id] = $person->name . ' ' . $person->surname . ' (' . $person->group_title . ' | LEDCOIN: ' . $amount . ' ' . get_inflection_ledcoin($amount) /*get_inflection_by_numbers($amount, 'LEDCOIN-ov', 'LEDCOIN', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-y', 'LEDCOIN-v') */ . ')';
+            $persons_select[$person->id] = $person->name . ' ' . $person->surname . ' (' . $person->group_title . ' | LEDCOIN: ' . $amount . ' ' . get_inflection_ledcoin($amount) . ')';
         }
         
         $workplaces = new Workplace();
