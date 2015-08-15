@@ -12,7 +12,8 @@
                     <th data-priority="persist">Škola</th>
                     <th data-priority="1">Zostávajúci LEDCOIN</th>
                     <th data-priority="2">Získaný LEDCOIN</th>
-                    <th data-priority="3">Použitý LEDCOIN</th>
+                    <th data-priority="3">Vyťažený LEDCOIN</th>
+                    <th data-priority="4">Použitý LEDCOIN</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,9 +23,10 @@
                     <td>{$person->name} {$person->surname}</td>
                     <td>{$person->group_title}</td>
                     <td>{$person->organisation}</td>
-                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->plus_amount - $person->minus_amount_direct - $person->minus_amount_products - $person->minus_amount_services}|intval} inline}</td>
-                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_amount|intval} inline}</td>
-                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->minus_amount_direct + $person->minus_amount_products + $person->minus_amount_services}|intval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->plus_amount - $person->minus_amount_direct - $person->minus_amount_products - $person->minus_amount_services}|doubleval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_amount|doubleval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_mined|doubleval} inline}</td>
+                    <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->minus_amount_direct + $person->minus_amount_products + $person->minus_amount_services}|doubleval} inline}</td>
                 </tr>
                 {/foreach}
             </tbody>
