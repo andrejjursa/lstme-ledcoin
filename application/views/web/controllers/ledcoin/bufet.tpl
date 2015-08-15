@@ -2,7 +2,7 @@
 {block content_block}
     <div class="ui-body ui-body-a ui-corner-all">
         <h3>Zoznam tovaru v bufete</h3>
-        <p>Súčasný kurz je <strong>1 horalka</strong> za <strong>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{1 / $multiplier * 1000}|intval / 1000.0}|doubleval inline}</strong><strong title="Kurz je približný.">*</strong>.</p>
+        <p>Súčasný kurz je <strong>1 horalka</strong> za <strong>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$multiplier * 1000}|intval / 1000.0}|doubleval inline}</strong><strong title="Kurz je približný.">*</strong>.</p>
         <table data-role="table" data-mode="reflow" class="ui-responsive grid_table">
             <thead>
                 <tr>
