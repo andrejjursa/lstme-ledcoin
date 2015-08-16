@@ -13,6 +13,7 @@
 		}
 
 		public function index() {
+			$this->load->helper('operations');
 			$this->load->helper('filter');
 
 			$post = $this->input->post();
@@ -110,11 +111,20 @@
 				$persons_non_admins->order_by('organisation', 'asc');
 			}
 			$persons_non_admins->get_iterated();
+
+			$total_mined   = operations_ledcoin_mined();
+			$total_ledcoin = operations_ledcoin_maximum();
+			$remaining_ledcoin = 0;
+			operations_ledcoin_addition_possible(0, $remaining_ledcoin);
+
 			$this->parser->parse('web/controllers/ledcoin/index.tpl', array(
-				'persons' => $persons_non_admins,
-				'title'   => 'Účastníci',
-				'form'    => $this->get_persons_filter_form($filter),
-				'filter'  => $filter,
+				'persons'       => $persons_non_admins,
+				'title'         => 'Účastníci',
+				'form'          => $this->get_persons_filter_form($filter),
+				'filter'        => $filter,
+				'total_mined'   => $total_mined,
+				'total_ledcoin' => $total_ledcoin,
+				'remaining_ledcoin' => $remaining_ledcoin,
 			));
 		}
 

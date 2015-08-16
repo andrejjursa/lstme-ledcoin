@@ -224,3 +224,14 @@
 
 		return $ledcoin <= $remaining;
 	}
+
+	/**
+	 * Return maximum ledcoin set in config file + mined ledcoin.
+	 *
+	 * @return double maximum ledcoin.
+	 */
+	function operations_ledcoin_maximum() {
+		$CI =& get_instance();
+		$CI->config->load('application');
+		return (double)$CI->config->item('ledcoin_maximum') + operations_ledcoin_mined();
+	}

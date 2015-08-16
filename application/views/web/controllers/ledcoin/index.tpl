@@ -2,6 +2,7 @@
 {block content_block}
     <div class="ui-body ui-body-a ui-corner-all">
         <h3>Zoznam účastníkov</h3>
+        <p>Na účte vedúcich je momentálne <strong>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$remaining_ledcoin|doubleval inline}</strong> z celkového počtu <strong>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$total_ledcoin|doubleval inline}</strong>. Za dobu trvania sústredenia sa už vyťažilo <strong>{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$total_mined|doubleval inline}</strong>.</p>
         {if $filter.renderas eq 'table'}
         <table data-role="table" data-mode="reflow" class="ui-responsive grid_table">
             <thead>
