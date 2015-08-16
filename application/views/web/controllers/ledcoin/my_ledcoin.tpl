@@ -8,6 +8,7 @@
                     <tr>
                         <th>Zostávajúci LEDCOIN</th>
                         <th>Získaný LEDCOIN</th>
+                        <th>Vyťažený LEDCOIN</th>
                         <th>Použitý LEDCOIN</th>
                         <th>Skupina</th>
                         <th>Škola</th>
@@ -15,9 +16,10 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->plus_amount - $person->minus_amount_direct - $person->minus_amount_products - $person->minus_amount_services}|intval} inline}</td>
-                        <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_amount|intval} inline}</td>
-                        <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->minus_amount_direct + $person->minus_amount_products + $person->minus_amount_services}|intval} inline}</td>
+                        <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->plus_amount - $person->minus_amount_direct - $person->minus_amount_products - $person->minus_amount_services}|doubleval} inline}</td>
+                        <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_amount|doubleval} inline}</td>
+                        <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={$person->plus_mined|doubleval} inline}</td>
+                        <td>{include file='web/partials/ledcoin_inflection.tpl' ledcoins={{$person->minus_amount_direct + $person->minus_amount_products + $person->minus_amount_services}|doubleval} inline}</td>
                         <td>{$person->group_title}</td>
                         <td>{$person->organisation}</td>
                     </tr>
@@ -42,7 +44,7 @@
                         <td>{$operation->admin_name} {$operation->admin_surname}</td>
                         <td>{$operation->workplace_title|default:'---'}</td>
                         {if $operation->type eq Operation::TYPE_ADDITION}
-                        <td>+{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$operation->amount inline}</td>
+                        <td>+{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$operation->amount inline} ({if $operation->addition_type eq Operation::ADDITION_TYPE_MINING}Dolovanie.{else}Prevod.{/if})</td>
                         <td><span class="operation_type_addition_highlight">+{include file='web/partials/ledcoin_inflection.tpl' ledcoins=$operation->amount inline}</span></td>
                         {else}
                             {if $operation->subtraction_type eq Operation::SUBTRACTION_TYPE_DIRECT}
@@ -55,8 +57,8 @@
                                 {if $product_quantities->get_iterated()->exists()}
                                     <ul class="transaction_items_list">
                                     {foreach $product_quantities as $product_quantity}
-                                        <li>{$product_quantity->product_title} ({$product_quantity->quantity|intval} x {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$product_quantity->price|intval inline})</li>
-                                        {$additional_amount_subtract = $additional_amount_subtract + $product_quantity->quantity|intval * $product_quantity->price|intval}
+                                        <li>{$product_quantity->product_title} ({$product_quantity->quantity|intval} x {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$product_quantity->price|doubleval inline} x {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$product_quantity->multiplier|doubleval inline})</li>
+                                        {$additional_amount_subtract = $additional_amount_subtract + $product_quantity->quantity|intval * $product_quantity->price|doubleval * $product_quantity->multiplier|doubleval}
                                     {/foreach}
                                     </ul>
                                 {else}
@@ -71,8 +73,8 @@
                                 {if $service_usages->get_iterated()->exists()}
                                     <ul class="transaction_items_list">
                                     {foreach $service_usages as $service_usage}
-                                        <li>{$service_usage->service_title} ({$service_usage->quantity|intval} x {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$service_usage->price|intval inline})</li>
-                                        {$additional_amount_subtract = $additional_amount_subtract + $service_usage->quantity|intval * $service_usage->price|intval}
+                                        <li>{$service_usage->service_title} ({$service_usage->quantity|intval} x {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$service_usage->price|doubleval inline} x {include file='web/partials/ledcoin_inflection.tpl' ledcoins=$service_usage->multiplier|doubleval inline})</li>
+                                        {$additional_amount_subtract = $additional_amount_subtract + $service_usage->quantity|intval * $service_usage->price|doubleval * $service_usage->multiplier|doubleval}
                                     {/foreach}
                                     </ul>
                                 {else}

@@ -177,6 +177,12 @@
 			$operations_addition->select_sum('amount', 'amount_sum');
 			$operations_addition->where_related_person('id', '${parent}.id');
 
+			$operations_mining = new Operation();
+			$operations_mining->where('type', Operation::TYPE_ADDITION);
+			$operations_mining->where('addition_type', Operation::ADDITION_TYPE_MINING);
+			$operations_mining->select_sum('amount', 'amount_sum');
+			$operations_mining->where_related_person('id', '${parent}.id');
+
 			$operations_subtraction_direct = new Operation();
 			$operations_subtraction_direct->where('type', Operation::TYPE_SUBTRACTION);
 			$operations_subtraction_direct->where('subtraction_type', Operation::SUBTRACTION_TYPE_DIRECT);
@@ -221,6 +227,7 @@
 			$person->where('admin', 0);
 			$person->select('*');
 			$person->select_subquery($operations_addition, 'plus_amount');
+			$person->select_subquery($operations_mining, 'plus_mined');
 			$person->select_subquery($operations_subtraction_direct, 'minus_amount_direct');
 			$person->select_subquery($operations_subtraction_products, 'minus_amount_products');
 			$person->select_subquery($operations_subtraction_services, 'minus_amount_services');
@@ -233,7 +240,7 @@
 			}
 
 			$operations = new Operation();
-			$operations->select('id, created, amount, type, subtraction_type, comment');
+			$operations->select('id, created, amount, type, subtraction_type, addition_type, comment');
 			$operations->include_related('admin', array('name', 'surname'));
 			$operations->include_related('workplace', 'title');
 			$operations->where_related_person($person);
