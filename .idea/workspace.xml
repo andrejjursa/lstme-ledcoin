@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6823910-b0b6-4ea9-aa6a-1dcade04d047" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/ledcoin.php" afterPath="$PROJECT_DIR$/application/controllers/ledcoin.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/web/controllers/ledcoin/my_ledcoin.tpl" afterPath="$PROJECT_DIR$/application/views/web/controllers/ledcoin/my_ledcoin.tpl" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.php" afterPath="$PROJECT_DIR$/index.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="lstme-ledcoin.iws" />
