@@ -577,7 +577,7 @@ class Operations extends CI_Controller {
                     'data' => array('group_id' => $current_group),
                     'label' => 'Spoločné nastavenie času',
                     'min' => 0,
-                    'max' => 100,
+                    'max' => 25,
                     'step' => 0.1,
                     'default' => 0,
                     'type' => 'slider',
@@ -591,7 +591,7 @@ class Operations extends CI_Controller {
                 'label' => '<span class="person_name_label"><img src="' . get_person_image_min($person->id) . '" alt="" /><span class="person_name">' . $person->name . ' ' . $person->surname . '</span></span>',
                 'type' => 'slider',
                 'min' => 0,
-                'max' => 100,
+                'max' => 25,
                 'step' => 0.1,
                 'data' => array(
                     'person-name' => $person->name . ' ' . $person->surname,
@@ -660,7 +660,7 @@ class Operations extends CI_Controller {
         $persons_select = array('' => '');
         
         foreach ($persons as $person) {
-            $amount = (intval($person->plus_amount) - intval($person->minus_amount_direct) - intval($person->minus_amount_products) - intval($person->minus_amount_services));
+            $amount = (doubleval($person->plus_amount) - intval($person->minus_amount_direct) - intval($person->minus_amount_products) - intval($person->minus_amount_services));
             $persons_select[$person->id] = $person->name . ' ' . $person->surname . ' (' . $person->group_title . ' | LEDCOIN: ' . $amount . ' ' . get_inflection_ledcoin($amount) . ')';
         }
         
@@ -762,7 +762,7 @@ class Operations extends CI_Controller {
                         'stay-visible' => 'true',
                     ),
                     'min' => 0,
-                    'max' => 100,
+                    'max' => 25,
                     'step' => 0.1,
                     'default' => 0,
                     'validation' => array(
