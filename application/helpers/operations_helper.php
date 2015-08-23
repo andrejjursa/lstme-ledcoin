@@ -132,8 +132,8 @@
 			$multiplier = $max;
 		}
 
-		$multiplier *= 1000;
-		$multiplier = (double)((double)round($multiplier) / 1000.0);
+		$multiplier *= 10000000;
+		$multiplier = (double)((double)round($multiplier) / 10000000.0);
 
 		return $multiplier;
 	}
