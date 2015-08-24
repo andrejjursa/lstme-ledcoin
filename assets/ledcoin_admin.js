@@ -35,6 +35,7 @@ var make_gridtable_active = function(gridtable_selector) {
     gridtables.each(function(index, gridtable) {
         var $gridtable = $(gridtable);
         if ($gridtable.is('table')) {
+            var object_name = $(gridtable).attr('data-gridtable-object_name');
             var operations = $(gridtable).attr('data-gridtable-operations').split(',');
             var operations_template = [];
             for (var i in operations) {
@@ -44,6 +45,7 @@ var make_gridtable_active = function(gridtable_selector) {
                     operation_tmpl.action = operation_data[0];
                     operation_tmpl.text = operation_data[1];
                     operation_tmpl.is_prompt = $(gridtable).attr('data-gridtable-operation-' + operation_tmpl.action + '-prompt') === 'true';
+                    operation_tmpl.if = $(gridtable).attr('data-gridtable-operation-' + operation_tmpl.action + '-if');
                     if (operation_tmpl.is_prompt === true) {
                         operation_tmpl.cancel_button_text = $(gridtable).attr('data-gridtable-operation-' + operation_tmpl.action + '-prompt-cancel');
                         operation_tmpl.ok_button_text = $(gridtable).attr('data-gridtable-operation-' + operation_tmpl.action + '-prompt-ok');
@@ -84,13 +86,26 @@ var make_gridtable_active = function(gridtable_selector) {
                 };
                 var unique = $tr.attr('data-gridtable-unique');
                 if (typeof(unique) === 'string') {
+                    var name_of_actions = '';
+                    if (typeof object_name === 'string') {
+                        var noa_attr = 'data-gridtable-' + object_name;
+                        if (typeof $tr.attr(noa_attr) === 'string' || typeof $tr.attr(noa_attr) === 'number') {
+                            name_of_actions = ': ' + $tr.attr(noa_attr);
+                        }
+                    }
                     var popup = '<div data-role="popup" id="popup-' + unique + '" data-short="' + unique + '" data-theme="c" data-position-to="origin" style="max-width:400px;">';
-                    popup += '<ul data-role="listview" data-inset="true" style="min-width: 200px;"><li data-role="list-divider">Akcia</li></ul>';
+                    popup += '<ul data-role="listview" data-inset="true" style="min-width: 200px;"><li data-role="list-divider">Akcia' + name_of_actions + '</li></ul>';
                     popup += '</div>';
                     var popup_element = $(popup);
                     var popup_element_listview = popup_element.find('ul[data-role=listview]');
                     for (var i in operations_template) {
                         var operation_tmpl = operations_template[i];
+                        if (typeof operation_tmpl.if === 'string') {
+                            var if_attr_name = 'data-gridtable-' + operation_tmpl.if;
+                            if (typeof $tr.attr(if_attr_name) !== 'string' || $tr.attr(if_attr_name) != 'true') {
+                                continue;
+                            }
+                        }
                         var button_li = $('<li></li>');
                         var button = $('<a href="#"></a>').text(operation_tmpl.text);
                         button.appendTo(button_li);

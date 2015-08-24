@@ -8,7 +8,7 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $persons->exists()}
         <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-               data-gridtable-operations="edit:Upraviť,photo:Pridať/upraviť fotku,delete:Vymazať"
+               data-gridtable-operations="edit:Upraviť,photo:Pridať/upraviť fotku,delete:Vymazať,add_ledcoin:Pridať LEDCOIN,subtract_ledcoin:Odobrať LEDCOIN"
                data-gridtable-operation-edit-url="{'persons/edit_person/--ID--'|site_url}"
                data-gridtable-operation-photo-url="{'persons/edit_photo/--ID--'|site_url}"
                data-gridtable-operation-delete-prompt="true"
@@ -17,6 +17,11 @@
                data-gridtable-operation-delete-prompt-cancel="Nie, nechcem"
                data-gridtable-operation-delete-prompt-ok="Áno, chcem"
                data-gridtable-operation-delete-prompt-ok-url="{'persons/delete_person/--ID--'|site_url}"
+               data-gridtable-operation-add_ledcoin-url="{'operations/new_operation/addition/--ID--'|site_url}"
+               data-gridtable-operation-add_ledcoin-if="is_not_admin"
+               data-gridtable-operation-subtract_ledcoin-url="{'operations/new_operation/subtraction/--ID--'|site_url}"
+               data-gridtable-operation-subtract_ledcoin-if="is_not_admin"
+               data-gridtable-object_name="name"
         >
             <thead>
                 <tr>
@@ -31,7 +36,8 @@
             </thead>
             <tbody>
                 {foreach $persons as $person}
-                <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}" data-gridtable-name="{$person->name|escape:'html'|addslashes} {$person->surname|escape:'html'|addslashes}" data-gridtable-login="{$person->login|escape:'html'|addslashes}">
+                <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}" data-gridtable-name="{$person->name|escape:'html'|addslashes} {$person->surname|escape:'html'|addslashes}" data-gridtable-login="{$person->login|escape:'html'|addslashes}"
+                    data-gridtable-is_not_admin="{if $person->admin eq 1}false{else}true{/if}">
                     <td>{$person->id|intval}</td>
                     <td><img src="{get_person_image_min($person->id)}" alt="" /></td>
                     <td>{$person->name} {$person->surname}</td>

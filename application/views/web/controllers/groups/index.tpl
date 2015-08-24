@@ -16,6 +16,7 @@
                data-gridtable-operation-delete-prompt-cancel="Nie, nechcem"
                data-gridtable-operation-delete-prompt-ok="Áno, chcem"
                data-gridtable-operation-delete-prompt-ok-url="{'groups/delete_group/--ID--'|site_url}"
+               data-gridtable-object_name="title"
         >
             <thead>
                 <tr>

@@ -17,6 +17,7 @@
                data-gridtable-operation-delete-prompt-ok="Áno, chcem"
                data-gridtable-operation-delete-prompt-ok-url="{'services/delete_service/--ID--'|site_url}"
                data-gridtable-operation-overview-url="{'services/overview/--ID--'|site_url}"
+               data-gridtable-object_name="title"
         >
             <thead>
                 <tr>

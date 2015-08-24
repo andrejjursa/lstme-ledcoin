@@ -19,6 +19,7 @@
                data-gridtable-operation-delete-prompt-ok-url="{'products/delete_product/--ID--'|site_url}"
                data-gridtable-operation-stock-url="{'products/stock/--ID--'|site_url}"
                data-gridtable-operation-overview-url="{'products/overview/--ID--'|site_url}"
+               data-gridtable-object_name="title"
         >
             <thead>
                 <tr>

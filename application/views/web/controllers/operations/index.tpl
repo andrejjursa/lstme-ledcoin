@@ -12,6 +12,7 @@
                data-gridtable-operation-transactions-url="{'operations/transactions/--ID--'|site_url}"
                data-gridtable-operation-add-url="{'operations/new_operation/addition/--ID--'|site_url}"
                data-gridtable-operation-subtract-url="{'operations/new_operation/subtraction/--ID--'|site_url}"
+               data-gridtable-object_name="person_name"
         >
             <thead>
                 <tr>
@@ -29,7 +30,7 @@
             </thead>
             <tbody>
                 {foreach $persons as $person}
-                <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}" data-gridtable-name="{$person->name|escape:'html'|addslashes} {$person->surname|escape:'html'|addslashes}" data-gridtable-login="{$person->login|escape:'html'|addslashes}">
+                <tr data-gridtable-unique="person_{$person->id|intval}" data-gridtable-id="{$person->id|intval}" data-gridtable-name="{$person->name|escape:'html'|addslashes} {$person->surname|escape:'html'|addslashes}" data-gridtable-login="{$person->login|escape:'html'|addslashes}" data-gridtable-person_name="{$person->name|escape:'html'} {$person->surname|escape:'html'}">
                     <td>{$person->id|intval}</td>
                     <td><img src="{get_person_image_min($person->id)}" alt="" /></td>
                     <td>{$person->name} {$person->surname}</td>

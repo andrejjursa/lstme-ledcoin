@@ -5,7 +5,7 @@
  | Application version
  |--------------------------------------------------------------------------
  */
-$config['app_version'] = '1.1.0';
+$config['app_version'] = '1.1.1';
 
 /* End of file ledcoin.php */
 /* Location: ./application/config/ledcoin.php */
