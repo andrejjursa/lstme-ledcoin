@@ -30,4 +30,3 @@ class Error extends CI_Controller {
     
 }
 
-?>

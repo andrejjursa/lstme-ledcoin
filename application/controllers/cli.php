@@ -32,7 +32,6 @@
 			echo "(3) - zjednotiť konfiguráciu\n";
 			echo "(4) - koniec\n";
 			echo "\n";
-			$choice = '';
 			do {
 				$choice = $this->_get_cli_user_input('Volba');
 			} while (!preg_match('/^[0-9]+$/', $choice) || ((int)$choice < 1 || (int)$choice > 4));
@@ -54,7 +53,6 @@
 			$this->load->library('migration');
 
 			echo "Ktoru migraciu chcete spustit?\n(P) - poslednu\n(cislo) - cislo migracie\n\n";
-			$choice = '';
 			do {
 				$choice = $this->_get_cli_user_input('Volba');
 			} while (strtolower($choice) != 'p' && !preg_match('/^[0-9]+$/', $choice));
@@ -182,7 +180,7 @@
 				if (rtrim(shell_exec($command)) !== 'OK') {
 					trigger_error("Can't invoke bash");
 
-					return;
+					return '';
 				}
 				$command  = "/usr/bin/env bash -c 'read -s -p \"" . addslashes("$prompt: ") . "\" mypassword && echo \$mypassword'";
 				$password = rtrim(shell_exec($command));
@@ -218,4 +216,3 @@
 
 	}
 
-?>

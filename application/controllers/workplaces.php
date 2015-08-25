@@ -171,5 +171,3 @@ class Workplaces extends CI_Controller {
     }
     
 }
-
-?>

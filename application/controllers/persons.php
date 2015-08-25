@@ -425,4 +425,3 @@ class Persons extends CI_Controller {
     
 }
 
-?>

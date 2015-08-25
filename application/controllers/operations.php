@@ -974,4 +974,3 @@ class Operations extends CI_Controller {
     }
 }
 
-?>

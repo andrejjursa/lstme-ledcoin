@@ -177,4 +177,3 @@ class Groups extends CI_Controller {
     }
 }
 
-?>
