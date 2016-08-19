@@ -35,7 +35,7 @@ class Questionnaires extends CI_Controller
     public function new_questionnaire() {
         $questionnaire_data = $this->input->post('questionnaire');
 
-        $upload_temp_id = isset($questionnaire_data['upload_id']) ? $questionnaire_data['upload_id'] : $this->get_upload_temp_id();
+        $upload_temp_id = isset($questionnaire_data['upload_id']) ? $questionnaire_data['upload_id'] : Questionnaire::get_upload_temp_id();
 
         $this->parser->parse('web/controllers/questionnaires/new_questionnaire.tpl',
             array(
@@ -255,6 +255,8 @@ class Questionnaires extends CI_Controller
                     'name' => 'file',
                     'type' => 'upload',
                     'id' => 'file-id',
+                    'label' => 'Nahrať obrázok',
+                    'hint' => 'Povolené typy súborov sú: gif, png, jpeg',
                 ),
             ),
             'arangement' => array(
@@ -313,14 +315,6 @@ class Questionnaires extends CI_Controller
         add_error_flash_message('Nie je možné premenovať adresár so súbormi. Pravdepodobne sa stratia všetky väzby na súbory.');
         return false;
 
-    }
-
-    protected function get_upload_temp_id() {
-        $path = Questionnaire::PATH_TO_UPLOAD_FOLDER;
-        do {
-            $temp_id = 'temp_' . substr(sha1(date('U') . memory_get_usage(true)), rand(0,31), 8);
-        } while (file_exists($path . $temp_id));
-        return $temp_id;
     }
 
     protected function delete_upload_folder($id) {
