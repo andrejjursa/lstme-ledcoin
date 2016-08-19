@@ -1,0 +1,9 @@
+#!/bin/bash
+
+composer install
+
+php index.php cli set_environment
+php index.php cli merge
+php index.php cli configure_database
+php index.php cli migration
+php index.php cli admin
