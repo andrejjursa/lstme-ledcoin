@@ -25,32 +25,48 @@
 		}
 
 		public function index() {
+		    $options = array(
+		        1 => array(
+		            'desc' => 'zmeniť prostredie aplikácie',
+                    'cmd' => 'set_environment',
+                ),
+                2 => array(
+                    'desc' => 'zjednotiť konfiguráciu',
+                    'cmd' => 'merge',
+                ),
+                3 => array(
+                    'desc' => 'konfigurácia pripojenia k databáze',
+                    'cmd' => 'configure_database',
+                ),
+                4 => array(
+                    'desc' => 'databazové migrácie',
+                    'cmd' => 'migration',
+                ),
+                5 => array(
+                    'desc' => 'vytvorenie administrátora',
+                    'cmd' => 'admin',
+                ),
+                6 => array(
+                    'desc' => 'koniec',
+                    'cmd' => false
+                ),
+            );
+
 			echo "Vitajte v konfiguracii aplikacie LEDCOIN.\n\n";
 			echo "Prosim vyberte si z nasledujucej ponuky:\n\n";
-			echo "(1) - databazove migracie\n";
-			echo "(2) - vytvorenie administratora\n";
-			echo "(3) - zjednotiť konfiguráciu\n";
-            echo "(4) - zmeniť prostredie aplikácie\n";
-			echo "(5) - koniec\n";
+            for ($i=1;$i<=count($options);$i++) {
+                echo $i . ' - ' . $options[$i]['desc'] . PHP_EOL;
+            }
 			echo "\n";
 			do {
 				$choice = $this->_get_cli_user_input('Volba');
-			} while (!preg_match('/^[0-9]+$/', $choice) || ((int)$choice < 1 || (int)$choice > 5));
+			} while (!preg_match('/^[0-9]+$/', $choice) || !array_key_exists((int)$choice, $options));
 
-			switch ((int)$choice) {
-				case 1:
-					$this->migration();
-					break;
-				case 2:
-					$this->admin();
-					break;
-				case 3:
-					$this->merge();
-					break;
-                case 4:
-                    $this->set_environment();
-                    break;
-			}
+            $cmd = $options[(int)$choice]['cmd'];
+
+            if ($cmd !== false) {
+                call_user_func(array($this, $cmd));
+            }
 		}
 
 		public function migration() {
@@ -182,6 +198,150 @@
                 case 1: $this->_set_environment('production'); break;
                 case 2: $this->_set_environment('development'); break;
                 case 3: $this->_set_environment('testing'); break;
+            }
+        }
+
+        public function configure_database() {
+            $file = APPPATH . 'config/' . ENVIRONMENT . '/database.php';
+
+            if (!file_exists($file)) {
+                echo 'Konfiguračný súbor databázy sa nenašiel, najskôr zjednotte konfiguráciu.' . PHP_EOL;
+                return;
+            }
+
+            $db = array();
+            $active_group = 'default';
+
+            include $file;
+
+            $bools = array('pconnect', 'db_debug', 'cache_on', 'autoinit', 'stricton');
+
+            if (isset($db) && isset($active_group) && is_array($db) && isset($db[$active_group]) && is_array($db[$active_group]) && !empty($db[$active_group])) {
+                $exit = false;
+                do {
+                    echo "Nastavenie databázovej konfigurácie\n\n";
+
+                    foreach ($db[$active_group] as $item => $current_value) {
+                        if (in_array($item, $bools)) {
+                            do {
+                                $new_value = $this->_get_cli_user_input('Nastavenie ' . $item . ' [' . ($current_value ? 'TRUE' : 'FALSE') . ']');
+                            } while ($new_value !== '' && strtoupper($new_value) !== 'TRUE' && strtoupper($new_value) !== 'FALSE');
+                        } else {
+                            $new_value = $this->_get_cli_user_input('Nastavenie ' . $item . ' [' . $current_value . ']');
+                        }
+                        if (trim($new_value) !== '') {
+                            if (in_array($item, $bools)) {
+                                $db[$active_group][$item] = strtoupper($new_value) === 'TRUE' ? TRUE : FALSE;
+                            } else {
+                                $db[$active_group][$item] = $new_value;
+                            }
+                        }
+                    }
+
+                    echo "\nNová konfigurácia:\n\n";
+
+                    foreach ($db[$active_group] as $item => $value) {
+                        if (in_array($item, $bools)) {
+                            echo "$item: " . ($value ? 'TRUE' : 'FALSE') . "\n";
+                        } else {
+                            echo "$item: $value\n";
+                        }
+                    }
+
+                    echo PHP_EOL;
+
+                    do {
+                        $choice = strtolower($this->_get_cli_user_input('Chcete uložiť túto konfiguráciu? [ano/nie]'));
+                    } while ($choice !== 'ano' && $choice !== 'nie');
+
+                    if ($choice == 'ano') {
+                        if ($this->_save_db_config($file, $db, $active_group)) {
+                            echo PHP_EOL . 'Zmeny boli úspešne uložené.' . PHP_EOL;
+                        }
+                        $exit = true;
+                    } else {
+                        echo PHP_EOL . 'Zmeny nebudú uložené.' . PHP_EOL . PHP_EOL;
+                        do {
+                            $exit_choice = strtolower($this->_get_cli_user_input('Chcete zopakovať zadávanie konfiguračných hodnôt? [ano/nie]'));
+                        } while($exit_choice !== 'ano' && $exit_choice !== 'nie');
+
+                        if ($exit_choice == 'nie') { $exit = true; } else { echo PHP_EOL; }
+                    }
+                } while ($exit == false);
+            } else {
+                echo "Chyba: Konfiguračný súbor nemá správny formát!\n";
+            }
+
+        }
+
+        private function _save_db_config($file, $db, $active_group) {
+            $content = <<<EOC
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/*
+| -------------------------------------------------------------------
+| DATABASE CONNECTIVITY SETTINGS
+| -------------------------------------------------------------------
+| This file will contain the settings needed to access your database.
+|
+| For complete instructions please consult the 'Database Connection'
+| page of the User Guide.
+|
+| -------------------------------------------------------------------
+| EXPLANATION OF VARIABLES
+| -------------------------------------------------------------------
+|
+|	['hostname'] The hostname of your database server.
+|	['username'] The username used to connect to the database
+|	['password'] The password used to connect to the database
+|	['database'] The name of the database you want to connect to
+|	['dbdriver'] The database type. ie: mysql.  Currently supported:
+|				 mysql, mysqli, postgre, odbc, mssql, sqlite, oci8
+|	['dbprefix'] You can add an optional prefix, which will be added
+|				 to the table name when using the  Active Record class
+|	['pconnect'] TRUE/FALSE - Whether to use a persistent connection
+|	['db_debug'] TRUE/FALSE - Whether database errors should be displayed.
+|	['cache_on'] TRUE/FALSE - Enables/disables query caching
+|	['cachedir'] The path to the folder where cache files should be stored
+|	['char_set'] The character set used in communicating with the database
+|	['dbcollat'] The character collation used in communicating with the database
+|				 NOTE: For MySQL and MySQLi databases, this setting is only used
+| 				 as a backup if your server is running PHP < 5.2.3 or MySQL < 5.0.7
+|				 (and in table creation queries made with DB Forge).
+| 				 There is an incompatibility in PHP with mysql_real_escape_string() which
+| 				 can make your site vulnerable to SQL injection if you are using a
+| 				 multi-byte character set and are running versions lower than these.
+| 				 Sites using Latin-1 or UTF-8 database character set and collation are unaffected.
+|	['swap_pre'] A default table prefix that should be swapped with the dbprefix
+|	['autoinit'] Whether or not to automatically initialize the database.
+|	['stricton'] TRUE/FALSE - forces 'Strict Mode' connections
+|							- good for ensuring strict SQL while developing
+|
+| The \$active_group variable lets you choose which connection group to
+| make active.  By default there is only one group (the 'default' group).
+|
+| The \$active_record variables lets you determine whether or not to load
+| the active record class
+*/
+EOC;
+
+            $content .= PHP_EOL . PHP_EOL;
+            $content .= '$active_group = ' . var_export($active_group, true) . ';' . PHP_EOL;
+            $content .= '$active_record = TRUE;' . PHP_EOL . PHP_EOL;
+            $content .= '$db = ' . var_export($db, true) . ';' . PHP_EOL . PHP_EOL . PHP_EOL;
+            $content .= <<<EOC
+            
+/* End of file database.php */
+/* Location: $file */
+EOC;
+
+            try {
+                $f = fopen($file, 'w');
+                fwrite($f, $content);
+                fclose($f);
+                return true;
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                return false;
             }
         }
 
