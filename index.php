@@ -201,8 +201,18 @@ if (defined('ENVIRONMENT'))
  * LOAD THE DATAMAPPER BOOTSTRAP FILE
  * --------------------------------------------------------------------
  */
-require_once APPPATH.'third_party/datamapper/bootstrap.php';        
- 
+require_once APPPATH.'third_party/datamapper/bootstrap.php';
+
+/*
+ * --------------------------------------------------------------------
+ * LOAD VENDOR CLASS LOADER
+ * --------------------------------------------------------------------
+ */
+
+if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php')) {
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+}
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
@@ -211,7 +221,9 @@ require_once APPPATH.'third_party/datamapper/bootstrap.php';
  * And away we go...
  *
  */
+
 require_once BASEPATH.'core/CodeIgniter.php';
+
 
 /* End of file index.php */
 /* Location: ./index.php */

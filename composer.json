@@ -1,0 +1,5 @@
+{
+    "require": {
+        "Symfony/Yaml": "^3.1"
+    }
+}
