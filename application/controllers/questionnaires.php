@@ -152,6 +152,28 @@ class Questionnaires extends CI_Controller
         }
     }
 
+    public function delete_questionnaire($id) {
+        $questionnaire = new Questionnaire();
+        $questionnaire->get_by_id((int)$id);
+        if (!$questionnaire->exists()) {
+            add_error_flash_message('Dotazník sa nenašiel.');
+            redirect('questionnaires');
+        }
+
+        $success_message = sprintf('Dotazník <strong>%s</strong> s id <strong>%d</strong> bol vymazaný.', $questionnaire->title, $questionnaire->id);
+        $error_message = sprintf('Dotazník <strong>%s</strong> s id <strong>%d</strong> sa nepodarilo vymazať.', $questionnaire->title, $questionnaire->id);
+
+        $folder_id = $questionnaire->id;
+
+        if ($questionnaire->delete()) {
+            $this->delete_upload_folder($folder_id);
+            add_success_flash_message($success_message);
+        } else {
+            add_error_flash_message($error_message);
+        }
+        redirect('questionnaires');
+    }
+
     protected function get_files($id) {
         $path = Questionnaire::PATH_TO_UPLOAD_FOLDER . $id . DIRECTORY_SEPARATOR;
 
