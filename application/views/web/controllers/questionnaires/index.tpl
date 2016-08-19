@@ -8,7 +8,7 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $questionnaires->exists()}
             <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-                   data-gridtable-operations="edit:Upraviť,delete:Vymazať"
+                   data-gridtable-operations="show:Ukážka,edit:Upraviť,delete:Vymazať"
                    data-gridtable-operation-edit-url="{'questionnaires/edit_questionnaire/--ID--'|site_url}"
                    data-gridtable-operation-delete-prompt="true"
                    data-gridtable-operation-delete-prompt-title="Vymazať dotazník?"
@@ -17,6 +17,7 @@
                    data-gridtable-operation-delete-prompt-ok="Áno, chcem"
                    data-gridtable-operation-delete-prompt-ok-url="{'questionnaires/delete_questionnaire/--ID--'|site_url}"
                    data-gridtable-object_name="title"
+                   data-gridtable-operation-show-url="{'questionnaires/show_questionnaire/--ID--'|site_url}"
             >
                 <thead>
                 <tr>

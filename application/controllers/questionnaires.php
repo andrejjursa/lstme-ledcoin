@@ -174,6 +174,20 @@ class Questionnaires extends CI_Controller
         redirect('questionnaires');
     }
 
+    public function show_questionnaire($id) {
+        $questionnaire = new Questionnaire();
+        $questionnaire->get_by_id((int)$id);
+        if (!$questionnaire->exists()) {
+            add_error_flash_message('Dotazník sa nenašiel.');
+            redirect('questionnaires');
+        }
+
+        $error = '';
+        var_export(Questionnaire::is_configuration_valid($questionnaire->configuration, $error));
+
+        echo $error;
+    }
+
     protected function get_files($id) {
         $path = Questionnaire::PATH_TO_UPLOAD_FOLDER . $id . DIRECTORY_SEPARATOR;
 
@@ -215,7 +229,7 @@ class Questionnaires extends CI_Controller
                     'id' => 'questionnaire-configuration',
                     'label' => 'Konfigurácia',
                     'object_property' => 'configuration',
-                    'validation' => 'required',
+                    'validation' => 'required|callback__validate_configuration',
                     'monospace' => true,
                 ),
                 'published' => array(
@@ -278,6 +292,15 @@ class Questionnaires extends CI_Controller
         }
 
         return $form;
+    }
+
+    public function _validate_configuration($string) {
+        $error = '';
+        if (!Questionnaire::is_configuration_valid($string, $error)) {
+            $this->form_validation->set_message('_validate_configuration', $error);
+            return false;
+        }
+        return true;
     }
 
     protected function upload_file($id) {
