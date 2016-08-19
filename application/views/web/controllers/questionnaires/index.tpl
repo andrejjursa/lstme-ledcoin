@@ -22,6 +22,8 @@
                 <tr>
                     <th>ID</th>
                     <th>Názov</th>
+                    <th>Zverejnený</th>
+                    <th>Počet pokusov</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,6 +31,8 @@
                     <tr data-gridtable-unique="group_{$questionnaire->id|intval}" data-gridtable-id="{$questionnaire->id|intval}" data-gridtable-title="{$questionnaire->title|escape:'html'|addslashes}">
                         <td>{$questionnaire->id|intval}</td>
                         <td>{$questionnaire->title}</td>
+                        <td>{if $questionnaire->published}Áno{else}Nie{/if}</td>
+                        <td>{if is_null($questionnaire->attempts)}Neobmedzene{else}{$questionnaire->attempts|intval}{/if}</td>
                     </tr>
                 {/foreach}
                 </tbody>
