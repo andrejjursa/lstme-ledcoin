@@ -30,11 +30,12 @@
 			echo "(1) - databazove migracie\n";
 			echo "(2) - vytvorenie administratora\n";
 			echo "(3) - zjednotiť konfiguráciu\n";
-			echo "(4) - koniec\n";
+            echo "(4) - zmeniť prostredie aplikácie\n";
+			echo "(5) - koniec\n";
 			echo "\n";
 			do {
 				$choice = $this->_get_cli_user_input('Volba');
-			} while (!preg_match('/^[0-9]+$/', $choice) || ((int)$choice < 1 || (int)$choice > 4));
+			} while (!preg_match('/^[0-9]+$/', $choice) || ((int)$choice < 1 || (int)$choice > 5));
 
 			switch ((int)$choice) {
 				case 1:
@@ -46,10 +47,15 @@
 				case 3:
 					$this->merge();
 					break;
+                case 4:
+                    $this->set_environment();
+                    break;
 			}
 		}
 
 		public function migration() {
+		    $this->load->database();
+            $this->load->library('datamapper');
 			$this->load->library('migration');
 
 			echo "Ktoru migraciu chcete spustit?\n(P) - poslednu\n(cislo) - cislo migracie\n\n";
@@ -81,6 +87,9 @@
 		}
 
 		public function admin() {
+            $this->load->database();
+            $this->load->library('datamapper');
+
 			echo "Vytvorenie noveho administratora\n\n";
 			$name           = $this->_get_cli_user_input('Meno');
 			$surname        = $this->_get_cli_user_input('Priezvisko');
@@ -150,7 +159,45 @@
 			$this->load->library('configurator');
 			echo $this->configurator->merge_config_files('config') ? "Config ... OK\n" : "Config ... Chyba\n";
 			echo $this->configurator->merge_config_files('application') ? "Application ... OK\n" : "Application ... Chyba\n";
+            $original_database_file = APPPATH . 'config/database.php';
+            $target_database_file = APPPATH . 'config/' . ENVIRONMENT . '/database.php';
+            if (!file_exists($target_database_file) && file_exists($original_database_file)) {
+                echo copy($original_database_file, $target_database_file) ? "Database ... OK\n" : "Database ... Chyba\n";
+            }
 		}
+
+		public function set_environment() {
+		    echo 'Súčasné prostredie aplikácie je nastavené na: ' . ENVIRONMENT . PHP_EOL . PHP_EOL;
+            echo '(1) production' . PHP_EOL;
+            echo '(2) development' . PHP_EOL;
+            echo '(3) testing' . PHP_EOL;
+            echo '(4) koniec' . PHP_EOL;
+            echo PHP_EOL;
+
+            do {
+                $choice = $this->_get_cli_user_input('Zvoľte nové prostredie');
+            } while (!preg_match('/^[0-9]+$/', $choice) || ((int)$choice < 1 || (int)$choice > 4));
+
+            switch ($choice) {
+                case 1: $this->_set_environment('production'); break;
+                case 2: $this->_set_environment('development'); break;
+                case 3: $this->_set_environment('testing'); break;
+            }
+        }
+
+        private function _set_environment($environment) {
+            $content = '<?php ' . PHP_EOL . 'define(\'ENVIRONMENT\', \'' . $environment . '\');' . PHP_EOL;
+            $file = rtrim(APPPATH, '\\/') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'environment.php';
+
+            try {
+                $f = fopen($file, 'w');
+                fwrite($f, $content);
+                fclose($f);
+                echo PHP_EOL . 'Prostredie prepnuté na "' . $environment . '". Je treba opäť zjednotiť konfiguráciu a vykonať úpravy.' . PHP_EOL;
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+        }
 
 		/**
 		 * Displays standard input prompt with message and return answer.

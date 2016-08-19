@@ -1,6 +1,14 @@
 <?php
 	class Api extends CI_Controller {
-		public function bufet(){
+
+        public function __construct()
+        {
+            parent::__construct();
+            $this->load->database();
+            $this->load->library('datamapper');
+        }
+
+        public function bufet(){
 			$this->load->helper('operations');
 
 			return $this->output

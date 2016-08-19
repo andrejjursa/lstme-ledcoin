@@ -9,6 +9,8 @@
 
 		public function __construct() {
 			parent::__construct();
+            $this->load->database();
+            $this->load->library('datamapper');
 			$this->load->library('session');
 		}
 
