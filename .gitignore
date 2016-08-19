@@ -6,3 +6,4 @@ application/logs/*.php
 application/cache/smarty/compiled/*.php
 application/cache/smarty/cached/*.php
 application/config/environment.php
+.idea/
