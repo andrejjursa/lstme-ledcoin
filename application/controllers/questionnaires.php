@@ -306,10 +306,14 @@ class Questionnaires extends CI_Controller
         $old_folder = Questionnaire::PATH_TO_UPLOAD_FOLDER . $old_id;
         $new_folder = Questionnaire::PATH_TO_UPLOAD_FOLDER . $new_id;
 
-        if (file_exists($old_folder) && is_dir($old_folder) && !file_exists($new_folder)) {
-            if (@rename($old_folder, $new_folder)) {
-                return true;
+        if (file_exists($old_folder) && is_dir($old_folder)) {
+            if (!file_exists($new_folder)) {
+                if (@rename($old_folder, $new_folder)) {
+                    return true;
+                }
             }
+        } else {
+            return true;
         }
 
         add_error_flash_message('Nie je možné premenovať adresár so súbormi. Pravdepodobne sa stratia všetky väzby na súbory.');
