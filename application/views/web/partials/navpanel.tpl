@@ -5,7 +5,7 @@
     <h3>Navigácia</h3>
     <ul data-role="listview" data-inset="true">
         <li><a href="{'/'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Účastníci</a></li>
-        <li><a href="{'ledcoin/bufet'|site_url}" class="ui-btn ui-btn-a ui-shadow"data-ajax="false">Bufet</a></li>
+        <li><a href="{'ledcoin/bufet'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Bufet</a></li>
         {if auth_is_authentificated()}
             {if !auth_is_admin()}
             <li><a href="{'ledcoin/my_ledcoin'|site_url}" class="ui-btn ui-btn-a ui-shadow" data-ajax="false">Môj LEDCOIN</a></li>
@@ -39,6 +39,7 @@
         <li><a href="{'services'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Služby</a></li>
         <li><a href="{'operations'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">LEDCOIN</a></li>
         <li><a href="{'limits'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Denné limity</a></li>
+        <li><a href="{'questionnaires'|site_url}" class="ui-btn ui-btn-c ui-shadow" data-ajax="false">Dotazníky</a></li>
     </ul>
 {/if}
 </div>
