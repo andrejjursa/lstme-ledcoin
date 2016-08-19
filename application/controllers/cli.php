@@ -216,12 +216,28 @@
 
             $bools = array('pconnect', 'db_debug', 'cache_on', 'autoinit', 'stricton');
 
+            $defaults = array(
+                'char_set' => 'utf8',
+                'dbcollat' => 'utf8_slovak_ci',
+                'dbprefix' => '',
+                'pconnect' => true,
+                'cache_on' => false,
+                'cachedir' => '',
+                'swap_pre' => '',
+                'autoinit' => true,
+                'dbdriver' => 'mysqli',
+            );
+
             if (isset($db) && isset($active_group) && is_array($db) && isset($db[$active_group]) && is_array($db[$active_group]) && !empty($db[$active_group])) {
                 $exit = false;
                 do {
                     echo "Nastavenie databázovej konfigurácie\n\n";
 
                     foreach ($db[$active_group] as $item => $current_value) {
+                        if (array_key_exists($item, $defaults)) {
+                            $db[$active_group][$item] = $defaults[$item];
+                            continue;
+                        }
                         if (in_array($item, $bools)) {
                             do {
                                 $new_value = $this->_get_cli_user_input('Nastavenie ' . $item . ' [' . ($current_value ? 'TRUE' : 'FALSE') . ']');
