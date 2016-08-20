@@ -182,10 +182,21 @@ class Questionnaires extends CI_Controller
             redirect('questionnaires');
         }
 
-        $error = '';
-        var_export(Questionnaire::is_configuration_valid($questionnaire->configuration, $error));
+        $form = $questionnaire->get_form_config();
 
-        echo $error;
+        if (!empty($this->input->post())) {
+            build_validator_from_form($form);
+            $this->form_validation->run();
+        }
+
+        $this->parser->parse('web/controllers/questionnaires/show_questionnaire.tpl',
+            array(
+                'form' => $form,
+                'title' => 'Administrácia / Dotazníky / Náhľad dotazníka',
+                'back_url' => site_url('questionnaires'),
+                'questionnaire' => $questionnaire,
+            )
+        );
     }
 
     protected function get_files($id) {
