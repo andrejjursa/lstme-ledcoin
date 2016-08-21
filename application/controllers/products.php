@@ -19,7 +19,7 @@
             $this->load->library('datamapper');
 			$this->load->library('session');
 
-			auth_redirect_if_not_admin('error/no_admin');
+			auth_redirect_if_not_admin('errormessage/no_admin');
 		}
 
 		public function index() {

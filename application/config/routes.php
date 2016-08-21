@@ -39,7 +39,7 @@
 */
 
 $route['default_controller'] = "ledcoin";
-$route['404_override'] = 'error/page_not_found';
+$route['404_override'] = 'errormessage/page_not_found';
 
 
 /* End of file routes.php */

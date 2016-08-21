@@ -159,7 +159,7 @@
 		}
 
 		public function my_ledcoin() {
-			auth_redirect_if_not_authentificated('error/no_auth');
+			auth_redirect_if_not_authentificated('errormessage/no_auth');
 
 			$this->load->helper('filter');
 
@@ -256,6 +256,10 @@
 				'form'       => $this->get_my_ledcoin_filter_form($filter, $operations->paged),
 			));
 		}
+
+		public function questionnaires() {
+		    auth_redirect_if_not_authentificated('errormessage/no_auth');
+        }
 
 		protected function get_my_ledcoin_filter_form($filter, $paged) {
 			$pages = array();
