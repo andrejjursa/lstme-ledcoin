@@ -11,7 +11,7 @@ class Migration_add_questionnaire_answers_table extends CI_Migration {
 
         $this->db->query('ALTER TABLE `questionnaire_answers` ADD CONSTRAINT `qa_person_id` FOREIGN KEY (`person_id`) REFERENCES `persons`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;');
 
-        $this->db->query('ALTER TABLE `questionnaire_answers` ADD UNIQUE `person_answer_number` (`person_id`, `answer_number`);');
+        $this->db->query('ALTER TABLE `questionnaire_answers` ADD UNIQUE `person_answer_number` (`person_id`, `answer_number`, `questionnaire_id`);');
 
         $this->db->query('ALTER TABLE `questionnaire_answers` ADD CONSTRAINT `qa_questionnaire_id` FOREIGN KEY (`questionnaire_id`) REFERENCES `questionnaires`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;');
     }

@@ -295,6 +295,11 @@
         public function save_questionnaire($id) {
             auth_redirect_if_not_authentificated('errormessage/no_auth');
 
+            $this->db->trans_begin();
+
+            $person = new Person();
+            $person->get_by_id(auth_get_id());
+
             $questionnaire = $this->get_questionnaire_for_current_person($id);
 
             if (!$questionnaire->exists()) {
@@ -313,8 +318,19 @@
 
             if ($this->form_validation->run()) {
                 $questionnaire_data = $this->input->post('question');
-                print_r($questionnaire_data);
+                $questionnaire_answer = new Questionnaire_answer();
+                $questionnaire_answer->answers = serialize($questionnaire_data);
+                $questionnaire_answer->answer_number = $questionnaire->max_answer_number + 1;
+                if ($questionnaire_answer->save(array($person, $questionnaire))) {
+                    $this->db->trans_commit();
+                    add_success_flash_message('Odpovede z dotazníka boli uložené.');
+                } else {
+                    $this->db->trans_rollback();
+                    add_error_flash_message('Odpovede z dotazníka sa nepodarilo uložiť.');
+                }
+                redirect('ledcoin/questionnaires');
             } else {
+                $this->db->trans_rollback();
                 $this->answer_questionnaire($id);
             }
         }
