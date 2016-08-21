@@ -57,6 +57,52 @@ class Questionnaire extends DataMapper {
         return $form;
     }
 
+    public function resolve_answers($answers) {
+        if (!isset($this->configuration)) {
+            return array();
+        }
+
+        $output = array();
+
+        try {
+            $parsed = Yaml::parse($this->configuration);
+        } catch (ParseException $pe) {
+            return $output;
+        }
+
+        if (!is_array($parsed) || !isset($parsed['questions']) || empty($parsed['questions'])) {
+            return $output;
+        }
+
+        $questions = $parsed['questions'];
+
+        $types = self::get_question_types();
+
+        $output = array();
+
+        foreach ($answers as $question_key => $answer_value) {
+            if (!isset($questions[$question_key])) {
+                continue;
+            }
+
+            if (!isset($questions[$question_key]['type']) || !isset($questions[$question_key]['question'])) {
+                continue;
+            }
+
+            $type = $questions[$question_key]['type'];
+
+            $method = $types[$type]['resolver'];
+
+            $parsed_answer = $this->$method($questions[$question_key], $answer_value);
+
+            if (!is_null($parsed_answer)) {
+                $output[] = $parsed_answer;
+            }
+        }
+
+        return $output;
+    }
+
     /**
      * @return Questionnaire
      */
@@ -139,15 +185,75 @@ class Questionnaire extends DataMapper {
         return true;
     }
 
+    private function resolve_input($question, $answer) {
+        $output = array();
+
+        $image = '';
+
+        if (isset($question['image']) && file_exists(realpath(__DIR__ . '/../../' . self::PATH_TO_UPLOAD_FOLDER . $this->id . DIRECTORY_SEPARATOR . $question['image']))) {
+            $image = '<br /><br /><img src="' . base_url(self::PATH_TO_UPLOAD_FOLDER . $this->id . DIRECTORY_SEPARATOR . $question['image']) . '" alt="" />';
+        }
+
+        $output['question'] = $this->markdown_parse($question['question']) . $image;
+        $output['answer'] = $this->markdown_parse($answer);
+
+        return $output;
+    }
+
+    private function resolve_select($question, $answer) {
+        $output = array();
+
+        $image = '';
+
+        if (isset($question['image']) && file_exists(realpath(__DIR__ . '/../../' . self::PATH_TO_UPLOAD_FOLDER . $this->id . DIRECTORY_SEPARATOR . $question['image']))) {
+            $image = '<br /><br /><img src="' . base_url(self::PATH_TO_UPLOAD_FOLDER . $this->id . DIRECTORY_SEPARATOR . $question['image']) . '" alt="" />';
+        }
+
+        $output['question'] = $this->markdown_parse($question['question']) . $image;
+        if (is_array($answer)) {
+            if (!empty($answer)) {
+                $answers = array();
+                foreach ($answer as $answer_key) {
+                    $answers[] = '&gt;&gt; ' . $this->resolve_option($question['options'][$answer_key]);
+                }
+                $output['answer'] = implode('<br />', $answers);
+            }
+        } else {
+            $output['answer'] = $this->resolve_option($question['options'][$answer]);
+        }
+
+        return $output;
+    }
+
+    private function resolve_option($option) {
+        if (is_array($option)) {
+            if (!isset($option['text'])) {
+                return '';
+            }
+
+            $image = '';
+
+            if (isset($option['image']) && file_exists(realpath(__DIR__ . '/../../' . self::PATH_TO_UPLOAD_FOLDER . $this->id . DIRECTORY_SEPARATOR . $option['image']))) {
+                $image = '<br /><br /><img src="' . base_url(self::PATH_TO_UPLOAD_FOLDER . $this->id . DIRECTORY_SEPARATOR . $option['image']) . '" alt="" />';
+            }
+
+            return $this->markdown_parse($option['text']) . $image;
+        } else {
+            return $this->markdown_parse($option);
+        }
+    }
+
     private static function get_question_types() {
         return array(
             'input' => array(
                 'validator' => 'validate_input',
                 'convertor' => 'convert_input',
+                'resolver' => 'resolve_input',
             ),
             'select' => array(
                 'validator' => 'validate_select',
                 'convertor' => 'convert_select',
+                'resolver' => 'resolve_select',
             ),
         );
     }

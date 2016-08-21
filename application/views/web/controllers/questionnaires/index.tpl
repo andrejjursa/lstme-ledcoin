@@ -8,7 +8,8 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $questionnaires->exists()}
             <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-                   data-gridtable-operations="show:Ukážka,edit:Upraviť,delete:Vymazať"
+                   data-gridtable-operations="download:Stiahnuť,show:Ukážka,edit:Upraviť,delete:Vymazať"
+                   data-gridtable-operation-download-url="{'questionnaires/download_questionnaire/--ID--'|site_url}"
                    data-gridtable-operation-edit-url="{'questionnaires/edit_questionnaire/--ID--'|site_url}"
                    data-gridtable-operation-delete-prompt="true"
                    data-gridtable-operation-delete-prompt-title="Vymazať dotazník?"
