@@ -178,8 +178,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 			}
 		}
 
-		public function merge($with_output = true) {
-		    ob_start();
+		public function merge() {
 			$this->load->library('configurator');
 			echo $this->configurator->merge_config_files('config') ? "Config ... OK\n" : "Config ... Chyba\n";
 			echo $this->configurator->merge_config_files('application') ? "Application ... OK\n" : "Application ... Chyba\n";
@@ -187,11 +186,6 @@ use Symfony\Component\Yaml\Exception\ParseException;
             $target_database_file = APPPATH . 'config/' . ENVIRONMENT . '/database.php';
             if (!file_exists($target_database_file) && file_exists($original_database_file)) {
                 echo copy($original_database_file, $target_database_file) ? "Database ... OK\n" : "Database ... Chyba\n";
-            }
-            if ($with_output) {
-                echo ob_get_clean();
-            } else {
-                ob_clean();
             }
 		}
 
@@ -303,7 +297,7 @@ use Symfony\Component\Yaml\Exception\ParseException;
 
         }
 
-        public function config_from_yaml() {
+        public function set_environment_from_yaml() {
             $path_to_config = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.yaml');
             if (!file_exists($path_to_config)) {
                 echo 'Konfiguračný config.yaml súbor sa nenašiel.' . PHP_EOL;
@@ -322,15 +316,35 @@ use Symfony\Component\Yaml\Exception\ParseException;
                 return;
             }
 
-            // prostredie:
-
             $envs = array('production', 'development', 'testing');
 
             $env = isset($config_items['env']) && in_array($config_items['env'], $envs) ? $config_items['env'] : 'development';
 
-            $this->_set_environment($env, false);
+            $this->_set_environment($env);
+        }
 
-            $this->merge(false);
+        public function config_db_from_yaml() {
+            $path_to_config = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.yaml');
+            if (!file_exists($path_to_config)) {
+                echo 'Konfiguračný config.yaml súbor sa nenašiel.' . PHP_EOL;
+                return;
+            }
+
+            $config_yaml = file_get_contents($path_to_config);
+
+            $config_items = array();
+
+            $parser = new Yaml();
+            try {
+                $config_items = $parser->parse($config_yaml);
+            } catch (ParseException $pe) {
+                echo $pe->getMessage();
+                return;
+            }
+
+            // zluc konfiguraciu
+
+            $this->merge();
 
             // databaza:
 
@@ -446,23 +460,15 @@ EOC;
             }
         }
 
-        private function _set_environment($environment, $with_output = true) {
-            ob_start();
+        private function _set_environment($environment) {
             $content = '<?php ' . PHP_EOL . 'define(\'ENVIRONMENT\', \'' . $environment . '\');' . PHP_EOL;
             $file = rtrim(APPPATH, '\\/') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'environment.php';
 
             try {
-                $f = fopen($file, 'w');
-                fwrite($f, $content);
-                fclose($f);
+                file_put_contents($file, $content);
                 echo PHP_EOL . 'Prostredie prepnuté na "' . $environment . '". Je treba opäť zjednotiť konfiguráciu a vykonať úpravy.' . PHP_EOL;
             } catch (Exception $e) {
                 echo $e->getMessage();
-            }
-            if ($with_output) {
-                echo ob_get_clean();
-            } else {
-                ob_clean();
             }
         }
 
