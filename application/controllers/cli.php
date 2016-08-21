@@ -69,15 +69,19 @@
             }
 		}
 
-		public function migration() {
+		public function migration($interactive = true) {
 		    $this->load->database();
             $this->load->library('datamapper');
 			$this->load->library('migration');
 
-			echo "Ktoru migraciu chcete spustit?\n(P) - poslednu\n(cislo) - cislo migracie\n\n";
-			do {
-				$choice = $this->_get_cli_user_input('Volba');
-			} while (strtolower($choice) != 'p' && !preg_match('/^[0-9]+$/', $choice));
+            $choice = 'p';
+
+            if ((bool)$interactive) {
+                echo "Ktoru migraciu chcete spustit?\n(P) - poslednu\n(cislo) - cislo migracie\n\n";
+                do {
+                    $choice = $this->_get_cli_user_input('Volba');
+                } while (strtolower($choice) != 'p' && !preg_match('/^[0-9]+$/', $choice));
+            }
 
 			if (strtolower($choice) == 'p') {
 				$this->db->query('SET FOREIGN_KEY_CHECKS=0;');
