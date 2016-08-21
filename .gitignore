@@ -10,3 +10,4 @@ application/config/environment.php
 vendor/
 questionnaires/*
 !questionnaires/.gitkeep
+config.yaml
