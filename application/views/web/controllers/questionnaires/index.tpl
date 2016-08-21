@@ -8,7 +8,7 @@
     <div class="ui-body ui-body-c ui-corner-all">
         {if $questionnaires->exists()}
             <table data-role="table" data-mode="reflow" class="admin_grid_table ui-responsive"
-                   data-gridtable-operations="edit:Upraviť,delete:Vymazať"
+                   data-gridtable-operations="show:Ukážka,edit:Upraviť,delete:Vymazať"
                    data-gridtable-operation-edit-url="{'questionnaires/edit_questionnaire/--ID--'|site_url}"
                    data-gridtable-operation-delete-prompt="true"
                    data-gridtable-operation-delete-prompt-title="Vymazať dotazník?"
@@ -17,18 +17,25 @@
                    data-gridtable-operation-delete-prompt-ok="Áno, chcem"
                    data-gridtable-operation-delete-prompt-ok-url="{'questionnaires/delete_questionnaire/--ID--'|site_url}"
                    data-gridtable-object_name="title"
+                   data-gridtable-operation-show-url="{'questionnaires/show_questionnaire/--ID--'|site_url}"
             >
                 <thead>
                 <tr>
                     <th>ID</th>
                     <th>Názov</th>
+                    <th>Zverejnený</th>
+                    <th>Počet pokusov</th>
+                    <th>Počet odpovedí</th>
                 </tr>
                 </thead>
                 <tbody>
                 {foreach $questionnaires as $questionnaire}
                     <tr data-gridtable-unique="group_{$questionnaire->id|intval}" data-gridtable-id="{$questionnaire->id|intval}" data-gridtable-title="{$questionnaire->title|escape:'html'|addslashes}">
                         <td>{$questionnaire->id|intval}</td>
-                        <td>{$questionnaire->title}</td>
+                        <td>{$questionnaire->title|escape:'html'}</td>
+                        <td>{if $questionnaire->published}Áno{else}Nie{/if}</td>
+                        <td>{if is_null($questionnaire->attempts)}Neobmedzene{else}{$questionnaire->attempts|intval}{/if}</td>
+                        <td>{$questionnaire->questionnaire_answer_count|intval}</td>
                     </tr>
                 {/foreach}
                 </tbody>

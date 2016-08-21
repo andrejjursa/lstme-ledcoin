@@ -24,6 +24,9 @@ function smarty_function_form_value($params, $template) {
         if (empty($value) && isset($params['default'])) {
             $value = $params['default'];
         }
+        if (is_array($value)) {
+            $value = implode('|', $value);
+        }
         return $value;
     } elseif (isset($params['default'])) {
         return $params['default'];

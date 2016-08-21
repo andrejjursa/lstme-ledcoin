@@ -8,6 +8,8 @@
             {include file='web/forms/input.tpl' form_element=$form_element form_source=$source inline}
         {elseif $form_element.type eq 'password_input'}
             {include file='web/forms/input.tpl' form_element=$form_element form_source=$source inline}
+        {elseif $form_element.type eq 'textarea'}
+            {include file='web/forms/textarea.tpl' form_element=$form_element form_source=$source inline}
         {elseif $form_element.type eq 'select'}
             {include file='web/forms/select.tpl' form_element=$form_element form_source=$source inline}
         {elseif $form_element.type eq 'flipswitch'}
@@ -20,6 +22,10 @@
             {include file='web/forms/imagepreview.tpl' form_element=$form_element inline}
         {elseif $form_element.type eq 'upload'}
             {include file='web/forms/upload.tpl' form_element=$form_element inline}
+        {elseif $form_element.type eq 'radios'}
+            {include file='web/forms/radios.tpl' form_element=$form_element form_source=$source inline}
+        {elseif $form_element.type eq 'checkboxes'}
+            {include file='web/forms/checkboxes.tpl' form_element=$form_element form_source=$source inline}
         {/if}
     {else}
         <!--<p>Chyba, nedá da nájsť index {$index}.</p>-->

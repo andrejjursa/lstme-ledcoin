@@ -1,5 +1,6 @@
 {
     "require": {
-        "Symfony/Yaml": "^3.1"
+        "Symfony/Yaml": "^3.1",
+        "knplabs/knp-markdown-bundle": "^1.5"
     }
 }
