@@ -260,7 +260,25 @@
 		public function questionnaires() {
 		    auth_redirect_if_not_authentificated('errormessage/no_auth');
 
-            
+            $person = new Person();
+            $person->get_by_id(auth_get_id());
+
+            $questionnaire_answers = new Questionnaire_answer();
+            $questionnaire_answers->select_func('MAX', '@answer_number', 'max_answer');
+            $questionnaire_answers->group_by('person_id');
+            $questionnaire_answers->where_related($person);
+            $questionnaire_answers->where_related_questionnaire('id', '${parent}.id');
+
+            $questonnaires = new Questionnaire();
+            $questonnaires->select('*');
+            $questonnaires->select_subquery($questionnaire_answers, 'max_answer_number');
+            $questonnaires->where('published', 1);
+            $questonnaires->get_iterated();
+
+            $this->parser->parse('web/controllers/ledcoin/questionnaires.tpl', array(
+                'title'      => 'Dotazníky',
+                'questionnaires' => $questonnaires,
+            ));
         }
 
 		protected function get_my_ledcoin_filter_form($filter, $paged) {
