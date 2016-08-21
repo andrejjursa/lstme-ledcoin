@@ -10,4 +10,5 @@ application/config/environment.php
 vendor/
 questionnaires/*
 !questionnaires/.gitkeep
+docker-compose.yml
 config.yaml
