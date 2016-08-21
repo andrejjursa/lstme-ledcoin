@@ -13,7 +13,8 @@ echo "  username: '${DB_USERNAME}'" >> config.yaml
 echo "  password: '${DB_PASSWORD}'" >> config.yaml
 echo "  database: '${DB_DATABASE}'" >> config.yaml
 
-php index.php cli config_from_yaml
+php index.php cli set_environment_from_yaml
+php index.php cli config_db_from_yaml
 php index.php cli migration 0
 
 echo Starting apache2-foreground ...
