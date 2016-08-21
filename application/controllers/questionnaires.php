@@ -208,6 +208,33 @@ class Questionnaires extends CI_Controller
         );
     }
 
+    public function download_questionnaire($id) {
+        $questionnaire = new Questionnaire();
+        $questionnaire->get_by_id((int)$id);
+        if (!$questionnaire->exists()) {
+            add_error_flash_message('Dotazník sa nenašiel.');
+            redirect('questionnaires');
+        }
+
+        $questionnaire_answer_max = new Questionnaire_answer();
+        $questionnaire_answer_max->select_func('MAX', '@answer_number', 'max_answer_number');
+        $questionnaire_answer_max->where('${parent}.id', 'questionnaire_answers_subquery.id', false);
+
+        $questionnaire_answers = new Questionnaire_answer();
+        $questionnaire_answers->where_related($questionnaire);
+        $questionnaire_answers->where_subquery('answer_number', $questionnaire_answer_max);
+        $questionnaire_answers->include_related('person', array('name', 'surname', 'admin'));
+        $questionnaire_answers->order_by_related('person', 'admin', 'asc');
+        $questionnaire_answers->order_by_related('person', 'surname', 'asc');
+        $questionnaire_answers->order_by_related('person', 'name', 'asc');
+        $questionnaire_answers->get_iterated();
+
+        $this->parser->parse('web/controllers/questionnaires/download_questionnaire.tpl', array(
+            'questionnaire' => $questionnaire,
+            'questionnaire_answers' => $questionnaire_answers,
+        ));
+    }
+
     protected function get_files($id) {
         $path = Questionnaire::PATH_TO_UPLOAD_FOLDER . $id . DIRECTORY_SEPARATOR;
 
