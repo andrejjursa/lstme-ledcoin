@@ -260,25 +260,63 @@
 		public function questionnaires() {
 		    auth_redirect_if_not_authentificated('errormessage/no_auth');
 
-            $person = new Person();
-            $person->get_by_id(auth_get_id());
-
-            $questionnaire_answers = new Questionnaire_answer();
-            $questionnaire_answers->select_func('MAX', '@answer_number', 'max_answer');
-            $questionnaire_answers->group_by('person_id');
-            $questionnaire_answers->where_related($person);
-            $questionnaire_answers->where_related_questionnaire('id', '${parent}.id');
-
-            $questonnaires = new Questionnaire();
-            $questonnaires->select('*');
-            $questonnaires->select_subquery($questionnaire_answers, 'max_answer_number');
-            $questonnaires->where('published', 1);
-            $questonnaires->get_iterated();
+            $questonnaires = $this->get_questionnaires();
 
             $this->parser->parse('web/controllers/ledcoin/questionnaires.tpl', array(
                 'title'      => 'Dotazníky',
                 'questionnaires' => $questonnaires,
             ));
+        }
+
+        public function answer_questionnaire($id) {
+            auth_redirect_if_not_authentificated('errormessage/no_auth');
+
+            $questionnaire = $this->get_questionnaire_for_current_person($id);
+
+            if (!$questionnaire->exists()) {
+                add_error_flash_message('Dotazník sa nenašieľ alebo nie je zverejnený.');
+                redirect('ledcoin/questionnaires');
+            }
+
+            if (!is_null($questionnaire->attempts) && $questionnaire->max_answer_number >= $questionnaire->attempts) {
+                add_error_flash_message(sprintf('Dotazník <strong>%s</strong> už nemôžeš vyplniť. Dosiahol si maximálneho počtu pokusov.', htmlspecialchars($questionnaire->title)));
+                redirect('ledcoin/questionnaires');
+            }
+
+            $form = $questionnaire->get_form_config();
+
+            $this->parser->parse('web/controllers/ledcoin/answer_questionnaire.tpl', array(
+                'title' => 'Dotazníky / ' . htmlspecialchars($questionnaire->title),
+                'form' => $form,
+                'questionnaire' => $questionnaire,
+            ));
+        }
+
+        public function save_questionnaire($id) {
+            auth_redirect_if_not_authentificated('errormessage/no_auth');
+
+            $questionnaire = $this->get_questionnaire_for_current_person($id);
+
+            if (!$questionnaire->exists()) {
+                add_error_flash_message('Dotazník sa nenašieľ alebo nie je zverejnený.');
+                redirect('ledcoin/questionnaires');
+            }
+
+            if (!is_null($questionnaire->attempts) && $questionnaire->max_answer_number >= $questionnaire->attempts) {
+                add_error_flash_message(sprintf('Dotazník <strong>%s</strong> už nemôžeš vyplniť. Dosiahol si maximálneho počtu pokusov.', htmlspecialchars($questionnaire->title)));
+                redirect('ledcoin/questionnaires');
+            }
+
+            $form = $questionnaire->get_form_config();
+
+            build_validator_from_form($form);
+
+            if ($this->form_validation->run()) {
+                $questionnaire_data = $this->input->post('question');
+                print_r($questionnaire_data);
+            } else {
+                $this->answer_questionnaire($id);
+            }
         }
 
 		protected function get_my_ledcoin_filter_form($filter, $paged) {
@@ -507,4 +545,49 @@
 			return $series;
 		}
 
-	}
+        /**
+         * @param $id
+         */
+        protected function get_questionnaire_for_current_person($id)
+        {
+            $person = new Person();
+            $person->get_by_id(auth_get_id());
+
+            $questionnaire_answers = new Questionnaire_answer();
+            $questionnaire_answers->select_func('MAX', '@answer_number', 'max_answer');
+            $questionnaire_answers->group_by('person_id');
+            $questionnaire_answers->where_related($person);
+            $questionnaire_answers->where_related_questionnaire('id', '${parent}.id');
+
+            $questionnaire = new Questionnaire();
+            $questionnaire->select('*');
+            $questionnaire->select_subquery($questionnaire_answers, 'max_answer_number');
+            $questionnaire->where('published', 1);
+            $questionnaire->get_by_id((int)$id);
+
+            return $questionnaire;
+        }
+
+        /**
+         * @return Questionnaire
+         */
+        protected function get_questionnaires()
+        {
+            $person = new Person();
+            $person->get_by_id(auth_get_id());
+
+            $questionnaire_answers = new Questionnaire_answer();
+            $questionnaire_answers->select_func('MAX', '@answer_number', 'max_answer');
+            $questionnaire_answers->group_by('person_id');
+            $questionnaire_answers->where_related($person);
+            $questionnaire_answers->where_related_questionnaire('id', '${parent}.id');
+
+            $questonnaires = new Questionnaire();
+            $questonnaires->select('*');
+            $questonnaires->select_subquery($questionnaire_answers, 'max_answer_number');
+            $questonnaires->where('published', 1);
+            $questonnaires->get_iterated();
+            return $questonnaires;
+        }
+
+    }

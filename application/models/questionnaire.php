@@ -44,16 +44,14 @@ class Questionnaire extends DataMapper {
 
         $types = self::get_question_types();
 
-        $question_id = 0;
-
-        foreach ($parsed['questions'] as $question) {
+        foreach ($parsed['questions'] as $question_id => $question) {
             if (!isset($question['type']) || !array_key_exists($question['type'], $types)) {
                 continue;
             }
 
             $method = $types[$question['type']]['convertor'];
 
-            $this->$method($form, $question, ++$question_id);
+            $this->$method($form, $question, $question_id);
         }
 
         return $form;
@@ -167,15 +165,15 @@ class Questionnaire extends DataMapper {
 
         $question_text = $this->markdown_parse($question['question']) . $image;
 
-        $form['fields']['question_' . $id] = array(
+        $form['fields'][$id] = array(
             'type' => 'text_input',
-            'name' => 'question[question_' . $id . ']',
+            'name' => 'question[' . $id . ']',
             'id' => 'question-' . $id,
             'label' => 'Odpoveď',
             'validation' => 'required',
             'question_text' => $question_text,
         );
-        $form['arangement'][] = 'question_' . $id;
+        $form['arangement'][] = $id;
     }
 
     private function convert_select(&$form, &$question, $id) {
@@ -220,16 +218,16 @@ class Questionnaire extends DataMapper {
             }
         }
 
-        $form['fields']['question_' . $id] = array(
+        $form['fields'][$id] = array(
             'type' => $multiple ? 'checkboxes' : 'radios',
             'values' => $parsedoptions,
             'question_text' => $question_text,
             'id' => 'question-' . $id,
             'label' => 'Odpoveď',
-            'name' => 'question[question_' . $id . ']',
+            'name' => 'question[' . $id . ']',
             'validation' => 'required',
         );
-        $form['arangement'][] = 'question_' . $id;
+        $form['arangement'][] = $id;
     }
 
     private function markdown_parse($text) {
