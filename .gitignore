@@ -12,3 +12,5 @@ questionnaires/*
 !questionnaires/.gitkeep
 docker-compose.yml
 config.yaml
+user/*
+!user/.gitkeep

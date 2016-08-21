@@ -1,8 +1,10 @@
 FROM php:5.6-apache
 
 RUN apt-get update
-RUN apt-get install -y curl git-core libmcrypt-dev && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN apt-get install -y curl 
+RUN apt-get install -y git-core 
+RUN apt-get install -y libmcrypt-de
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 ADD . /var/www/html
 
@@ -20,3 +22,6 @@ RUN chmod -R 0770 /var/www/html
 EXPOSE 80
 
 CMD entrypoint.sh
+
+VOLUME /var/www/html/questionnaires
+VOLUME /var/www/html/user
