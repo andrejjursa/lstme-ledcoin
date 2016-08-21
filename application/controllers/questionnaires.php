@@ -160,6 +160,15 @@ class Questionnaires extends CI_Controller
             redirect('questionnaires');
         }
 
+        $questionnaire_answers = new Questionnaire_answer();
+        $questionnaire_answers->where_related($questionnaire);
+        $count_answers = $questionnaire_answers->count();
+
+        if ($count_answers > 0) {
+            add_error_flash_message(sprintf('Nie je možné vymazať dotazník <strong>%s</strong>, pretože obsahuje <strong>%d</strong> odpovedí.', $questionnaire->title, $count_answers));
+            redirect('questionnaires');
+        }
+
         $success_message = sprintf('Dotazník <strong>%s</strong> s id <strong>%d</strong> bol vymazaný.', $questionnaire->title, $questionnaire->id);
         $error_message = sprintf('Dotazník <strong>%s</strong> s id <strong>%d</strong> sa nepodarilo vymazať.', $questionnaire->title, $questionnaire->id);
 

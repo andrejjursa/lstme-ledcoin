@@ -17,6 +17,8 @@ class Questionnaire extends DataMapper {
 
     public $table_name = 'questionnaires';
 
+    public $has_many = array('questionnaire_answer');
+
     /**
      * @return array
      */
@@ -63,6 +65,7 @@ class Questionnaire extends DataMapper {
     public static function get_all_questionnaires()
     {
         $questionnaires = new Questionnaire();
+        $questionnaires->include_related_count('questionnaire_answer');
         $questionnaires->get_iterated();
         return $questionnaires;
     }

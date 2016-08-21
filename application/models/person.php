@@ -14,7 +14,7 @@ class Person extends DataMapper {
     public $table_name = 'persons';
     
     public $has_one = array('group');
-    public $has_many = array('operation');
+    public $has_many = array('operation', 'questionnaire_answer');
 }
 
 ?>

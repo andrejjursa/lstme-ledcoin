@@ -25,6 +25,7 @@
                     <th>Názov</th>
                     <th>Zverejnený</th>
                     <th>Počet pokusov</th>
+                    <th>Počet odpovedí</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,6 +35,7 @@
                         <td>{$questionnaire->title}</td>
                         <td>{if $questionnaire->published}Áno{else}Nie{/if}</td>
                         <td>{if is_null($questionnaire->attempts)}Neobmedzene{else}{$questionnaire->attempts|intval}{/if}</td>
+                        <td>{$questionnaire->questionnaire_answer_count|intval}</td>
                     </tr>
                 {/foreach}
                 </tbody>

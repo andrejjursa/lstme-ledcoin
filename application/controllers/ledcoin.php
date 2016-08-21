@@ -259,6 +259,8 @@
 
 		public function questionnaires() {
 		    auth_redirect_if_not_authentificated('errormessage/no_auth');
+
+            
         }
 
 		protected function get_my_ledcoin_filter_form($filter, $paged) {
