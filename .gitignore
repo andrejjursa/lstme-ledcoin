@@ -8,3 +8,4 @@ application/cache/smarty/cached/*.php
 application/config/environment.php
 .idea/
 vendor/
+config.yaml
