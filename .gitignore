@@ -8,4 +8,6 @@ application/cache/smarty/cached/*.php
 application/config/environment.php
 .idea/
 vendor/
+questionnaires/*
+!questionnaires/.gitkeep
 config.yaml
