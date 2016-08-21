@@ -131,8 +131,6 @@ class Questionnaire extends DataMapper {
             return false;
         }
 
-        echo '<pre>' . htmlspecialchars(print_r($parsed, true)) . '</pre>';
-
         if (is_array($parsed)) {
             if (isset($parsed[self::KEY_QUESTIONS]) && is_array($parsed[self::KEY_QUESTIONS]) && !empty($parsed[self::KEY_QUESTIONS])) {
                 return self::are_questions_valid($parsed[self::KEY_QUESTIONS], $error);
@@ -343,8 +341,8 @@ class Questionnaire extends DataMapper {
     }
 
     private function strip_tags($html) {
-        $output = str_replace('</p>', '</p>' . PHP_EOL . PHP_EOL, $html);
-        $output = strip_tags($output, '<strong><i><u><em><b><br>');
+        $output = str_replace('</p>', '</p>' . PHP_EOL, $html);
+        $output = strip_tags($output, '<strong><i><u><em><b><br><pre><code>');
         $output = nl2br(trim($output));
         return $output;
     }
