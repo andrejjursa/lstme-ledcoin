@@ -149,7 +149,7 @@
 					return FALSE;
 				}
 			} elseif (file_exists($file_orig)) {
-				@mkdir($dir_env, 0755, TRUE);
+			    @mkdir($dir_env, 0755, TRUE);
 
 				return @copy($file_orig, $file_env);
 			}
