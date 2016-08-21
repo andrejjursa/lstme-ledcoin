@@ -1,5 +1,8 @@
 <?php
 
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception\ParseException;
+
 	/*
 	 * To change this template, choose Tools | Templates
 	 * and open the template in the editor.
@@ -69,15 +72,19 @@
             }
 		}
 
-		public function migration() {
+		public function migration($interactive = true) {
 		    $this->load->database();
             $this->load->library('datamapper');
 			$this->load->library('migration');
 
-			echo "Ktoru migraciu chcete spustit?\n(P) - poslednu\n(cislo) - cislo migracie\n\n";
-			do {
-				$choice = $this->_get_cli_user_input('Volba');
-			} while (strtolower($choice) != 'p' && !preg_match('/^[0-9]+$/', $choice));
+            $choice = 'p';
+
+            if ((bool)$interactive) {
+                echo "Ktoru migraciu chcete spustit?\n(P) - poslednu\n(cislo) - cislo migracie\n\n";
+                do {
+                    $choice = $this->_get_cli_user_input('Volba');
+                } while (strtolower($choice) != 'p' && !preg_match('/^[0-9]+$/', $choice));
+            }
 
 			if (strtolower($choice) == 'p') {
 				$this->db->query('SET FOREIGN_KEY_CHECKS=0;');
@@ -171,7 +178,8 @@
 			}
 		}
 
-		public function merge() {
+		public function merge($with_output = true) {
+		    ob_start();
 			$this->load->library('configurator');
 			echo $this->configurator->merge_config_files('config') ? "Config ... OK\n" : "Config ... Chyba\n";
 			echo $this->configurator->merge_config_files('application') ? "Application ... OK\n" : "Application ... Chyba\n";
@@ -179,6 +187,11 @@
             $target_database_file = APPPATH . 'config/' . ENVIRONMENT . '/database.php';
             if (!file_exists($target_database_file) && file_exists($original_database_file)) {
                 echo copy($original_database_file, $target_database_file) ? "Database ... OK\n" : "Database ... Chyba\n";
+            }
+            if ($with_output) {
+                echo ob_get_clean();
+            } else {
+                ob_clean();
             }
 		}
 
@@ -290,6 +303,78 @@
 
         }
 
+        public function config_from_yaml() {
+            $path_to_config = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.yaml');
+            if (!file_exists($path_to_config)) {
+                echo 'Konfiguračný config.yaml súbor sa nenašiel.' . PHP_EOL;
+                return;
+            }
+
+            $config_yaml = file_get_contents($path_to_config);
+
+            $config_items = array();
+
+            $parser = new Yaml();
+            try {
+                $config_items = $parser->parse($config_yaml);
+            } catch (ParseException $pe) {
+                echo $pe->getMessage();
+                return;
+            }
+
+            // prostredie:
+
+            $envs = array('production', 'development', 'testing');
+
+            $env = isset($config_items['env']) && in_array($config_items['env'], $envs) ? $config_items['env'] : 'development';
+
+            $this->_set_environment($env, false);
+
+            $this->merge(false);
+
+            // databaza:
+
+            $file = APPPATH . 'config/' . ENVIRONMENT . '/database.php';
+
+            if (!file_exists($file)) {
+                echo 'Konfiguračný súbor databázy sa nenašiel, najskôr zjednotte konfiguráciu.' . PHP_EOL;
+                return;
+            }
+
+            $db = array();
+            $active_group = 'default';
+
+            include $file;
+
+            $defaults = array(
+                'char_set' => 'utf8',
+                'dbcollat' => 'utf8_slovak_ci',
+                'dbprefix' => '',
+                'pconnect' => true,
+                'cache_on' => false,
+                'cachedir' => '',
+                'swap_pre' => '',
+                'autoinit' => true,
+                'dbdriver' => 'mysqli',
+            );
+
+            $db[$active_group] = array_merge($db[$active_group], $config_items['db']);
+            $db[$active_group] = array_merge($db[$active_group], $defaults);
+
+            $this->_save_db_config($file, $db, $active_group);
+
+            // config.php
+
+            $this->load->library('configurator');
+
+            $cfg = $this->configurator->get_config_array_custom('config');
+
+            $cfg['base_url'] = isset($config_items['host']) && !empty($config_items['host']) ? $config_items['host'] : '';
+
+            $this->configurator->set_config_array('config', $cfg);
+
+        }
+
         private function _save_db_config($file, $db, $active_group) {
             $content = <<<EOC
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
@@ -361,7 +446,8 @@ EOC;
             }
         }
 
-        private function _set_environment($environment) {
+        private function _set_environment($environment, $with_output = true) {
+            ob_start();
             $content = '<?php ' . PHP_EOL . 'define(\'ENVIRONMENT\', \'' . $environment . '\');' . PHP_EOL;
             $file = rtrim(APPPATH, '\\/') . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'environment.php';
 
@@ -372,6 +458,11 @@ EOC;
                 echo PHP_EOL . 'Prostredie prepnuté na "' . $environment . '". Je treba opäť zjednotiť konfiguráciu a vykonať úpravy.' . PHP_EOL;
             } catch (Exception $e) {
                 echo $e->getMessage();
+            }
+            if ($with_output) {
+                echo ob_get_clean();
+            } else {
+                ob_clean();
             }
         }
 
