@@ -208,7 +208,7 @@ class Questionnaires extends CI_Controller
         );
     }
 
-    public function download_questionnaire($id) {
+    public function download_questionnaire($id, $format = 'html') {
         $questionnaire = new Questionnaire();
         $questionnaire->get_by_id((int)$id);
         if (!$questionnaire->exists()) {
@@ -229,10 +229,44 @@ class Questionnaires extends CI_Controller
         $questionnaire_answers->order_by_related('person', 'name', 'asc');
         $questionnaire_answers->get_iterated();
 
-        $this->parser->parse('web/controllers/questionnaires/download_questionnaire.tpl', array(
-            'questionnaire' => $questionnaire,
-            'questionnaire_answers' => $questionnaire_answers,
-        ));
+        if ($format == 'html') {
+            $this->parser->parse('web/controllers/questionnaires/download_questionnaire.tpl', array(
+                'questionnaire' => $questionnaire,
+                'questionnaire_answers' => $questionnaire_answers,
+            ));
+        } else {
+            $this->load->helper('general');
+
+            $csv = array();
+
+            $build_questions_line = true;
+
+            $questions_line = array('');
+
+            foreach ($questionnaire_answers as $questionnaire_answer) {
+                $resolved = $questionnaire->resolve_answers(unserialize($questionnaire_answer->answers));
+
+                if (count($resolved) > 0) {
+                    $person = array($questionnaire_answer->person_name . ' ' . $questionnaire_answer->person_surname);
+                    foreach ($resolved as $one_resolv) {
+                        if ($build_questions_line) {
+                            $questions_line[] = br2nl(strip_tags($one_resolv['question']));
+                        }
+                        $person[] = br2nl(strip_tags($one_resolv['answer']));
+                    }
+                    if ($build_questions_line) {
+                        $csv[] = $questions_line;
+                    }
+                    $csv[] = $person;
+                }
+
+                $build_questions_line = false;
+            }
+
+            header('content-disposition: attachement; filename=vysledky.csv');
+
+            echo array_to_csv($csv);
+        }
     }
 
     protected function get_files($id) {
