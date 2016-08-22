@@ -3,6 +3,9 @@
 echo Configuring app ...
 
 cd /var/www/html
+
+composer install --no-interaction
+
 rm -f config.yaml
 
 echo "env: '${APP_ENV}'" >> config.yaml
