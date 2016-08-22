@@ -4,6 +4,8 @@ echo Configuring app ...
 
 cd /var/www/html
 
+chmod -R 0777 *
+
 composer install --no-interaction
 
 rm -f config.yaml
