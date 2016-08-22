@@ -134,3 +134,30 @@
 			return base_url('user/products/default/product_min.png');
 		}
 	}
+
+    function array_to_csv( array &$fields, $delimiter = ';', $enclosure = '"') {
+        $path = APPPATH . '../user/';
+
+        do {
+            $file = $path . rand(10000,999999) . '.csv';
+        } while (file_exists($file));
+
+        $f = fopen($file, 'w');
+        if (!empty($fields)) {
+            foreach ($fields as $field) {
+                fputcsv($f, $field, $delimiter, $enclosure);
+            }
+        }
+        fclose($f);
+
+        $csv = file_get_contents($file);
+
+        unlink($file);
+
+        return $csv;
+    }
+
+    function br2nl($str) {
+        $str = preg_replace("/(\r\n|\n|\r)/", "", $str);
+        return preg_replace("=&lt;br */?&gt;=i", "\n", $str);
+    }
