@@ -10,6 +10,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN docker-php-ext-install mysql mysqli pdo pdo_mysql mcrypt
 RUN apt-get install -y libpng12-dev
 RUN apt-get install -y libjpeg-dev
+RUN docker-php-ext-configure gd --with-jpeg-dir=shared,/usr
 RUN docker-php-ext-install gd
 
 ADD php.ini /usr/local/etc/php
